@@ -1,7 +1,7 @@
 const mongoose = require("mongoose")
 
 const TableSchema = new mongoose.Schema({
-    table_no: {
+    tableNumber: {
         type: Number,
         required: true
     },
@@ -16,10 +16,10 @@ const TableSchema = new mongoose.Schema({
     },
     openedBy: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
+        default: null,
         ref: "User"
     },
-    time_opened: {
+    timeOpened: {
         type: Date,
         default: null
     }
