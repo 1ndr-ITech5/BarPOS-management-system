@@ -18,6 +18,9 @@ app.use("/api/auth", require("./routes/authRoutes.js"))
 // manage paths for table modification
 app.use("/api/tables", require("./routes/tableRoutes.js"))
 
+// manage the menu items
+app.use("/api/menu-items", require("./routes/menuRoutes.js"))
+
 // call middleware to catch the errors
 app.use(errorHandler)
 
