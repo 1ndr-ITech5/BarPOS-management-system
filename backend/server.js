@@ -21,6 +21,9 @@ app.use("/api/tables", require("./routes/tableRoutes.js"))
 // manage the menu items
 app.use("/api/menu-items", require("./routes/menuRoutes.js"))
 
+// manage the order manipulation paths
+app.use("/api/order", require("./routes/orderRoutes.js"))
+
 // call middleware to catch the errors
 app.use(errorHandler)
 

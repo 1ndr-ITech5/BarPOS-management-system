@@ -63,9 +63,12 @@ const openOrder = async(table_id, user_id) => {
     })
 
     // update the table status to occupied after the newOrder gets created
-    const updateTableStatus = await Table.findByIdAndUpdate(
+    const updateTable = await Table.findByIdAndUpdate(
         table._id, 
-        {status: "occupied"},
+        {   status: "occupied",
+            openedBy: user_id,
+            timeOpened: new Date()
+        },
         {new: true, runValidators: true}
     )
 
@@ -73,3 +76,85 @@ const openOrder = async(table_id, user_id) => {
 
     // calculate the total from all products price
 }
+
+const closeOrder = async(table_id, user_id) => {
+    // find the order based on the table
+    const order = await Order.findOne({
+        tableId: table_id,
+        status: "open"
+    })
+
+    // check if order was found
+    if(!order){
+        const error = new Error("Order does not exists for this table!")
+        error.statusCode = 404
+        throw error;
+    }
+
+    // make sure that the waiter closing is the one that opened it
+    if (order.waiterId.toString() !== user_id){
+        const error = new Error("Only the waiter who opened it, has the right to close this order!")
+        error.statusCode = 401
+        throw error;
+    }
+
+    // update the order status
+    const closedOrder = await Order.findByIdAndUpdate(
+        order._id,
+        {   status: "closed",
+            closedAt: new Date()
+        },
+        {new: true, runValidators: true}
+    )
+
+    // update table occupation
+    const table = await Table.findByIdAndUpdate(
+        table_id,
+        {   status: "available",
+            openedBy: null,
+            timeOpened: null
+        },
+        {new: true, runValidators: true}
+    )
+
+    return closedOrder
+}
+
+const deleteOrder = async(table_id, user_id) => {
+    // check if the order exists
+    const order = await Order.findOne({
+        tableId: table_id,
+        status: "open"
+    })
+
+    if(!order){
+        const error = new Error("Order does not exists for this table!")
+        error.statusCode = 404
+        throw error;
+    }
+
+    // make sure that the waiter who opened it, has the right to close it aswell
+    if (order.waiterId.toString() !== user_id){
+        const error = new Error("Only the waiter who opened it, has the right to close this order!")
+        error.statusCode = 401
+        throw error;
+    }
+
+    // delete the found order
+    const deletedOrder = await Order.findByIdAndDelete(order._id)
+
+    // update table occupation
+    const table = await Table.findByIdAndUpdate(
+        table_id,
+        {   status: "available",
+            openedBy: null,
+            timeOpened: null
+        },
+        {new: true, runValidators: true}
+    )
+
+
+    return deletedOrder
+}
+
+module.exports = {getOrder, openOrder, closeOrder, deleteOrder}
