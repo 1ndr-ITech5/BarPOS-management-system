@@ -1,7 +1,7 @@
 const Order = require("../models/orderModel.js")
 const Table = require("../models/tableModel.js")
 const User = require("../models/userModel.js")
-
+const OrderItem = require("../models/orderItemModel.js")
 
 // get the order based on the table id
 const getOrder = async(table_id) => {
@@ -73,8 +73,31 @@ const openOrder = async(table_id, user_id) => {
     )
 
     return newOrder
+}
 
-    // calculate the total from all products price
+const updateOrderTotal = async(order_id) => {
+    // find the order
+    const order = await Order.findById(order_id)
+    if (!order){
+        const error = new Error("Order couldn't be found!")
+        error.statusCode = 404
+        throw error;
+    }
+
+    // get all the items in this order
+    const items = await OrderItem.find({orderId: order_id})
+
+    // calculate the total of these items
+    const totalPrice = items.reduce(
+        (sum, item) => sum += item.linePrice , 0
+    );
+
+    // update the order with the new total
+    const updatedOrder = await Order.findByIdAndUpdate(
+        order_id,
+        {total: totalPrice},
+        {new:true, runValidators: true}
+    )
 }
 
 const closeOrder = async(table_id, user_id) => {
@@ -157,4 +180,4 @@ const deleteOrder = async(table_id, user_id) => {
     return deletedOrder
 }
 
-module.exports = {getOrder, openOrder, closeOrder, deleteOrder}
+module.exports = {getOrder, openOrder, updateOrderTotal, closeOrder, deleteOrder}

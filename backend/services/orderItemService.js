@@ -1,6 +1,7 @@
 const OrderItem = require("../models/orderItemModel.js")
 const Order = require("../models/orderModel.js")
 const Menu = require("../models/menuModel.js")
+const {updateOrderTotal} = require("./orderService.js")
 
 const getOrderItems = async(order_id) => {
     // check if order exists
@@ -47,6 +48,10 @@ const addOrderItem = async(order_id, menuItem_id) => {
             unitPrice: item.price,
             linePrice: quantity * item.price
         })
+        // update the order's total
+        await updateOrderTotal(order_id)
+
+        // return the newly created / updated order item
         return newOrderItem
     }else{
         const newQuantity = orderItem.quantity + 1
@@ -58,7 +63,10 @@ const addOrderItem = async(order_id, menuItem_id) => {
             {
                 new: true, runValidators: true
             })
-            return updatedOrderItem
+        // update the order's total
+        await updateOrderTotal(order_id)
+
+        return updatedOrderItem
     }
 }
 
@@ -90,9 +98,16 @@ const removeOrderItem = async(order_id, menuItem_id) => {
             {
                 new: true, runValidators: true
             })
+        // update the order's total
+        await updateOrderTotal(order_id)
+
         return updateOrderItem
     }else{
         const deleteOrderItem = await OrderItem.findByIdAndDelete(orderItem._id)
+        
+        // update the order's total
+        await updateOrderTotal(order_id)
+
         return deleteOrderItem
     }
 }
