@@ -29,20 +29,19 @@ const getOrder = async(table_id) => {
 
 // create the order
 const openOrder = async(table_id, user_id) => {
-    // check if the user exists in db
-    const user = await User.findById(user_id)
-    if (!user) {
-        const error = new Error("This user does not exist!")
-        error.statusCode = 404
-        throw error;
-    }
-
     // check if the table exists in db
     const table = await Table.findById(table_id)
     if (!table) {
         const error = new Error("This table does not exist!")
         error.statusCode = 404
         throw error;
+    }
+
+    // check table status to be available during the order opening
+    if (table.status === "occupied"){
+        const error = new Error("Cannot open an order on an occupied table!")
+        error.statusCode = 400
+        throw error
     }
 
     // check if any order is opened for that table
@@ -82,6 +81,13 @@ const updateOrderTotal = async(order_id) => {
         const error = new Error("Order couldn't be found!")
         error.statusCode = 404
         throw error;
+    }
+
+    // check if that order is open
+    if (order.status !== "open"){
+        const error = new Error("Cannot update the total of an closed order!")
+        error.statusCode = 400
+        throw error
     }
 
     // get all the items in this order
@@ -158,7 +164,7 @@ const deleteOrder = async(table_id, user_id) => {
 
     // make sure that the waiter who opened it, has the right to close it aswell
     if (order.waiterId.toString() !== user_id){
-        const error = new Error("Only the waiter who opened it, has the right to close this order!")
+        const error = new Error("Only the waiter who opened it, has the right to delete this order!")
         error.statusCode = 401
         throw error;
     }
