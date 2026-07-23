@@ -1,53 +1,53 @@
 const asyncHandler = require("express-async-handler")
 const {getOrder, openOrder, closeOrder, deleteOrder} = require("../services/orderService.js")
 
-const findOrder = asyncHandler(async(req,res) => {
-    const {id} = req.params
+const getOrderController = asyncHandler(async(req,res) => {
+    const {tableId} = req.params
 
-    const foundOrder = await getOrder(id)
+    const foundOrder = await getOrder(tableId)
     res.status(200).json(foundOrder)
 })
 
-const createOrder = asyncHandler(async(req, res) => {
+const openOrderController = asyncHandler(async(req, res) => {
     // destruct the url by taking the table id
-    const {id} = req.params
+    const {tableId} = req.params
 
     // get the waiter id from the req.user
     const userId = req.user._id.toString()
 
-    const createdOrder = await openOrder(id, userId)
+    const createdOrder = await openOrder(tableId, userId)
     res.status(201).json({
         createdOrder,
         response: "Order opened successfully!"
     })
 })
 
-const lockOrder = asyncHandler(async(req,res) => {
+const closeOrderController = asyncHandler(async(req,res) => {
     // destruct the url by taking the table id
-    const {id} = req.params
+    const {tableId} = req.params
 
     // get the waiter id from the req.user
     const userId = req.user._id.toString()
 
-    const closedOrder = await closeOrder(id, userId)
+    const closedOrder = await closeOrder(tableId, userId)
     res.status(200).json({
         closedOrder,
         response: "Order closed successfully!"
     })
 })
 
-const removeOrder = asyncHandler(async(req, res) => {
+const deleteOrderController = asyncHandler(async(req, res) => {
     // destruct the url by taking the table id
-    const {id} = req.params
+    const {tableId} = req.params
 
     // get the waiter id from the req.user
     const userId = req.user._id.toString()
 
-    const deletedOrder = await deleteOrder(id, userId)
+    const deletedOrder = await deleteOrder(tableId, userId)
     res.status(200).json({
         deletedOrder,
         response: "Order deleted by success!"
     })
 })
 
-module.exports = {findOrder, createOrder, lockOrder, removeOrder}
+module.exports = {getOrderController, openOrderController, closeOrderController, deleteOrderController}

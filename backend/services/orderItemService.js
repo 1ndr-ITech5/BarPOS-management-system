@@ -5,7 +5,10 @@ const {updateOrderTotal} = require("./orderService.js")
 
 const getOrderItems = async(order_id) => {
     // check if order exists
-    const order = await Order.findById(order_id)
+    const order = await Order.findOne({
+        _id: order_id,
+        status: "open"
+    })
     if (!order) {
         const error = new Error("Order does not exists!")
         error.statusCode = 404
@@ -17,7 +20,7 @@ const getOrderItems = async(order_id) => {
     return orderItems
 }
 
-const addOrderItem = async(order_id, menuItem_id) => {
+const addOrderItem = async(order_id, menuItem_id, user_id) => {
     // check if order exists
     const order = await Order.findById(order_id)
     if (!order) {
@@ -26,11 +29,25 @@ const addOrderItem = async(order_id, menuItem_id) => {
         throw error
     }
 
+    // check if order is in status open
+    if (order.status !== "open"){
+        const error = new Error("Cannot add items on a closed order!")
+        error.statusCode = 400
+        throw error
+    }
+
     // check if the order item is in the menu
     const item = await Menu.findById(menuItem_id)
     if (!item){
         const error = new Error("Item does not exists in the menu!")
         error.statusCode = 404
+        throw error
+    }
+
+    // check if the waiter who opened it has the right to add items on order
+    if (order.waiterId.toString() !== user_id){
+        const error = new Error("Only the waiter who opened this order has the right to add items!")
+        error.statusCode = 401
         throw error
     }
 
@@ -70,12 +87,26 @@ const addOrderItem = async(order_id, menuItem_id) => {
     }
 }
 
-const removeOrderItem = async(order_id, menuItem_id) => {
+const removeOrderItem = async(order_id, menuItem_id, user_id) => {
     // check if the order exists
     const order = await Order.findById(order_id)
     if (!order) {
         const error = new Error("Order does not exists!")
         error.statusCode = 404
+        throw error
+    }
+
+    // check if order is in status open
+    if (order.status !== "open"){
+        const error = new Error("Cannot add items on a closed order!")
+        error.statusCode = 400
+        throw error
+    }
+
+    // check if the waiter who opened it has the right to add items on order
+    if (order.waiterId.toString() !== user_id){
+        const error = new Error("Only the waiter who opened this order has the right to remove items!")
+        error.statusCode = 401
         throw error
     }
 

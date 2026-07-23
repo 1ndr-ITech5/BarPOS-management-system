@@ -1,14 +1,14 @@
 const express = require("express")
-const {findOrder, createOrder, lockOrder, removeOrder} = require('../controllers/orderController.js')
+const {getOrderController, openOrderController, closeOrderController, deleteOrderController} = require('../controllers/orderController.js')
 const {protect} = require("../middlewares/authMiddleware.js")
 const router = express.Router()
 
-router.get("/:id", findOrder)
+router.get("/:tableId", protect, getOrderController)
 
-router.post("/open/:id", protect, createOrder)
+router.post("/:tableId/open", protect, openOrderController)
 
-router.put("/close/:id", protect, lockOrder)
+router.put("/:tableId/close", protect, closeOrderController)
 
-router.delete("/delete/:id", protect, removeOrder)
+router.delete("/:tableId/delete", protect, deleteOrderController)
 
 module.exports = router;

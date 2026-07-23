@@ -14,7 +14,10 @@ const addItem = asyncHandler(async(req,res) => {
     // get the params of orderid and menuitem id
     const {orderId, menuItemId} = req.params
 
-    const addedItem = await addOrderItem(orderId, menuItemId)
+    // get the user id from req.user
+    const userId = req.user._id.toString()
+
+    const addedItem = await addOrderItem(orderId, menuItemId, userId)
     res.status(201).json({
         addedItem, 
         response: "Item added on the order!"
@@ -25,7 +28,10 @@ const removeItem = asyncHandler(async(req,res) => {
     // get the params of orderid and menuitem id
     const {orderId, menuItemId} = req.params
 
-    const removedItem = await removeOrderItem(orderId, menuItemId)
+    // get the user id from req.user
+    const userId = req.user._id.toString()
+
+    const removedItem = await removeOrderItem(orderId, menuItemId, userId)
     res.status(200).json({
         removedItem, 
         response: "Item removed from the order!"
