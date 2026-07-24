@@ -2,11 +2,23 @@ const express = require("express")
 const dotenv = require("dotenv").config()
 const connectDB = require('./config/db.js')
 const {errorHandler} = require("./middlewares/errorMiddleware.js")
+const helmet = require("helmet")
+const cors = require("cors")
 const port = process.env.PORT || 5000
 
 // call the connection with mongo
 connectDB();
 const app = express();
+
+// enable communication with frontend port
+app.use(cors({
+    origin: "http://localhost:5173",
+    methods: [GET, POST, PUT, DELETE],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}))
+
+// set HTTP security headers with helmet
+app.use(helmet())
 
 // middleware to translate json
 app.use(express.json())
