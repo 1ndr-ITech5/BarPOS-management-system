@@ -13,7 +13,6 @@ const app = express();
 // enable communication with frontend port
 app.use(cors({
     origin: "http://localhost:5173",
-    methods: [GET, POST, PUT, DELETE],
     allowedHeaders: ["Content-Type", "Authorization"]
 }))
 
@@ -38,6 +37,9 @@ app.use("/api/order", require("./routes/orderRoutes.js"))
 
 // manage the order items paths
 app.use("/api/order", require("./routes/orderItemRoutes.js"))
+
+// manage the payment paths
+app.use("/api", require("./routes/paymentRoutes.js"))
 
 // call middleware to catch the errors
 app.use(errorHandler)

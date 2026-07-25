@@ -106,30 +106,10 @@ const updateOrderTotal = async(order_id) => {
     )
 }
 
-const closeOrder = async(table_id, user_id) => {
-    // find the order based on the table
-    const order = await Order.findOne({
-        tableId: table_id,
-        status: "open"
-    })
-
-    // check if order was found
-    if(!order){
-        const error = new Error("Order does not exists for this table!")
-        error.statusCode = 404
-        throw error;
-    }
-
-    // make sure that the waiter closing is the one that opened it
-    if (order.waiterId.toString() !== user_id){
-        const error = new Error("Only the waiter who opened it, has the right to close this order!")
-        error.statusCode = 401
-        throw error;
-    }
-
+const closeOrder = async(order_id, table_id) => {
     // update the order status
     const closedOrder = await Order.findByIdAndUpdate(
-        order._id,
+        order_id,
         {   status: "closed",
             closedAt: new Date()
         },
@@ -145,8 +125,6 @@ const closeOrder = async(table_id, user_id) => {
         },
         {new: true, runValidators: true}
     )
-
-    return closedOrder
 }
 
 const deleteOrder = async(table_id, user_id) => {

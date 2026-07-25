@@ -25,7 +25,7 @@ const paymentSchema = new mongoose.Schema({
     },
     tips: {
         type: Number,
-        default: 0
+        required: true
     },
     method: {
         type: String,
