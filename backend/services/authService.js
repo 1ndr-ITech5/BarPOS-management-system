@@ -21,15 +21,10 @@ const register = async(user_info) => {
         throw error;
     }
 
-    // encrypt the password
-    const salt = await bcrypt.genSalt(10)
-    const hashed_password = await bcrypt.hash(password, salt)
-
     // save the new user to the database
     const newUser = await User.create({
         first_name, last_name, username, 
-        password: hashed_password, role
-    })
+        password, role})
 
     return newUser
 }

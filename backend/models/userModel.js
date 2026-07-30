@@ -1,4 +1,5 @@
 const mongoose = require("mongoose")
+const bcrypt = require("bcryptjs")
 
 const userSchema = new mongoose.Schema({
     first_name: {
@@ -26,7 +27,21 @@ const userSchema = new mongoose.Schema({
     },
     {
         timestamps: true
-    })
+})
+
+// use mongoose middleware to hash the user's password
+userSchema.pre("save", async function() {
+    // check if password is modified
+    if(!this.isModified("password")){
+        return;
+    }
+
+    // hash password
+    const salt = await bcrypt.genSalt(10)
+    const hashPassword = await bcrypt.hash(this.password, salt)
+
+    // save the hashed password as the new password
+    this.password = hashPassword
+})
 
 module.exports = mongoose.model("User", userSchema)
-

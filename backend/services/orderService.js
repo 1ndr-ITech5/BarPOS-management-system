@@ -27,6 +27,20 @@ const getOrder = async(table_id) => {
     }
 }
 
+// get all the active orders
+const getAllOrders = async() => {
+    // find in db all orders that have status open
+    const activeOrders = await Order.find({status: "open"})
+    return activeOrders
+}
+
+// get the active orders based on the waiter id
+const getWaiterOrders = async(user_id) => {
+    // find all the active orders that waiter has opened
+    const waiterOrders = await Order.find({waiterId: user_id, status: "open"})
+    return waiterOrders
+}
+
 // create the order
 const openOrder = async(table_id, user_id) => {
     // check if the table exists in db
@@ -164,4 +178,4 @@ const deleteOrder = async(table_id, user_id) => {
     return deletedOrder
 }
 
-module.exports = {getOrder, openOrder, updateOrderTotal, closeOrder, deleteOrder}
+module.exports = {getOrder, getAllOrders, getWaiterOrders, openOrder, updateOrderTotal, closeOrder, deleteOrder}
