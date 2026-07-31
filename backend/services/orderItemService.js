@@ -3,26 +3,9 @@ const Order = require("../models/orderModel.js")
 const Menu = require("../models/menuModel.js")
 const {updateOrderTotal} = require("./orderService.js")
 
-const getOrderItems = async(order_id) => {
+const addOrderItem = async(order_id, menuItem_id, userData) => {
     // check if order exists
-    const order = await Order.findOne({
-        _id: order_id,
-        status: "open"
-    })
-    if (!order) {
-        const error = new Error("Order does not exists!")
-        error.statusCode = 404
-        throw error
-    }
-
-    // get all the order items of that order
-    const orderItems = await OrderItem.find({orderId: order_id})
-    return orderItems
-}
-
-const addOrderItem = async(order_id, menuItem_id, user_id) => {
-    // check if order exists
-    const order = await Order.findById(order_id)
+    const order = await Order.findById(order_id).populate("waiterId", "first_name last_name")
     if (!order) {
         const error = new Error("Order does not exists!")
         error.statusCode = 404
@@ -44,10 +27,10 @@ const addOrderItem = async(order_id, menuItem_id, user_id) => {
         throw error
     }
 
-    // check if the waiter who opened it has the right to add items on order
-    if (order.waiterId.toString() !== user_id){
-        const error = new Error("Only the waiter who opened this order has the right to add items!")
-        error.statusCode = 401
+    // check if the waiter who opened it and the admin, have the rights to add items on order
+    if (order.waiterId._id.toString() !== userData._id.toString() && userData.role !== "admin"){
+        const error = new Error(`Only ${order.waiterId.first_name} ${order.waiterId.last_name} and the admin, have the rights to add items on this order!`)
+        error.statusCode = 403
         throw error
     }
 
@@ -78,7 +61,7 @@ const addOrderItem = async(order_id, menuItem_id, user_id) => {
                 linePrice: newQuantity * orderItem.unitPrice
             },
             {
-                new: true, runValidators: true
+                returnDocument: "after", runValidators: true
             })
         // update the order's total
         await updateOrderTotal(order_id)
@@ -87,9 +70,9 @@ const addOrderItem = async(order_id, menuItem_id, user_id) => {
     }
 }
 
-const removeOrderItem = async(order_id, menuItem_id, user_id) => {
+const removeOrderItem = async(order_id, menuItem_id, userData) => {
     // check if the order exists
-    const order = await Order.findById(order_id)
+    const order = await Order.findById(order_id).populate("waiterId", "first_name last_name")
     if (!order) {
         const error = new Error("Order does not exists!")
         error.statusCode = 404
@@ -103,17 +86,17 @@ const removeOrderItem = async(order_id, menuItem_id, user_id) => {
         throw error
     }
 
-    // check if the waiter who opened it has the right to add items on order
-    if (order.waiterId.toString() !== user_id){
-        const error = new Error("Only the waiter who opened this order has the right to remove items!")
-        error.statusCode = 401
+    // check if the waiter who opened it and the admin have the right to add items on order
+    if (order.waiterId._id.toString() !== userData._id.toString() && userData.role !== "admin"){
+        const error = new Error(`Only ${order.waiterId.first_name} ${order.waiterId.last_name} and the admin, have the rights to remove items on this order!`)
+        error.statusCode = 403
         throw error
     }
 
     // check if the order item exists in this order
     const orderItem = await OrderItem.findOne({orderId: order_id, menuItemId: menuItem_id})
     if (!orderItem) {
-        const error = new Error("Item does not exists in this order!")
+        const error = new Error("This item does not exists in this order!")
         error.statusCode = 404
         throw error
     }
@@ -127,7 +110,7 @@ const removeOrderItem = async(order_id, menuItem_id, user_id) => {
                 linePrice: newQuantity * orderItem.unitPrice
             },
             {
-                new: true, runValidators: true
+                returnDocument: "after", runValidators: true
             })
         // update the order's total
         await updateOrderTotal(order_id)
@@ -143,4 +126,4 @@ const removeOrderItem = async(order_id, menuItem_id, user_id) => {
     }
 }
 
-module.exports = {getOrderItems, addOrderItem, removeOrderItem}
+module.exports = {addOrderItem, removeOrderItem}

@@ -3,8 +3,8 @@ const Table = require("../models/tableModel.js")
 const User = require("../models/userModel.js")
 const OrderItem = require("../models/orderItemModel.js")
 
-// get the order based on the table id
-const getOrder = async(table_id) => {
+// get the pre-bill of order based on the table id
+const getPreBill = async(table_id, userData) => {
     // check if this table exists in db
     const table = await Table.findById(table_id)
     if (!table){
@@ -17,20 +17,32 @@ const getOrder = async(table_id) => {
     const order = await Order.findOne({
         tableId: table_id,
         status: "open"
-    })
+    }).populate("waiterId", "first_name last_name")
+    .populate("tableId", "tableNumber")
 
-    // cases when you get order and when not
-    if (!order) {
-        return null
-    }else{
-        return order
+    // return when order is not found
+    if (!order) {return null}
+
+    // check that only the waiter who opened it or the admin has permission to get it
+    if(order.waiterId._id.toString() !== userData._id.toString() && userData.role !== "admin"){
+        const error = new Error(`The pre-bill can be viewed by ${order.waiterId.first_name} ${order.waiterId.last_name} and the admin!`)
+        error.statusCode = 403
+        throw error;
     }
+
+    // query over order items
+    const orderItems = await OrderItem.find({orderId: order._id})
+    .populate("menuItemId", "productName")
+
+    return {order, orderItems}
 }
 
 // get all the active orders
 const getAllOrders = async() => {
     // find in db all orders that have status open
-    const activeOrders = await Order.find({status: "open"})
+    const activeOrders = await Order.find({status: "open"}).populate("waiterId", "first_name last_name")
+    .populate("tableId", "tableNumber")
+    
     return activeOrders
 }
 
@@ -38,6 +50,8 @@ const getAllOrders = async() => {
 const getWaiterOrders = async(user_id) => {
     // find all the active orders that waiter has opened
     const waiterOrders = await Order.find({waiterId: user_id, status: "open"})
+    .populate("tableId", "tableNumber")
+
     return waiterOrders
 }
 
@@ -82,7 +96,7 @@ const openOrder = async(table_id, user_id) => {
             openedBy: user_id,
             timeOpened: new Date()
         },
-        {new: true, runValidators: true}
+        {returnDocument: "after", runValidators: true}
     )
 
     return newOrder
@@ -116,7 +130,7 @@ const updateOrderTotal = async(order_id) => {
     const updatedOrder = await Order.findByIdAndUpdate(
         order_id,
         {total: totalPrice},
-        {new:true, runValidators: true}
+        {returnDocument: "after", runValidators: true}
     )
 }
 
@@ -127,7 +141,7 @@ const closeOrder = async(order_id, table_id) => {
         {   status: "closed",
             closedAt: new Date()
         },
-        {new: true, runValidators: true}
+        {returnDocument: "after", runValidators: true}
     )
 
     // update table occupation
@@ -137,16 +151,16 @@ const closeOrder = async(order_id, table_id) => {
             openedBy: null,
             timeOpened: null
         },
-        {new: true, runValidators: true}
+        {returnDocument: "after", runValidators: true}
     )
 }
 
-const deleteOrder = async(table_id, user_id) => {
+const deleteOrder = async(table_id, userData) => {
     // check if the order exists
     const order = await Order.findOne({
         tableId: table_id,
         status: "open"
-    })
+    }).populate("waiterId", "first_name last_name")
 
     if(!order){
         const error = new Error("Order does not exists for this table!")
@@ -154,10 +168,10 @@ const deleteOrder = async(table_id, user_id) => {
         throw error;
     }
 
-    // make sure that the waiter who opened it, has the right to close it aswell
-    if (order.waiterId.toString() !== user_id){
-        const error = new Error("Only the waiter who opened it, has the right to delete this order!")
-        error.statusCode = 401
+    // make sure that the waiter who opened it, has the right to close it aswell, admin can do it too
+    if (order.waiterId._id.toString() !== userData._id.toString() && userData.role !== "admin"){
+        const error = new Error(`Only ${order.waiterId.first_name} ${order.waiterId.last_name} and the admin, have the rights to delete this order!`)
+        error.statusCode = 403
         throw error;
     }
 
@@ -171,11 +185,11 @@ const deleteOrder = async(table_id, user_id) => {
             openedBy: null,
             timeOpened: null
         },
-        {new: true, runValidators: true}
+        {returnDocument: "after", runValidators: true}
     )
 
 
     return deletedOrder
 }
 
-module.exports = {getOrder, getAllOrders, getWaiterOrders, openOrder, updateOrderTotal, closeOrder, deleteOrder}
+module.exports = {getPreBill, getAllOrders, getWaiterOrders, openOrder, updateOrderTotal, closeOrder, deleteOrder}

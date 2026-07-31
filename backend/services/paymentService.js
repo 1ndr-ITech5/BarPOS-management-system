@@ -8,12 +8,12 @@ const getPayments = async() => {
     return payments
 }
 
-const createPayment = async(payment_fields, order_id, user_id) => {
+const createPayment = async(payment_fields, order_id, user) => {
     // check if the open order exists
     const order = await Order.findOne({
         _id: order_id,
         status: "open"
-    })
+    }).populate("waiterId", "first_name last_name")
     if (!order){
         const error = new Error("Cannot create a payment for an order that doesn't exist!")
         error.statusCode = 404
@@ -29,14 +29,14 @@ const createPayment = async(payment_fields, order_id, user_id) => {
     }
 
     // check if the waiter who opened the order will be the one who closes it
-    if (order.waiterId.toString() !== user_id){
-        const error = new Error("The waiter who opened the order has the rights to close it!")
-        error.statusCode = 401
+    if (order.waiterId._id.toString() !== user._id.toString() && user.role !== "admin"){
+        const error = new Error(`The waiter: ${order.waiterId.first_name} ${order.waiterId.last_name} and admin have the rights to close the order!`)
+        error.statusCode = 403
         throw error
     }
 
     // check if all the required fields are filled
-    const {amountPaid, method, tips} = payment_fields
+    const {amountPaid, method} = payment_fields
     if (!amountPaid || !method){
         const error = new Error("Please provide the required payment fields!")
         error.statusCode = 400
@@ -50,13 +50,8 @@ const createPayment = async(payment_fields, order_id, user_id) => {
         throw error
     }
 
-    // make sure that if user has not provided tip it is default 0
-    if (!tips){
-        const tips = 0
-    }
-
     // calculate the change and make sure it is not under 0
-    const change = amountPaid - order.total - tips
+    const change = amountPaid - order.total
     if (change < 0){
         const error = new Error("Change cannot be below 0!")
         error.statusCode = 400
@@ -66,11 +61,10 @@ const createPayment = async(payment_fields, order_id, user_id) => {
     // save payment in the database
     const payment = await Payment.create({
         orderId: order_id,
-        waiterId: user_id,
+        waiterId: user._id,
         totalAmount: order.total,
         amountPaid: amountPaid,
         change: change,
-        tips: tips,
         method: method
     })
 

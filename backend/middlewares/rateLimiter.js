@@ -6,7 +6,7 @@ const authLimiter = rateLimit({
     message: {
         message: "Too many requests done! Try again after 20 minutes!"
     },
-    standartHeaders: true,
+    standardHeaders: true,
     legacyHeaders: false
 })
 

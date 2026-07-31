@@ -6,7 +6,7 @@ const {adminOnly} = require("../middlewares/adminOnlyMiddleware.js")
 const router = express.Router()
 
 // path to register controller
-router.post("/register", authLimiter, protect, adminOnly, registUser)
+router.post("/register", protect, adminOnly, registUser)
 
 // path to login controller
 router.post("/login", authLimiter, logUser)

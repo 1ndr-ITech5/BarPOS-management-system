@@ -23,10 +23,6 @@ const paymentSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    tips: {
-        type: Number,
-        required: true
-    },
     method: {
         type: String,
         enum: ["cash", "card"],
