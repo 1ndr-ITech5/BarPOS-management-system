@@ -5,9 +5,7 @@ const {getPreBill, getAllOrders, getWaiterOrders, openOrder, deleteOrder} = requ
 const getOrderController = asyncHandler(async(req,res) => {
     const {tableId} = req.params
 
-    const userData = req.user
-
-    const foundOrder = await getPreBill(tableId, userData)
+    const foundOrder = await getPreBill(tableId, req.user)
     res.status(200).json(foundOrder)
 })
 

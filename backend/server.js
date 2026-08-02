@@ -1,5 +1,4 @@
 const express = require("express")
-const dotenv = require("dotenv").config()
 const connectDB = require('./config/db.js')
 const {errorHandler} = require("./middlewares/errorMiddleware.js")
 const helmet = require("helmet")

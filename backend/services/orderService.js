@@ -1,6 +1,5 @@
 const Order = require("../models/orderModel.js")
 const Table = require("../models/tableModel.js")
-const User = require("../models/userModel.js")
 const OrderItem = require("../models/orderItemModel.js")
 
 // get the pre-bill of order based on the table id
@@ -20,8 +19,12 @@ const getPreBill = async(table_id, userData) => {
     }).populate("waiterId", "first_name last_name")
     .populate("tableId", "tableNumber")
 
-    // return when order is not found
-    if (!order) {return null}
+    // when order is not found
+    if (!order) {
+        const error = new Error(`No active order was found for table number ${table.tableNumber}!`)
+        error.statusCode = 404
+        throw error;
+    }
 
     // check that only the waiter who opened it or the admin has permission to get it
     if(order.waiterId._id.toString() !== userData._id.toString() && userData.role !== "admin"){
@@ -68,7 +71,7 @@ const openOrder = async(table_id, user_id) => {
     // check table status to be available during the order opening
     if (table.status === "occupied"){
         const error = new Error("Cannot open an order on an occupied table!")
-        error.statusCode = 400
+        error.statusCode = 409
         throw error
     }
 
@@ -79,7 +82,7 @@ const openOrder = async(table_id, user_id) => {
     })
     if (order) {
         const error = new Error("This table has an order already!")
-        error.statusCode = 400
+        error.statusCode = 409
         throw error;
     }
 
@@ -90,7 +93,7 @@ const openOrder = async(table_id, user_id) => {
     })
 
     // update the table status to occupied after the newOrder gets created
-    const updateTable = await Table.findByIdAndUpdate(
+    await Table.findByIdAndUpdate(
         table._id, 
         {   status: "occupied",
             openedBy: user_id,
@@ -103,21 +106,6 @@ const openOrder = async(table_id, user_id) => {
 }
 
 const updateOrderTotal = async(order_id) => {
-    // find the order
-    const order = await Order.findById(order_id)
-    if (!order){
-        const error = new Error("Order couldn't be found!")
-        error.statusCode = 404
-        throw error;
-    }
-
-    // check if that order is open
-    if (order.status !== "open"){
-        const error = new Error("Cannot update the total of an closed order!")
-        error.statusCode = 400
-        throw error
-    }
-
     // get all the items in this order
     const items = await OrderItem.find({orderId: order_id})
 
@@ -127,7 +115,7 @@ const updateOrderTotal = async(order_id) => {
     );
 
     // update the order with the new total
-    const updatedOrder = await Order.findByIdAndUpdate(
+    await Order.findByIdAndUpdate(
         order_id,
         {total: totalPrice},
         {returnDocument: "after", runValidators: true}
@@ -136,7 +124,7 @@ const updateOrderTotal = async(order_id) => {
 
 const closeOrder = async(order_id, table_id) => {
     // update the order status
-    const closedOrder = await Order.findByIdAndUpdate(
+    await Order.findByIdAndUpdate(
         order_id,
         {   status: "closed",
             closedAt: new Date()
@@ -145,7 +133,7 @@ const closeOrder = async(order_id, table_id) => {
     )
 
     // update table occupation
-    const table = await Table.findByIdAndUpdate(
+    await Table.findByIdAndUpdate(
         table_id,
         {   status: "available",
             openedBy: null,
@@ -179,7 +167,7 @@ const deleteOrder = async(table_id, userData) => {
     const deletedOrder = await Order.findByIdAndDelete(order._id)
 
     // update table occupation
-    const table = await Table.findByIdAndUpdate(
+    await Table.findByIdAndUpdate(
         table_id,
         {   status: "available",
             openedBy: null,

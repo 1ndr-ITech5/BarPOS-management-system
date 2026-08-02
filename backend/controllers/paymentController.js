@@ -10,14 +10,7 @@ const createNewPayment = asyncHandler(async(req,res) => {
     // get the order id from endpoint parameter
     const {orderId} = req.params
 
-    // get the waiter id from req.user
-    const user = req.user
-
-    // get the req.body items and save them to paymentData
-    const {amountPaid, method} = req.body
-    const paymentData = {amountPaid, method}
-
-    const newPayment = await createPayment(paymentData, orderId, user)
+    const newPayment = await createPayment(req.body, orderId, req.user)
 
     res.status(201).json({
         newPayment,

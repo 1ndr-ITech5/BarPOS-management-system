@@ -11,17 +11,25 @@ const protect = async(req, res, next) => {
             // extract the user's id from token
             const decode = jwt.verify(token, process.env.JWT_SECRET)
             // check in the db if this user exists
-            req.user = await User.findById(decode.id).select("-password")
+            const user = await User.findById(decode.id).select("-password")
+            if (!user){
+                const error = new Error("This user does not exist anymore!")
+                error.statusCode = 401
+                throw error;
+            }
+            req.user = user
             next();
         }catch(error){
-            console.log(`Error: ${error}!`)
+            error.statusCode = 401
+            throw error;
         }
     }
 
     // check if token is empty
     if (!token){
-        res.status(401)
-        throw new Error("Not authorized for this action!")
+        const error = new Error("You are not authorized for this action!")
+        error.statusCode = 401
+        throw error;
     }
 }
 

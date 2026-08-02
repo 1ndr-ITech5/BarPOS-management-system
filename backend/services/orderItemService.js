@@ -5,17 +5,10 @@ const {updateOrderTotal} = require("./orderService.js")
 
 const addOrderItem = async(order_id, menuItem_id, userData) => {
     // check if order exists
-    const order = await Order.findById(order_id).populate("waiterId", "first_name last_name")
+    const order = await Order.findOne({_id: order_id, status: "open"}).populate("waiterId", "first_name last_name")
     if (!order) {
         const error = new Error("Order does not exists!")
         error.statusCode = 404
-        throw error
-    }
-
-    // check if order is in status open
-    if (order.status !== "open"){
-        const error = new Error("Cannot add items on a closed order!")
-        error.statusCode = 400
         throw error
     }
 
@@ -72,17 +65,10 @@ const addOrderItem = async(order_id, menuItem_id, userData) => {
 
 const removeOrderItem = async(order_id, menuItem_id, userData) => {
     // check if the order exists
-    const order = await Order.findById(order_id).populate("waiterId", "first_name last_name")
+    const order = await Order.findOne({_id: order_id, status: "open"}).populate("waiterId", "first_name last_name")
     if (!order) {
         const error = new Error("Order does not exists!")
         error.statusCode = 404
-        throw error
-    }
-
-    // check if order is in status open
-    if (order.status !== "open"){
-        const error = new Error("Cannot add items on a closed order!")
-        error.statusCode = 400
         throw error
     }
 

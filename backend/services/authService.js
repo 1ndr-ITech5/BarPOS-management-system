@@ -3,7 +3,7 @@ const User = require("../models/userModel.js")
 
 
 // bussiness logic for register
-const register = async(user_info) => {
+const registerNewUser = async(user_info) => {
     const { first_name, last_name, username, password, role } = user_info
 
     // check if the user has provided all the needed datas
@@ -17,7 +17,7 @@ const register = async(user_info) => {
     const user = await User.findOne({username})
     if (user){
         const error = new Error("This user already exists!")
-        error.statusCode = 400
+        error.statusCode = 409
         throw error;
     }
 
@@ -30,7 +30,7 @@ const register = async(user_info) => {
 }
 
 
-const login = async(user_info) => {
+const loginExistingUser = async(user_info) => {
     const { username, password } = user_info
 
     // check if the fields are filled
@@ -59,4 +59,4 @@ const login = async(user_info) => {
     return user
 }
 
-module.exports = {register, login};
+module.exports = {registerNewUser, loginExistingUser};

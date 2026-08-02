@@ -4,11 +4,12 @@ const OrderItem = require("../models/orderItemModel.js")
 const {closeOrder} = require("./orderService.js")
 
 const getPayments = async() => {
-    const payments = await Payment.find()
+    const payments = await Payment.find().populate({path: "orderId", populate: {path: "tableId", select: "tableNumber"}})
+    .populate("waiterId", "first_name last_name")
     return payments
 }
 
-const createPayment = async(payment_fields, order_id, user) => {
+const createPayment = async(paymentData, order_id, user) => {
     // check if the open order exists
     const order = await Order.findOne({
         _id: order_id,
@@ -22,8 +23,8 @@ const createPayment = async(payment_fields, order_id, user) => {
 
     // check if this order has items in it
     const orderItems = await OrderItem.find({orderId: order_id})
-    if (!orderItems){
-        const error = new Error("Cannot create a payment for an order that doesn't have items in it!")
+    if (orderItems.length === 0){
+        const error = new Error("Cannot create a payment for an order that doesn't have any items in it!")
         error.statusCode = 404
         throw error
     }
@@ -36,7 +37,7 @@ const createPayment = async(payment_fields, order_id, user) => {
     }
 
     // check if all the required fields are filled
-    const {amountPaid, method} = payment_fields
+    const {amountPaid, method} = paymentData
     if (!amountPaid || !method){
         const error = new Error("Please provide the required payment fields!")
         error.statusCode = 400
@@ -45,15 +46,7 @@ const createPayment = async(payment_fields, order_id, user) => {
 
     // check if amount paid by user is greater or equal to total order amount
     if (amountPaid < order.total){
-        const error = new Error("Amount paid should be greater or equal to total order amount!")
-        error.statusCode = 400
-        throw error
-    }
-
-    // calculate the change and make sure it is not under 0
-    const change = amountPaid - order.total
-    if (change < 0){
-        const error = new Error("Change cannot be below 0!")
+        const error = new Error(`Amount paid should be greater or equal to total order amount! Amount needed to be added: ${order.total - amountPaid}`)
         error.statusCode = 400
         throw error
     }
@@ -64,7 +57,7 @@ const createPayment = async(payment_fields, order_id, user) => {
         waiterId: user._id,
         totalAmount: order.total,
         amountPaid: amountPaid,
-        change: change,
+        change: amountPaid - order.total,
         method: method
     })
 

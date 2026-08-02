@@ -1,12 +1,12 @@
 const asyncHandler = require("express-async-handler")
-const {register, login} = require("../services/authService.js")
+const {registerNewUser, loginExistingUser} = require("../services/authService.js")
 const generateToken = require("../utils/generateToken.js")
 
 // bussiness logic for register
 const registUser = asyncHandler(async(req, res) => {
     
     // get the result from the service
-    const newUser = await register(req.body)
+    const newUser = await registerNewUser(req.body)
 
     // check if the new user is created
     res.status(201).json({
@@ -22,7 +22,7 @@ const registUser = asyncHandler(async(req, res) => {
 
 const logUser = asyncHandler(async(req, res) => {
     
-    const user = await login(req.body)
+    const user = await loginExistingUser(req.body)
 
     // return the user info in frontend altogether with the token
     res.status(200).json({

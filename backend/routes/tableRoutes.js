@@ -1,7 +1,7 @@
 const express = require("express")
-const {getTables} = require("../controllers/tableController.js")
+const {getTablesController} = require("../controllers/tableController.js")
 const router = express.Router()
 
-router.get("/", getTables)
+router.get("/", getTablesController)
 
 module.exports = router;
