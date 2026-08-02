@@ -27,7 +27,7 @@ const protect = async(req, res, next) => {
 
     // check if token is empty
     if (!token){
-        const error = new Error("You are not authorized for this action!")
+        const error = new Error("Please log in to continue!")
         error.statusCode = 401
         throw error;
     }
