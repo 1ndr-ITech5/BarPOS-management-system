@@ -2,8 +2,8 @@ const Header = () => {
     return (
         <div>
             <select>
-                <option selected>Shqip</option>
-                <option>English</option>
+                <option value="shqip">Shqip</option>
+                <option value="english">English</option>
             </select>
         </div>
     )

@@ -1,8 +1,8 @@
 import './TableCard.css';
 
-const TableCard = ({table}) => {
+const TableCard = ({table, addModal}) => {
     return(
-        <div className="table-card" style={{backgroundColor: table.status === "available" ? "green" : "red"}}>
+        <div className="table-card" style={{backgroundColor: table.status === "available" ? "green" : "red"}} onClick={addModal}>
             {table.tableNo}
         </div>
     )

@@ -2,6 +2,8 @@ import Header from "../layout/Header.jsx";
 import Navbar from "../layout/Navbar.jsx";
 import Footer from "../layout/Footer.jsx";
 import TableCard from "../components/TableCard.jsx";
+import TableModal from "../components/TableModal.jsx";
+import {useState} from 'react';
 import './Home.css';
 
 const Home = () => {
@@ -25,6 +27,20 @@ const Home = () => {
         }
     ]
 
+    // set the state of choosen table and the modal appearence
+    const [choosenTable, setTable] = useState(null)
+    const [modalState, setModal] = useState(false)
+
+    const handleTableClick = (table) => {
+        setTable(table)
+        setModal(true)
+    }
+
+    const handleRemoveModal = () => {
+        setTable(null)
+        setModal(false)
+    }
+
     return (
         <div>
             <Header/>
@@ -33,11 +49,14 @@ const Home = () => {
                 <h1>Bar Restaurant Natyra</h1>
                 <div className="tables-grid">
                     {tables.map(table => (
-                        <TableCard key={table.tableNo} table={table}/>
+                        <TableCard key={table.tableNo} table={table} addModal={() => handleTableClick(table)}/>
                     ))}
                 </div>
                 <button>Login</button>
             </div>
+
+            {/* Manage the modal state */}
+            {modalState && <TableModal table={choosenTable} removeModal={() => handleRemoveModal()}/>}
             <Footer/>
         </div>
     )
