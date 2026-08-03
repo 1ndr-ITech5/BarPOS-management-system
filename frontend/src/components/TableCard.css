@@ -1,0 +1,14 @@
+.table-card {
+    width: 100px;
+    height: 100px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 8px;
+
+    color: rgb(0, 0, 0);
+    font-size: 32px;
+    font-weight: bold;
+}
