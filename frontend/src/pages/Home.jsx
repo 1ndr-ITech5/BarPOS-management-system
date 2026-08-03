@@ -1,6 +1,3 @@
-import Header from "../layout/Header.jsx";
-import Navbar from "../layout/Navbar.jsx";
-import Footer from "../layout/Footer.jsx";
 import TableCard from "../components/TableCard.jsx";
 import TableModal from "../components/TableModal.jsx";
 import {useState} from 'react';
@@ -43,8 +40,6 @@ const Home = () => {
 
     return (
         <div>
-            <Header/>
-            <Navbar/>
             <div className="main-page">
                 <h1>Bar Restaurant Natyra</h1>
                 <div className="tables-grid">
@@ -57,7 +52,6 @@ const Home = () => {
 
             {/* Manage the modal state */}
             {modalState && <TableModal table={choosenTable} removeModal={() => handleRemoveModal()}/>}
-            <Footer/>
         </div>
     )
 }

@@ -1,8 +1,9 @@
 import logo from "../assets/logo.png";
+import './Navbar.css'
 
 const Navbar = () => {
     return (
-        <div>
+        <div className="navbar">
             <img src={logo}/>
         </div>
     )
