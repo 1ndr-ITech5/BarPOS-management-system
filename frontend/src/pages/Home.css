@@ -1,3 +1,18 @@
+.home{
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items: center;
+    gap: 40px;
+}
+
+.main-page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
 .tables-grid{
     display: flex;
     flex-wrap: wrap;

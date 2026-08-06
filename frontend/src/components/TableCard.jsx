@@ -1,4 +1,4 @@
-import './TableCard.css';
+import '../comp-style/TableCard.css';
 
 const TableCard = ({table, addModal}) => {
     return(
