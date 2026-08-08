@@ -2,28 +2,14 @@ import TableCard from "../components/TableCard.jsx";
 import TableModal from "../components/TableModal.jsx";
 import UserPanel from "../components/UserPanel.jsx";
 import {useState} from 'react';
+import {useGetTablesQuery} from "../store/apis/tablesApi.js";
 import './Tables.css';
 
 const Tables = () => {
 
-    const tables = [
-        {
-            "tableNo": 1,
-            "status": "available"
-        },
-        {
-            "tableNo": 2,
-            "status": "available"
-        },
-        {
-            "tableNo": 3,
-            "status": "occupied"
-        },
-        {
-            "tableNo": 4,
-            "status": "available"
-        }
-    ]
+    const {data: tables, isloading} = useGetTablesQuery();
+    
+    if (isloading) return (<p>Loading tables...</p>);
 
     // set the state of choosen table and the modal appearence
     const [choosenTable, setTable] = useState(null)
@@ -45,8 +31,8 @@ const Tables = () => {
             <h1>Bar Restaurant Natyra</h1>
             <div className="main-page">
                 <div className="tables-grid">
-                    {tables.map(table => (
-                        <TableCard key={table.tableNo} table={table} addModal={() => handleTableClick(table)}/>
+                    {tables?.map(table => (
+                        <TableCard key={table._id} table={table} addModal={() => handleTableClick(table)}/>
                     ))}
                 </div>
                 <UserPanel/>

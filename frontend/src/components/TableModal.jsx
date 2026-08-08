@@ -1,7 +1,7 @@
 const TableModal = ({table, removeModal}) => {
     return(
         <div className="table-modal">
-            <h3>Table no.{table.tableNo}</h3>
+            <h3>Table no.{table.tableNumber}</h3>
             <p style={{color: table.status === "available" ? "green" : "red"}}>Status: {table.status}</p>
             {table.status === "available" ?
                 (<button>Open Table</button>)
