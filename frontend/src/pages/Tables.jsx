@@ -2,9 +2,9 @@ import TableCard from "../components/TableCard.jsx";
 import TableModal from "../components/TableModal.jsx";
 import UserPanel from "../components/UserPanel.jsx";
 import {useState} from 'react';
-import './Home.css';
+import './Tables.css';
 
-const Home = () => {
+const Tables = () => {
 
     const tables = [
         {
@@ -58,4 +58,4 @@ const Home = () => {
     )
 }
 
-export default Home;
+export default Tables;

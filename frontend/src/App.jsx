@@ -1,8 +1,13 @@
-import Home from "./pages/Home.jsx";
+import Tables from "./pages/Tables.jsx";
 import Header from "./layout/Header.jsx";
 import Navbar from "./layout/Navbar.jsx";
 import Footer from "./layout/Footer.jsx";
+import {Routes, Route} from "react-router-dom";
+import MyOrders from "./pages/MyOrders.jsx";
+import AllOrders from "./pages/AllOrders.jsx";
+import Payments from "./pages/Payments.jsx";
 import './App.css';
+import ProtectedRoutes from "./utils/ProtectedRoutes.jsx";
 
 const App = () => {
     return(
@@ -10,7 +15,16 @@ const App = () => {
           <Header/>
           <Navbar/>
           <main>
-            <Home/>
+            <Routes>
+              <Route path="/tables" element={<Tables/>}/>
+              <Route element={<ProtectedRoutes allowedRoles={"waiter"}/>}>
+                <Route path="/my-orders" element={<MyOrders/>}/>
+              </Route>
+              <Route element={<ProtectedRoutes allowedRoles={"admin"}/>}>
+                <Route path="/all-orders" element={<AllOrders/>}/>
+                <Route path="/payments" element={<Payments/>}/>
+              </Route>
+            </Routes>
           </main>
           <Footer/>
       </div>
