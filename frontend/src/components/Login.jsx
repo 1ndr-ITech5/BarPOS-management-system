@@ -2,8 +2,9 @@ import {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useLoginMutation} from '../store/apis/authApi.js';
 import {loginSuccess} from '../store/slices/authSlice.js';
+import {setLoginModal} from "../store/slices/modalSlice.js";
 
-const Login = ({changeModal}) => {
+const Login = () => {
 
     // call our api hook for authentication
     const [login, {isLoading}] = useLoginMutation()
@@ -26,7 +27,7 @@ const Login = ({changeModal}) => {
             // set the user info in localstorage
             localStorage.setItem("user", JSON.stringify(response.data))
             dispatch(loginSuccess(response.data))
-            changeModal(false)
+            dispatch(setLoginModal(false))
         }
     }
 
@@ -41,7 +42,7 @@ const Login = ({changeModal}) => {
             </div>
             <p style={{color: "red"}}>{error ? error : null}</p>
             <button onClick={(e) => handleSubmit(e)} disabled={isLoading}>{isLoading ? "Logging in..." : "Log In"}</button>
-            <button onClick={() => changeModal(false)} disabled={isLoading}>Back</button>
+            <button onClick={() => dispatch(setLoginModal(false))} disabled={isLoading}>Back</button>
         </section>
     )
 }

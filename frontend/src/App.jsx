@@ -6,6 +6,7 @@ import {Routes, Route} from "react-router-dom";
 import MyOrders from "./pages/MyOrders.jsx";
 import AllOrders from "./pages/AllOrders.jsx";
 import Payments from "./pages/Payments.jsx";
+import OrderPage from "./pages/OrderPage.jsx";
 import './App.css';
 import ProtectedRoutes from "./utils/ProtectedRoutes.jsx";
 
@@ -24,6 +25,11 @@ const App = () => {
                 <Route path="/all-orders" element={<AllOrders/>}/>
                 <Route path="/payments" element={<Payments/>}/>
               </Route>
+              <Route element={<ProtectedRoutes allowedRoles={"admin"}/>}>
+                <Route path="/all-orders" element={<AllOrders/>}/>
+                <Route path="/payments" element={<Payments/>}/>
+              </Route>
+              <Route path="/order-page" element={<OrderPage/>}/>
             </Routes>
           </main>
           <Footer/>

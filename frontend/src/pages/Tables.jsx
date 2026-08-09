@@ -1,30 +1,30 @@
 import TableCard from "../components/TableCard.jsx";
-import TableModal from "../components/TableModal.jsx";
 import UserPanel from "../components/UserPanel.jsx";
-import {useState} from 'react';
 import {useGetTablesQuery} from "../store/apis/tablesApi.js";
+import TableModal from "../components/TableModal.jsx";
+import {useDispatch, useSelector} from "react-redux";
+import Warning from "../components/Warning.jsx";
+import {setTableModal, setSelectedTable} from "../store/slices/modalSlice.js";
 import './Tables.css';
 
 const Tables = () => {
+    // destruct the api hook
+    const {data: tables, isLoading} = useGetTablesQuery();
 
-    const {data: tables, isloading} = useGetTablesQuery();
+    const dispatch = useDispatch();
+
+    const {tableModal, selectedTable, warningModal, loginModal} = useSelector((state) => state.modals)
     
-    if (isloading) return (<p>Loading tables...</p>);
+    if (isLoading) return (<p>Loading tables...</p>);
 
-    // set the state of choosen table and the modal appearence
-    const [choosenTable, setTable] = useState(null)
-    const [modalState, setModal] = useState(false)
-
-    const handleTableClick = (table) => {
-        setTable(table)
-        setModal(true)
+    const handleClick = (table) => {
+        if (warningModal || loginModal){
+            return;
+        }else{
+            dispatch(setTableModal(true))
+            dispatch(setSelectedTable(table))
+        }
     }
-
-    const handleRemoveModal = () => {
-        setTable(null)
-        setModal(false)
-    }
-
 
     return (
         <div className="home">
@@ -32,14 +32,14 @@ const Tables = () => {
             <div className="main-page">
                 <div className="tables-grid">
                     {tables?.map(table => (
-                        <TableCard key={table._id} table={table} addModal={() => handleTableClick(table)}/>
+                        <TableCard key={table._id} table={table} onClick={() => handleClick(table)}/>
                     ))}
                 </div>
                 <UserPanel/>
             </div>
-
             {/* Manage the modal state */}
-            {modalState && <TableModal table={choosenTable} removeModal={() => handleRemoveModal()}/>}
+            {tableModal && <TableModal table={selectedTable}/>}
+            {warningModal && <Warning/>}
         </div>
     )
 }

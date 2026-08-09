@@ -4,11 +4,12 @@ import Register from "../components/Register.jsx";
 import "../comp-style/UserPanel.css";
 import {useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
+import {setLoginModal} from "../store/slices/modalSlice.js";
 import {logout} from '../store/slices/authSlice.js';
 
 const UserPanel = () => {
     // login modal
-    const [loginModal, setLoginModal] = useState(false)
+    const loginModal = useSelector((state) => state.modals.loginModal)
 
     // register modal
     const [registerModal, setRegisterModal] = useState(false)
@@ -32,9 +33,9 @@ const UserPanel = () => {
             </div>
             {userInfo && <h2>Role: {userInfo.role}</h2>}
             {(userInfo && userInfo.role === "admin") && <button onClick={() => setRegisterModal(true)} disabled={registerModal}>Register Users</button>}
-            <button onClick={userInfo ? () => handleLogout() : () => setLoginModal(true)} disabled={loginModal}>{userInfo ? "Logout" : "Login"}</button>
+            {!loginModal && <button onClick={userInfo ? () => handleLogout() : () => dispatch(setLoginModal(true))}>{userInfo ? "Logout" : "Login"}</button>}
             {/* Manage the login modal */}
-            {loginModal && <Login changeModal={setLoginModal}/>}
+            {loginModal && <Login/>}
             {/* Manage the register modal */}
             {registerModal && <Register changeModal={setRegisterModal}/>}
         </div>
