@@ -1,13 +1,104 @@
-import {useNavigate} from "react-router-dom"
+import {useNavigate} from "react-router-dom";
+import Categories from "../orderPage-components/Categories.jsx";
+import Products from "../orderPage-components/Products.jsx";
+import OrderItems from "../orderPage-components/OrderItems.jsx";
+import "../orderPage-style/OrderPage.css";
+import {useState} from "react";
 
 const OrderPage = () => {
 
     const nav = useNavigate();
-    return (
-        <div>
-            <h1>Order's Page</h1>
-            <h3>Coming soon...</h3>
-            <button onClick={() => nav(-1)}>Go Back</button>
+
+    const [selectedCategory, setCategory] = useState("All")
+
+    const [orderItems, setOrderItems] = useState([])
+
+    const handleAddItems = (product) => {
+        // find if the existing product exists in the orderitems already
+        setOrderItems((prevList) => {
+            const existingItem = prevList.find(item => item.id === product.id)
+            if(existingItem){
+                const updatedItem = {...existingItem, quantity: existingItem.quantity + 1}
+                // push this item into list
+                const newList = prevList.map(item => {
+                    if(item.id === product.id){
+                        return updatedItem
+                    }else{
+                        return item
+                    }
+                })
+                return newList;
+            }else{
+                return [
+                    ...prevList, {...product, quantity: 1}
+                ]
+            }
+        })
+    }
+
+    const handleRemoveItems = (product) => {
+        setOrderItems((prevList) => {
+            const existingItem = prevList.find(item => item.id === product.id)
+            const updatedItem = {...product, quantity: existingItem.quantity - 1}
+            if(existingItem.quantity > 1){
+                const newList = prevList.map(item => {
+                    if(item.id === existingItem.id){
+                        return updatedItem
+                    }else{
+                        return item
+                    }
+                })
+                return newList;
+            }else{
+                const newList = prevList.filter(item => item.id !== existingItem.id)
+                return newList;
+            }
+            })
+    }
+
+    const menu = [
+        {
+            id: 1,
+            name: "Burger",
+            category: "Food",
+            price: 300
+        },
+        {
+            id: 2,
+            name: "Bruschette",
+            category: "Food",
+            price: 400
+        },
+        {
+            id: 3,
+            name: "Beer",
+            category: "Drinks",
+            price: 120
+        },
+        {
+            id: 4,
+            name: "Baklava",
+            category: "Dessert",
+            price: 100
+        }
+    ]
+
+    return(
+        <div className="order-page">
+            <div className="page-elements">
+                <button onClick={() => nav(-1)}>Go Back</button>
+                <h1>Order's Page</h1>
+            </div>
+            <div className="order-page-columns">
+                <Categories menuItems={menu} selectedCategory={selectedCategory} setCategory={setCategory}/>
+                <Products menuItems={menu} selectedCategory={selectedCategory} addProduct={handleAddItems}/>
+                <OrderItems orderItems={orderItems} addProduct={handleAddItems} removeProduct={handleRemoveItems}/>
+            </div>
+            <div className="order-buttons">
+                <button>Delete</button>
+                <button>Checkout</button>
+                <button>Get Pre-Bill</button>
+            </div>
         </div>
     )
 }
