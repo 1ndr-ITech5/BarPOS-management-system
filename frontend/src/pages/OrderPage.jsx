@@ -2,16 +2,22 @@ import {useNavigate} from "react-router-dom";
 import Categories from "../orderPage-components/Categories.jsx";
 import Products from "../orderPage-components/Products.jsx";
 import OrderItems from "../orderPage-components/OrderItems.jsx";
+import PreBill from "../components/PreBill.jsx";
 import "../orderPage-style/OrderPage.css";
 import {useState} from "react";
+import {useSelector} from "react-redux";
 
 const OrderPage = () => {
 
     const nav = useNavigate();
 
+    const table = useSelector(state => state.modals.selectedTable)
+
     const [selectedCategory, setCategory] = useState("All")
 
     const [orderItems, setOrderItems] = useState([])
+
+    const [preBill, setPreBill] = useState(false)
 
     const handleAddItems = (product) => {
         // find if the existing product exists in the orderitems already
@@ -97,8 +103,9 @@ const OrderPage = () => {
             <div className="order-buttons">
                 <button>Delete</button>
                 <button>Checkout</button>
-                <button>Get Pre-Bill</button>
+                <button onClick={() => setPreBill(true)}>Get Pre-Bill</button>
             </div>
+            {preBill && <PreBill orderItems={orderItems} changePreBillModal={setPreBill} tableNo={table.tableNumber}/>}
         </div>
     )
 }

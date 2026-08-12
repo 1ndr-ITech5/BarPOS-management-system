@@ -1,0 +1,13 @@
+.items-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.total-bill {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+}
