@@ -7,6 +7,8 @@ import MyOrders from "./pages/MyOrders.jsx";
 import AllOrders from "./pages/AllOrders.jsx";
 import Payments from "./pages/Payments.jsx";
 import OrderPage from "./pages/OrderPage.jsx";
+import Checkout from "./pages/Checkout.jsx";
+import PayCompleted from "./pages/PayCompleted.jsx";
 import './App.css';
 import ProtectedRoutes from "./utils/ProtectedRoutes.jsx";
 
@@ -26,6 +28,8 @@ const App = () => {
                 <Route path="/payments" element={<Payments/>}/>
               </Route>
               <Route path="/order-page" element={<OrderPage/>}/>
+              <Route path="/checkout" element={<Checkout/>}/>
+              <Route path="/payment-completed" element={<PayCompleted/>}/>
             </Routes>
           </main>
           <Footer/>

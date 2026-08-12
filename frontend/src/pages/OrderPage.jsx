@@ -3,6 +3,7 @@ import Categories from "../orderPage-components/Categories.jsx";
 import Products from "../orderPage-components/Products.jsx";
 import OrderItems from "../orderPage-components/OrderItems.jsx";
 import PreBill from "../components/PreBill.jsx";
+import DiscardModal from "../components/DiscardModal.jsx";
 import "../orderPage-style/OrderPage.css";
 import {useState} from "react";
 import {useSelector} from "react-redux";
@@ -18,6 +19,13 @@ const OrderPage = () => {
     const [orderItems, setOrderItems] = useState([])
 
     const [preBill, setPreBill] = useState(false)
+
+    const [showDiscard, setShowDiscard] = useState(false)
+
+    const handleDiscard = () => {
+        setShowDiscard(false)
+        nav("/tables")
+    }
 
     const handleAddItems = (product) => {
         // find if the existing product exists in the orderitems already
@@ -92,7 +100,7 @@ const OrderPage = () => {
     return(
         <div className="order-page">
             <div className="page-elements">
-                <button onClick={() => nav(-1)}>Go Back</button>
+                <button onClick={() => setShowDiscard(true)}>Go Back</button>
                 <h1>Order's Page</h1>
             </div>
             <div className="order-page-columns">
@@ -101,11 +109,12 @@ const OrderPage = () => {
                 <OrderItems orderItems={orderItems} addProduct={handleAddItems} removeProduct={handleRemoveItems}/>
             </div>
             <div className="order-buttons">
-                <button>Delete</button>
-                <button>Checkout</button>
+                <button onClick={() => setShowDiscard(true)}>Delete</button>
+                <button onClick={() => nav("/checkout", {state: {orderItems}})}>Checkout</button>
                 <button onClick={() => setPreBill(true)}>Get Pre-Bill</button>
             </div>
             {preBill && <PreBill orderItems={orderItems} changePreBillModal={setPreBill} tableNo={table.tableNumber}/>}
+            {showDiscard && <DiscardModal changeDiscardModal={handleDiscard} setShowDiscard={setShowDiscard}/>}
         </div>
     )
 }
