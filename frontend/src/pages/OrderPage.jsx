@@ -100,7 +100,7 @@ const OrderPage = () => {
     return(
         <div className="order-page">
             <div className="page-elements">
-                <button onClick={() => setShowDiscard(true)}>Go Back</button>
+                <button onClick={() => nav(-1)}>Go Back</button>
                 <h1>Order's Page</h1>
             </div>
             <div className="order-page-columns">
@@ -114,7 +114,7 @@ const OrderPage = () => {
                 <button onClick={() => setPreBill(true)}>Get Pre-Bill</button>
             </div>
             {preBill && <PreBill orderItems={orderItems} changePreBillModal={setPreBill} tableNo={table.tableNumber}/>}
-            {showDiscard && <DiscardModal changeDiscardModal={handleDiscard} setShowDiscard={setShowDiscard}/>}
+            {showDiscard && <DiscardModal changeDiscardModal={handleDiscard} setShowDiscard={setShowDiscard} table={table}/>}
         </div>
     )
 }

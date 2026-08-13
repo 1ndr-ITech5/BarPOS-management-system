@@ -1,14 +1,13 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {api} from "./api.js";
 
-export const tablesApi = createApi({
-    reducerPath: "tablesApi",
-    baseQuery: fetchBaseQuery({baseUrl: "http://localhost:5000"}),
+export const tablesApi = api.injectEndpoints({
     endpoints: (builder) => ({
             getTables: builder.query({
             query: () => ({
                 url: "/api/tables",
                 method: "GET",
             }),
+            providesTags: ["Tables"],
         }),
     })
 })

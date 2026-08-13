@@ -18,6 +18,14 @@ const tables = [
     {
         tableNumber: 4,
         capacity: 8
+    },
+    {
+        tableNumber: 5,
+        capacity: 4
+    },
+    {
+        tableNumber: 6,
+        capacity: 8
     }
 ]
 

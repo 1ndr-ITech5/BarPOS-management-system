@@ -1,14 +1,32 @@
 import {useDispatch, useSelector} from "react-redux";
 import {setTableModal, setWarningModal} from "../store/slices/modalSlice.js";
+import {useCreateOrderMutation} from "../store/apis/orderApi.js";
 import {useNavigate} from "react-router-dom";
 
-const TableModal = ({table}) => {
+const TableModal = ({selectedTable, allTables}) => {
+
+    const [createOrder, {isloading}] = useCreateOrderMutation();
 
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
 
     const user = useSelector((state) => state.user.user)
+
+    const table = allTables.find(t => t._id === selectedTable._id)
+
+    const handleOpenOrder = async(e, table) => {
+        e.preventDefault();
+
+        try{
+            const orderResponse = await createOrder({tableId: table._id}).unwrap()
+            console.log(orderResponse)
+            dispatch(setTableModal(false))
+            navigate("/order-page")
+        }catch(error){
+            console.log(error)
+        }
+    }  
 
     const handleWarning = () => {
         dispatch(setTableModal(false))
@@ -20,7 +38,7 @@ const TableModal = ({table}) => {
             <h3>Table no.{table.tableNumber}</h3>
             <p style={{color: table.status === "available" ? "green" : "red"}}>Status: {table.status}</p>
             {table.status === "available" ?
-                (<button onClick={() => user ? navigate("/order-page") : handleWarning()}>Open Table</button>)
+                (<button onClick={(e) => user ? handleOpenOrder(e, table) : handleWarning()}>Open Table</button>)
             :
                 (<>
                     <button onClick={() => user ? navigate("/order-page") : handleWarning()}>Update Table</button>

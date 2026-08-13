@@ -15,6 +15,21 @@ const insertProducts = async() => {
             price: 300
         },
         {
+            productName: "Burger",
+            category: "Food",
+            price: 300
+        },
+        {
+            productName: "Trilece",
+            category: "Dessert",
+            price: 180
+        },
+        {
+            productName: "Baklava",
+            category: "Dessert",
+            price: 100
+        },
+        {
             productName: "Water Glina",
             category: "Drinks",
             price: 80
@@ -23,6 +38,11 @@ const insertProducts = async() => {
             productName: "Korca Beer",
             category: "Drinks",
             price: 120
+        },
+        {
+            productName: "Alfa Beer",
+            category: "Drinks",
+            price: 150
         }
     ]
 

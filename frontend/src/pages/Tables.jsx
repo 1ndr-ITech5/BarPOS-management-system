@@ -8,8 +8,7 @@ import {setTableModal, setSelectedTable} from "../store/slices/modalSlice.js";
 import './Tables.css';
 
 const Tables = () => {
-    // destruct the api hook
-    const {data: tables, isLoading} = useGetTablesQuery();
+    const {data: tables, isLoading, refetch} = useGetTablesQuery();
 
     const dispatch = useDispatch();
 
@@ -38,7 +37,7 @@ const Tables = () => {
                 <UserPanel/>
             </div>
             {/* Manage the modal state */}
-            {tableModal && <TableModal table={selectedTable}/>}
+            {tableModal && <TableModal selectedTable={selectedTable} allTables={tables}/>}
             {warningModal && <Warning/>}
         </div>
     )
