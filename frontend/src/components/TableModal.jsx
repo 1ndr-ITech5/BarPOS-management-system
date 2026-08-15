@@ -22,13 +22,13 @@ const TableModal = ({selectedTable, allTables}) => {
         try{
             const orderResponse = await createOrder({tableId: table._id}).unwrap()
             dispatch(setTableModal(false))
-            dispatch(setCurrentOrder(orderResponse._id))
+            dispatch(setCurrentOrder(orderResponse.createdOrder._id))
             navigate("/order-page")
         }catch(error){
             console.log(error)
         }
-    }  
-
+    }
+ 
     const handleWarning = () => {
         dispatch(setTableModal(false))
         dispatch(setWarningModal(true))

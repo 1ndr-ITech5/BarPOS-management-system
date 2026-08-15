@@ -9,18 +9,22 @@ import {useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {useGetItemsQuery} from "../store/apis/itemsApi.js";
 import {clearCurrentOrder} from "../store/slices/orderSlice.js";
+import {useAddItemMutation, useRemoveItemMutation} from "../store/apis/orderItemsApi.js";
+import {useGetOrderQuery} from "../store/apis/orderApi.js";
 
 const OrderPage = () => {
 
     const nav = useNavigate();
+    const dispatch = useDispatch();
+    const tableId = useSelector(state => state.modals.selectedTable?._id)
+
+    const [addItem] = useAddItemMutation();
+    const [removeItem] = useRemoveItemMutation();
 
     const {data: items, isLoading} = useGetItemsQuery();
+    const {data: orderData, isLoading: orderLoading} = useGetOrderQuery(tableId, {skip: !tableId})
 
-    const [orderItems, setOrderItems] = useState([])
-
-    const table = useSelector(state => state.modals.selectedTable)
-
-    const currentOrder = useSelector(state => state.order.currentOrderId)
+    console.log(orderData)
 
     const [selectedCategory, setCategory] = useState("All")
 
@@ -32,53 +36,38 @@ const OrderPage = () => {
         return <p>Loading menu items...</p>
     }
 
+    if (isLoading || orderLoading) {
+        return <p>Loading order...</p>
+    }
+
     const handleDiscard = () => {
         setShowDiscard(false)
         dispatch(clearCurrentOrder())
         nav("/tables")
     }
 
-    const handleAddItems = (product) => {
-        // find if the existing product exists in the orderitems already
-        setOrderItems((prevList) => {
-            const existingItem = prevList.find(item => item.id === product.id)
-            if(existingItem){
-                const updatedItem = {...existingItem, quantity: existingItem.quantity + 1}
-                // push this item into list
-                const newList = prevList.map(item => {
-                    if(item.id === product.id){
-                        return updatedItem
-                    }else{
-                        return item
-                    }
-                })
-                return newList;
-            }else{
-                return [
-                    ...prevList, {...product, quantity: 1}
-                ]
-            }
-        })
+    const handleAddItems = async(e, orderId, productId) => {
+        e.preventDefault()
+
+        try{
+            const response = await addItem({orderId, menuItemId: productId}).unwrap()
+            console.log(response)
+        }catch(error){
+            console.log(error)
+        }
     }
 
-    const handleRemoveItems = (product) => {
-        setOrderItems((prevList) => {
-            const existingItem = prevList.find(item => item.id === product.id)
-            const updatedItem = {...product, quantity: existingItem.quantity - 1}
-            if(existingItem.quantity > 1){
-                const newList = prevList.map(item => {
-                    if(item.id === existingItem.id){
-                        return updatedItem
-                    }else{
-                        return item
-                    }
-                })
-                return newList;
-            }else{
-                const newList = prevList.filter(item => item.id !== existingItem.id)
-                return newList;
-            }
-            })
+
+    const handleRemoveItems = async(e, currentOrder, product) => {
+        e.preventDefault()
+
+        try{
+            const orderItem = orderData.orderItems.find(item => item._id === product._id)
+            const response = await removeItem(currentOrder, orderItem._id)
+            console.log(response)
+        }catch(error){
+            console.log(error)
+        }
     }
 
 
@@ -90,16 +79,16 @@ const OrderPage = () => {
             </div>
             <div className="order-page-columns">
                 <Categories menuItems={items} selectedCategory={selectedCategory} setCategory={setCategory}/>
-                <Products menuItems={items} selectedCategory={selectedCategory} addProduct={handleAddItems}/>
-                <OrderItems orderItems={orderItems} addProduct={handleAddItems} removeProduct={handleRemoveItems}/>
+                <Products menuItems={items} selectedCategory={selectedCategory} addProduct={handleAddItems} orderId={orderData?.order?._id}/>
+                <OrderItems orderItems={orderData?.orderItems} addProduct={handleAddItems} removeProduct={handleRemoveItems}/>
             </div>
             <div className="order-buttons">
                 <button onClick={() => setShowDiscard(true)}>Delete</button>
                 <button onClick={() => nav("/checkout")}>Checkout</button>
                 <button onClick={() => setPreBill(true)}>Get Pre-Bill</button>
             </div>
-            {preBill && <PreBill changePreBillModal={setPreBill} tableNo={table.tableNumber}/>}
-            {showDiscard && <DiscardModal changeDiscardModal={handleDiscard} setShowDiscard={setShowDiscard} table={table}/>}
+            {preBill && <PreBill changePreBillModal={setPreBill}/>}
+            {showDiscard && <DiscardModal changeDiscardModal={handleDiscard} setShowDiscard={setShowDiscard} tableId={tableId}/>}
         </div>
     )
 }

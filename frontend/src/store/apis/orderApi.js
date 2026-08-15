@@ -5,20 +5,25 @@ export const orderApi = api.injectEndpoints({
         createOrder: builder.mutation({
             query: ({tableId}) => ({
                 method: "POST",
-                url: `/api/order/${tableId}/open`,
-                body: tableId
+                url: `/api/order/${tableId}/open`
             }),
             invalidatesTags: ["Tables"],
         }),
         deleteOrder: builder.mutation({
-            query: ({tableId}) => ({
+            query: (tableId) => ({
                 method: "DELETE",
-                url: `/api/order/${tableId}/delete`,
-                body: tableId
+                url: `/api/order/${tableId}/delete`
             }),
             invalidatesTags: ["Tables"],
         }),
+        getOrder: builder.query({
+            query: (tableId) => ({
+                url: `/api/order/${tableId}`,
+                method: "GET"
+            }),
+            providesTags: ["Orders"]
+        })
     })
 });
 
-export const {useCreateOrderMutation, useDeleteOrderMutation} = orderApi; 
+export const {useCreateOrderMutation, useDeleteOrderMutation, useGetOrderQuery} = orderApi; 
