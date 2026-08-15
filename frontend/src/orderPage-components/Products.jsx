@@ -6,9 +6,9 @@ const Products = ({menuItems, selectedCategory, addProduct}) => {
             <h1>Products</h1>
             <div className="products">
             {selectedCategory === "All" ? menuItems.map((product) => 
-            <button key={product.id} onClick={() => addProduct(product)}>{product.name}</button>)
+            <button key={product._id} onClick={() => addProduct(product)}>{product.productName}</button>)
              : menuItems.filter((product) => product.category === selectedCategory).map((product) => 
-             <button key={product.id} onClick={() => addProduct(product)}>{product.name}</button>)}
+             <button key={product._id} onClick={() => addProduct(product)}>{product.productName}</button>)}
              </div>
         </div>
     )

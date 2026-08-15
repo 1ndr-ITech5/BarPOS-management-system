@@ -6,24 +6,35 @@ import PreBill from "../components/PreBill.jsx";
 import DiscardModal from "../components/DiscardModal.jsx";
 import "../orderPage-style/OrderPage.css";
 import {useState} from "react";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
+import {useGetItemsQuery} from "../store/apis/itemsApi.js";
+import {clearCurrentOrder} from "../store/slices/orderSlice.js";
 
 const OrderPage = () => {
 
     const nav = useNavigate();
 
-    const table = useSelector(state => state.modals.selectedTable)
-
-    const [selectedCategory, setCategory] = useState("All")
+    const {data: items, isLoading} = useGetItemsQuery();
 
     const [orderItems, setOrderItems] = useState([])
+
+    const table = useSelector(state => state.modals.selectedTable)
+
+    const currentOrder = useSelector(state => state.order.currentOrderId)
+
+    const [selectedCategory, setCategory] = useState("All")
 
     const [preBill, setPreBill] = useState(false)
 
     const [showDiscard, setShowDiscard] = useState(false)
 
+    if(isLoading){
+        return <p>Loading menu items...</p>
+    }
+
     const handleDiscard = () => {
         setShowDiscard(false)
+        dispatch(clearCurrentOrder())
         nav("/tables")
     }
 
@@ -70,50 +81,24 @@ const OrderPage = () => {
             })
     }
 
-    const menu = [
-        {
-            id: 1,
-            name: "Burger",
-            category: "Food",
-            price: 300
-        },
-        {
-            id: 2,
-            name: "Bruschette",
-            category: "Food",
-            price: 400
-        },
-        {
-            id: 3,
-            name: "Beer",
-            category: "Drinks",
-            price: 120
-        },
-        {
-            id: 4,
-            name: "Baklava",
-            category: "Dessert",
-            price: 100
-        }
-    ]
 
     return(
         <div className="order-page">
             <div className="page-elements">
-                <button onClick={() => nav(-1)}>Go Back</button>
+                <button onClick={() => {nav(-1)}}>Go Back</button>
                 <h1>Order's Page</h1>
             </div>
             <div className="order-page-columns">
-                <Categories menuItems={menu} selectedCategory={selectedCategory} setCategory={setCategory}/>
-                <Products menuItems={menu} selectedCategory={selectedCategory} addProduct={handleAddItems}/>
+                <Categories menuItems={items} selectedCategory={selectedCategory} setCategory={setCategory}/>
+                <Products menuItems={items} selectedCategory={selectedCategory} addProduct={handleAddItems}/>
                 <OrderItems orderItems={orderItems} addProduct={handleAddItems} removeProduct={handleRemoveItems}/>
             </div>
             <div className="order-buttons">
                 <button onClick={() => setShowDiscard(true)}>Delete</button>
-                <button onClick={() => nav("/checkout", {state: {orderItems}})}>Checkout</button>
+                <button onClick={() => nav("/checkout")}>Checkout</button>
                 <button onClick={() => setPreBill(true)}>Get Pre-Bill</button>
             </div>
-            {preBill && <PreBill orderItems={orderItems} changePreBillModal={setPreBill} tableNo={table.tableNumber}/>}
+            {preBill && <PreBill changePreBillModal={setPreBill} tableNo={table.tableNumber}/>}
             {showDiscard && <DiscardModal changeDiscardModal={handleDiscard} setShowDiscard={setShowDiscard} table={table}/>}
         </div>
     )

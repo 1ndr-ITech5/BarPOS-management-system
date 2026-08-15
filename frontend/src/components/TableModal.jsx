@@ -2,6 +2,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {setTableModal, setWarningModal} from "../store/slices/modalSlice.js";
 import {useCreateOrderMutation} from "../store/apis/orderApi.js";
 import {useNavigate} from "react-router-dom";
+import {setCurrentOrder} from "../store/slices/orderSlice.js";
 
 const TableModal = ({selectedTable, allTables}) => {
 
@@ -20,8 +21,8 @@ const TableModal = ({selectedTable, allTables}) => {
 
         try{
             const orderResponse = await createOrder({tableId: table._id}).unwrap()
-            console.log(orderResponse)
             dispatch(setTableModal(false))
+            dispatch(setCurrentOrder(orderResponse._id))
             navigate("/order-page")
         }catch(error){
             console.log(error)
