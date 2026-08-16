@@ -21,7 +21,7 @@ const Tables = () => {
             return;
         }else{
             dispatch(setTableModal(true))
-            dispatch(setSelectedTable(table))
+            dispatch(setSelectedTable(table._id))
         }
     }
 
@@ -37,7 +37,7 @@ const Tables = () => {
                 <UserPanel/>
             </div>
             {/* Manage the modal state */}
-            {tableModal && <TableModal selectedTable={selectedTable} allTables={tables}/>}
+            {tableModal && <TableModal selectedTableId={selectedTable} allTables={tables}/>}
             {warningModal && <Warning/>}
         </div>
     )

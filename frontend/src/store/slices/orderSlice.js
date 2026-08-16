@@ -11,6 +11,7 @@ const orderSlice = createSlice({
         },
         clearCurrentOrder: (state) => {
             state.currentOrderId = null
+            localStorage.removeItem("currentTableId")
         }
     }
 })

@@ -16,7 +16,7 @@ const Warning = () => {
             <h2>Please log In to continue!</h2>
             <div>
                 <button onClick={() => handleClick()}>Login</button>
-                <button onClick={() => dispatch(setWarningModal(false))}>Back</button>
+                <button onClick={() => {dispatch(setWarningModal(false)), localStorage.removeItem("currentTableId")}}>Back</button>
             </div>
         </div>
     )

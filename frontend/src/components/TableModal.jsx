@@ -3,18 +3,21 @@ import {setTableModal, setWarningModal} from "../store/slices/modalSlice.js";
 import {useCreateOrderMutation} from "../store/apis/orderApi.js";
 import {useNavigate} from "react-router-dom";
 import {setCurrentOrder} from "../store/slices/orderSlice.js";
+import {useGetOrderQuery} from "../store/apis/orderApi.js";
 
-const TableModal = ({selectedTable, allTables}) => {
-
-    const [createOrder, {isloading}] = useCreateOrderMutation();
+const TableModal = ({selectedTableId, allTables}) => {
 
     const dispatch = useDispatch();
-
     const navigate = useNavigate();
+
+    const table = allTables.find(t => t._id === selectedTableId)
+
+    const [createOrder, {isloading}] = useCreateOrderMutation();
+    const {data: orderData, isLoading: orderLoading} = useGetOrderQuery(table._id, {skip: !table._id})
+    console.log(orderData)
 
     const user = useSelector((state) => state.user.user)
 
-    const table = allTables.find(t => t._id === selectedTable._id)
 
     const handleOpenOrder = async(e, table) => {
         e.preventDefault();
@@ -28,10 +31,28 @@ const TableModal = ({selectedTable, allTables}) => {
             console.log(error)
         }
     }
+
+    const handleUpdateOrder = (e) => {
+        e.preventDefault();
+
+        try{
+            dispatch(setTableModal(false))
+            console.log(orderData)
+            dispatch(setCurrentOrder(orderData.order._id))
+            navigate("/order-page")
+        }catch(error){
+            console.log(error)
+        }
+    }
  
     const handleWarning = () => {
         dispatch(setTableModal(false))
         dispatch(setWarningModal(true))
+    }
+
+    const backToTables = () => {
+        dispatch(setTableModal(false))
+        localStorage.removeItem("currentTableId")
     }
 
     return (
@@ -42,11 +63,11 @@ const TableModal = ({selectedTable, allTables}) => {
                 (<button onClick={(e) => user ? handleOpenOrder(e, table) : handleWarning()}>Open Table</button>)
             :
                 (<>
-                    <button onClick={() => user ? navigate("/order-page") : handleWarning()}>Update Table</button>
+                    <button onClick={(e) => user ? handleUpdateOrder(e) : handleWarning()}>Update Table</button>
                     <button>Checkout</button>
                 </>)
             }
-            <button onClick={() => dispatch(setTableModal(false))}>Back</button>
+            <button onClick={() => backToTables()}>Back</button>
         </div>
     )
 }

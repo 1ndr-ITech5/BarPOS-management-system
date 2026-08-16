@@ -7,7 +7,7 @@ export const orderApi = api.injectEndpoints({
                 method: "POST",
                 url: `/api/order/${tableId}/open`
             }),
-            invalidatesTags: ["Tables"],
+            invalidatesTags: ["Tables", "Orders"],
         }),
         deleteOrder: builder.mutation({
             query: (tableId) => ({

@@ -12,8 +12,7 @@ export const orderItemsApi = api.injectEndpoints({
         removeItem: builder.mutation({
             query: ({orderId, menuItemId}) => ({
                 url: `/api/order/${orderId}/item/${menuItemId}/remove`,
-                method: "DELETE",
-                body: {orderId, menuItemId}
+                method: "DELETE"
             }),
             invalidatesTags: ["Orders"]
         })

@@ -16,14 +16,14 @@ const OrderPage = () => {
 
     const nav = useNavigate();
     const dispatch = useDispatch();
-    const tableId = useSelector(state => state.modals.selectedTable?._id)
+    const tableId = useSelector(state => state.modals.selectedTable)
+    console.log(tableId)
 
     const [addItem] = useAddItemMutation();
     const [removeItem] = useRemoveItemMutation();
 
     const {data: items, isLoading} = useGetItemsQuery();
     const {data: orderData, isLoading: orderLoading} = useGetOrderQuery(tableId, {skip: !tableId})
-
     console.log(orderData)
 
     const [selectedCategory, setCategory] = useState("All")
@@ -48,33 +48,35 @@ const OrderPage = () => {
 
     const handleAddItems = async(e, orderId, productId) => {
         e.preventDefault()
-
         try{
             const response = await addItem({orderId, menuItemId: productId}).unwrap()
-            console.log(response)
         }catch(error){
             console.log(error)
         }
     }
 
 
-    const handleRemoveItems = async(e, currentOrder, product) => {
+    const handleRemoveItems = async(e, orderId, productId) => {
         e.preventDefault()
 
         try{
-            const orderItem = orderData.orderItems.find(item => item._id === product._id)
-            const response = await removeItem(currentOrder, orderItem._id)
-            console.log(response)
+            const response = await removeItem({orderId, menuItemId: productId})
         }catch(error){
             console.log(error)
         }
+    }
+
+
+    const backToTables = () => {
+        localStorage.removeItem("currentTableId")
+        nav(-1)
     }
 
 
     return(
         <div className="order-page">
             <div className="page-elements">
-                <button onClick={() => {nav(-1)}}>Go Back</button>
+                <button onClick={() => backToTables()}>Go Back</button>
                 <h1>Order's Page</h1>
             </div>
             <div className="order-page-columns">

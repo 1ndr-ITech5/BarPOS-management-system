@@ -1,12 +1,14 @@
 import {createSlice} from "@reduxjs/toolkit";
 
+const tableId = localStorage.getItem("currentTableId")
+
 const modalSlice = createSlice({
     name: "modalSlice",
     initialState: {
         loginModal: false,
         warningModal: false,
         tableModal: false,
-        selectedTable: null
+        selectedTable: tableId || null
     },
     reducers: {
         setLoginModal(state, action){
@@ -26,6 +28,7 @@ const modalSlice = createSlice({
         },
         setSelectedTable(state, action){
             state.selectedTable = action.payload
+            localStorage.setItem("currentTableId", action.payload)
         }
     }
 })
