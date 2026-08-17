@@ -17,14 +17,12 @@ const OrderPage = () => {
     const nav = useNavigate();
     const dispatch = useDispatch();
     const tableId = useSelector(state => state.modals.selectedTable)
-    console.log(tableId)
 
     const [addItem] = useAddItemMutation();
     const [removeItem] = useRemoveItemMutation();
 
     const {data: items, isLoading} = useGetItemsQuery();
     const {data: orderData, isLoading: orderLoading} = useGetOrderQuery(tableId, {skip: !tableId})
-    console.log(orderData)
 
     const [selectedCategory, setCategory] = useState("All")
 

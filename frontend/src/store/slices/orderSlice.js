@@ -1,16 +1,19 @@
 import {createSlice} from "@reduxjs/toolkit";
 
+const currentOrderId = localStorage.getItem("orderId")
+
 const orderSlice = createSlice({
     name: "order",
     initialState: {
-        currentOrderId: null
+        currentOrderId: currentOrderId || null
     },
     reducers: {
         setCurrentOrder: (state, action) => {
             state.currentOrderId = action.payload
+            localStorage.setItem("orderId", action.payload)
         },
-        clearCurrentOrder: (state) => {
-            state.currentOrderId = null
+        clearCurrentOrder: () => {
+            localStorage.removeItem("orderId")
             localStorage.removeItem("currentTableId")
         }
     }
