@@ -1,5 +1,13 @@
 const asyncHandler = require("express-async-handler")
-const {getPayments, createPayment} = require("../services/paymentService.js")
+const {getCreatedPayment, getPayments, createPayment} = require("../services/paymentService.js")
+
+const getClosedPayment = asyncHandler(async(req,res) => {
+    
+    const {orderId} = req.params
+
+    const createdPayment = await getCreatedPayment({orderId})
+    res.status(200).json(createdPayment)
+})
 
 const getAllPayments = asyncHandler(async(req,res) => {
     const payments = await getPayments()
@@ -18,4 +26,4 @@ const createNewPayment = asyncHandler(async(req,res) => {
     })
 })
 
-module.exports = {getAllPayments, createNewPayment}
+module.exports = {getClosedPayment, getAllPayments, createNewPayment}

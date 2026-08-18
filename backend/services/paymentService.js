@@ -3,6 +3,21 @@ const Order = require("../models/orderModel.js")
 const OrderItem = require("../models/orderItemModel.js")
 const {closeOrder} = require("./orderService.js")
 
+const getCreatedPayment = async({orderId}) => {
+    const createdPayment = await Payment.findOne({orderId: orderId})
+    .populate({path: "orderId", populate: {path: "tableId", select: "tableNumber"}})
+    .populate("waiterId", "first_name last_name")
+
+    // return if no payment was found
+    if(!createdPayment){
+        return null
+    }
+
+    const orderItems = await OrderItem.find({orderId: createdPayment.orderId._id}).populate("menuItemId", "productName")
+
+    return {createdPayment, orderItems}
+}
+
 const getPayments = async() => {
     const payments = await Payment.find().populate({path: "orderId", populate: {path: "tableId", select: "tableNumber"}})
     .populate("waiterId", "first_name last_name")
@@ -67,4 +82,4 @@ const createPayment = async(paymentData, order_id, user) => {
     return payment
 }
 
-module.exports = {getPayments, createPayment}
+module.exports = {getCreatedPayment, getPayments, createPayment}
