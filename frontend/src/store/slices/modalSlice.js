@@ -8,7 +8,8 @@ const modalSlice = createSlice({
         loginModal: false,
         warningModal: false,
         tableModal: false,
-        selectedTable: tableId || null
+        selectedTable: tableId || null,
+        receiptModal: false
     },
     reducers: {
         setLoginModal(state, action){
@@ -29,9 +30,14 @@ const modalSlice = createSlice({
         setSelectedTable(state, action){
             state.selectedTable = action.payload
             localStorage.setItem("currentTableId", action.payload)
+        },
+        setViewReceipt(state, action){
+            if (state.receiptModal !== action.payload){
+                state.receiptModal = action.payload
+            }
         }
     }
 })
 
-export const {setLoginModal, setWarningModal, setTableModal, setSelectedTable} = modalSlice.actions;
+export const {setLoginModal, setWarningModal, setTableModal, setSelectedTable, setViewReceipt} = modalSlice.actions;
 export default modalSlice.reducer;

@@ -9,8 +9,14 @@ export const paymentApi = api.injectEndpoints({
                 body: paymentData
             }),
             invalidatesTags: ["Tables", "Orders"]
+        }),
+        getPayment: builder.query({
+            query: (orderId) => ({
+                url: `/api/${orderId}/payment`,
+                method: "GET"
+            })
         })
     })
 })
 
-export const {useCreatePaymentMutation} = paymentApi;
+export const {useCreatePaymentMutation, useGetPaymentQuery} = paymentApi;
