@@ -2,33 +2,48 @@ import { CiCircleRemove } from "react-icons/ci";
 import {useSelector} from "react-redux";
 import "../comp-style/PreBill.css";
 
-const PreBill = ({orderItems, changePreBillModal, tableNo}) => {
+const PreBill = ({changePreBillModal, orderData}) => {
 
-    const total = orderItems.reduce((sum, item) => sum += (item.price * item.quantity), 0)
+    const dateTime = new Date(orderData.order.createdAt);
 
-    const user = useSelector(state => state.user.user)
+    // format the date part
+    const date = dateTime.toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+
+    // format the time part in 24-hour style
+    const time = dateTime.toLocaleTimeString('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+    });
+
+    const total = orderData.orderItems.reduce((sum, item) => sum += (item.unitPrice * item.quantity), 0)
 
     return(
         <div className="pre-bill">
             <CiCircleRemove onClick={() => changePreBillModal(false)}/>
             <h1>Bar Restorant Natyra</h1>
             <div className="other-data">
-                <h3>Waiter: {user.first_name} {user.last_name}</h3>
-                <h3>Date: </h3>
-                <h3>Table: {tableNo}</h3>
+                <h3>Waiter: {orderData.order.waiterId.first_name} {orderData.order.waiterId.last_name}</h3>
+                <h3>Date: {date}</h3>
+                <h3>Time: {time}</h3>
+                <h3>Table: {orderData.order.tableId.tableNumber}</h3>
             </div>
             <div className="items-list">
                 <div className="item-columns">
                     <h2>Item</h2>
-                    {orderItems.map(item => <p key={item.id}>{item.name}</p>)}
+                    {orderData.orderItems.map(item => <p key={item._id}>{item.menuItemId.productName}</p>)}
                 </div>
                 <div className="item-columns">
                     <h2>Quantity</h2>
-                    {orderItems.map(item => <p key={item.id}>{item.quantity}</p>)}
+                    {orderData.orderItems.map(item => <p key={item._id}>{item.quantity}</p>)}
                 </div>
                 <div className="item-columns">
                     <h2>Price</h2>
-                    {orderItems.map(item => <p key={item.id}>{item.price * item.quantity}</p>)}
+                    {orderData.orderItems.map(item => <p key={item._id}>{item.unitPrice * item.quantity}</p>)}
                 </div>
             </div>
             <p>-------------------------------------------------------------------</p>

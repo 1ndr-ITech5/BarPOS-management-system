@@ -23,6 +23,7 @@ const OrderPage = () => {
 
     const {data: items, isLoading} = useGetItemsQuery();
     const {data: orderData, isLoading: orderLoading} = useGetOrderQuery(tableId, {skip: !tableId})
+    console.log(orderData)
 
     const [selectedCategory, setCategory] = useState("All")
 
@@ -87,7 +88,7 @@ const OrderPage = () => {
                 <button onClick={() => nav("/checkout")}>Checkout</button>
                 <button onClick={() => setPreBill(true)}>Get Pre-Bill</button>
             </div>
-            {preBill && <PreBill changePreBillModal={setPreBill}/>}
+            {preBill && <PreBill changePreBillModal={setPreBill} orderData={orderData}/>}
             {showDiscard && <DiscardModal changeDiscardModal={handleDiscard} setShowDiscard={setShowDiscard} tableId={tableId}/>}
         </div>
     )
