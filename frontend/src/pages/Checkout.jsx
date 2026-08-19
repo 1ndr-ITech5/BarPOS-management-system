@@ -37,7 +37,6 @@ const Checkout = () => {
         e.preventDefault();
 
         try{
-            console.log(paymentData)
             const paymentResponse = await createPayment({orderId, paymentData}).unwrap()
             nav("/payment-completed")
         }catch(error){

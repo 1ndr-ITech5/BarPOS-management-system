@@ -1,0 +1,28 @@
+.fields {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.payment-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  
+    padding: 16px;
+    margin: 12px;
+  
+    max-width: 350px;
+    background-color: white;
+}
+
+.payment-card img{
+    height: 100px;
+    width: auto;
+}

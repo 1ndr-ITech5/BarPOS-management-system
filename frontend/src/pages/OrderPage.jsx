@@ -23,7 +23,6 @@ const OrderPage = () => {
 
     const {data: items, isLoading} = useGetItemsQuery();
     const {data: orderData, isLoading: orderLoading} = useGetOrderQuery(tableId, {skip: !tableId})
-    console.log(orderData)
 
     const [selectedCategory, setCategory] = useState("All")
 

@@ -5,12 +5,14 @@ import {itemsApi} from "./apis/itemsApi.js";
 import userReducer from "./slices/authSlice.js";
 import modalReducer from "./slices/modalSlice.js";
 import orderReducer from "./slices/orderSlice.js";
+import filterReducer from "./slices/filterSlice.js";
 
 export const store = configureStore({
     reducer: {
         user: userReducer,
         modals: modalReducer,
         order: orderReducer,
+        filters: filterReducer,
         [authApi.reducerPath]: authApi.reducer,
         [api.reducerPath]: api.reducer,
         [itemsApi.reducerPath]: itemsApi.reducer

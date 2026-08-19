@@ -14,7 +14,6 @@ const TableModal = ({selectedTableId, allTables}) => {
 
     const [createOrder, {isloading}] = useCreateOrderMutation();
     const {data: orderData, isLoading: orderLoading} = useGetOrderQuery(table._id, {skip: !table._id})
-    console.log(orderData)
 
     const user = useSelector((state) => state.user.user)
 
@@ -37,7 +36,6 @@ const TableModal = ({selectedTableId, allTables}) => {
 
         try{
             dispatch(setTableModal(false))
-            console.log(orderData)
             dispatch(setCurrentOrder(orderData.order._id))
             navigate("/order-page")
         }catch(error){

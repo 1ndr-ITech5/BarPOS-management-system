@@ -20,7 +20,7 @@ const getCreatedPayment = async({orderId}) => {
 
 const getPayments = async() => {
     const payments = await Payment.find().populate({path: "orderId", populate: {path: "tableId", select: "tableNumber"}})
-    .populate("waiterId", "first_name last_name")
+    .populate("waiterId", "first_name last_name role")
     return payments
 }
 

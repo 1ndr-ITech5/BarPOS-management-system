@@ -1,0 +1,48 @@
+import userlogo from "../assets/user.png";
+import { MdOutlinePayment } from "react-icons/md";
+import {useGetPaymentQuery} from "../store/apis/paymentApi.js";
+import {setCurrentOrder} from "../store/slices/orderSlice.js";
+import {setViewReceipt} from "../store/slices/modalSlice.js";
+import {useDispatch} from "react-redux";
+import "../comp-style/PaymentCard.css";
+
+const PaymentCard = ({payment}) => {
+
+    const dispatch = useDispatch();
+
+    const dateObj = new Date(payment.createdAt);
+
+    const datePart = dateObj.toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+    });
+
+    const handleClick = () => {
+        dispatch(setCurrentOrder(payment.orderId._id))
+        dispatch(setViewReceipt(true))
+    }
+
+    return(
+        <div className="payment-card">
+            <div>
+                <h3>Date: {datePart}</h3>
+                <h3>Total: {payment.totalAmount} ALL</h3>
+            </div>
+            <div className="fields">
+                <img src={userlogo}/>
+                <div>
+                    <h2>{payment.waiterId.first_name} {payment.waiterId.last_name}</h2>
+                    <p>{payment.waiterId.role}</p>
+                </div>
+            </div>
+            <div className="fields">
+                <MdOutlinePayment />
+                <p>Payment Method: {payment.method}</p>
+            </div>
+            <button onClick={() => handleClick()}>View Receipt</button>
+        </div>
+    )
+}
+
+export default PaymentCard;
