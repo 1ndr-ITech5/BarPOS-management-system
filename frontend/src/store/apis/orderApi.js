@@ -28,8 +28,14 @@ export const orderApi = api.injectEndpoints({
                 url: "/api/order/my-orders",
                 method: "GET"
             })
+        }),
+        getAllOrders: builder.query({
+            query: () => ({
+                url: "/api/order/all-orders",
+                method: "GET"
+            })
         })
     })
 });
 
-export const {useCreateOrderMutation, useDeleteOrderMutation, useGetOrderQuery, useGetMyOrdersQuery} = orderApi; 
+export const {useCreateOrderMutation, useDeleteOrderMutation, useGetOrderQuery, useGetMyOrdersQuery, useGetAllOrdersQuery} = orderApi; 

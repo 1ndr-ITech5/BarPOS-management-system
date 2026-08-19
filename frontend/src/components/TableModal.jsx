@@ -62,7 +62,7 @@ const TableModal = ({selectedTableId, allTables}) => {
             :
                 (<>
                     <button onClick={(e) => user ? handleUpdateOrder(e) : handleWarning()}>Update Table</button>
-                    <button>Checkout</button>
+                    <button onClick={() => navigate("/checkout")}>Checkout</button>
                 </>)
             }
             <button onClick={() => backToTables()}>Back</button>
