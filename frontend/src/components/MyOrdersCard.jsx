@@ -31,6 +31,18 @@ const MyOrdersCard = ({order}) => {
         }
     }
 
+    const handleCheckout = (e) => {
+        e.preventDefault();
+
+        try{
+            dispatch(setSelectedTable(order.tableId._id))
+            dispatch(setCurrentOrder(order._id))
+            nav("/checkout")
+        }catch(error){
+            console.log(error)
+        }
+    }
+
     return(
         <div className="myorder-card">
             <h2>Table No. {order.tableId.tableNumber}</h2>
@@ -39,7 +51,7 @@ const MyOrdersCard = ({order}) => {
             <h3>Total: {order.total} ALL</h3>
             <div>
                 <button onClick={(e) => handleUpdateOrder(e)}>Update Order</button>
-                <button onClick={() => nav("/checkout")}>Checkout</button>
+                <button onClick={(e) => handleCheckout(e)}>Checkout</button>
             </div>
         </div>
     )

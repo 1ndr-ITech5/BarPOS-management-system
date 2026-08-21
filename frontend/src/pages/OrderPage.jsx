@@ -66,7 +66,7 @@ const OrderPage = () => {
 
 
     const backToTables = () => {
-        localStorage.removeItem("currentTableId")
+        dispatch(clearCurrentOrder())
         nav(-1)
     }
 
@@ -80,7 +80,7 @@ const OrderPage = () => {
             <div className="order-page-columns">
                 <Categories menuItems={items} selectedCategory={selectedCategory} setCategory={setCategory}/>
                 <Products menuItems={items} selectedCategory={selectedCategory} addProduct={handleAddItems} orderId={orderData?.order?._id}/>
-                <OrderItems orderItems={orderData?.orderItems} addProduct={handleAddItems} removeProduct={handleRemoveItems}/>
+                <OrderItems orderItems={orderData ? orderData.orderItems : []} addProduct={handleAddItems} removeProduct={handleRemoveItems}/>
             </div>
             <div className="order-buttons">
                 <button onClick={() => setShowDiscard(true)}>Delete</button>

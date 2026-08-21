@@ -10,7 +10,7 @@ const Checkout = () => {
     const tableId = useSelector(state => state.modals.selectedTable)
     const orderId = useSelector(state => state.order.currentOrderId)
 
-    const {data: orderData, isLoading: orderLoading} = useGetOrderQuery(tableId)
+    const {data: orderData, isLoading: orderLoading} = useGetOrderQuery(tableId, {skip: !tableId})
     const [createPayment] = useCreatePaymentMutation();
 
     const [paymentData, setPaymentData] = useState({

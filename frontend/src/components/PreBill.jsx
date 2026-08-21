@@ -4,6 +4,16 @@ import "../comp-style/PreBill.css";
 
 const PreBill = ({changePreBillModal, orderData}) => {
 
+    // security check when orderData might come undefined
+    if(!orderData){
+        return(
+            <div>
+                <CiCircleRemove onClick={() => changePreBillModal(false)}/>
+                <p>Order Data was not found!</p>
+            </div>
+        )
+    }
+
     const dateTime = new Date(orderData.order.createdAt);
 
     // format the date part

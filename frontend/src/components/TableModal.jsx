@@ -53,6 +53,11 @@ const TableModal = ({selectedTableId, allTables}) => {
         localStorage.removeItem("currentTableId")
     }
 
+    const handleCheckout = () => {
+        dispatch(setCurrentOrder(orderData.order._id))
+        navigate("/checkout")
+    }
+
     return (
         <div className="table-modal">
             <h3>Table no.{table.tableNumber}</h3>
@@ -62,7 +67,7 @@ const TableModal = ({selectedTableId, allTables}) => {
             :
                 (<>
                     <button onClick={(e) => user ? handleUpdateOrder(e) : handleWarning()}>Update Table</button>
-                    <button onClick={() => navigate("/checkout")}>Checkout</button>
+                    <button onClick={() => handleCheckout()}>Checkout</button>
                 </>)
             }
             <button onClick={() => backToTables()}>Back</button>

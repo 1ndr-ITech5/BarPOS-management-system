@@ -1,7 +1,16 @@
 import {useGetAllOrdersQuery} from "../store/apis/orderApi.js";
 import MyOrdersCard from "../components/MyOrdersCard.jsx";
+import {clearCurrentOrder} from "../store/slices/orderSlice.js";
+import {useDispatch} from "react-redux";
+import {useEffect} from "react";
 
 const AllOrders = () => {
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(clearCurrentOrder())
+    }, [])
 
     const {data: allOrders, isLoading} = useGetAllOrdersQuery();
 
