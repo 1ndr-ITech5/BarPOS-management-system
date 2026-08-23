@@ -86,23 +86,34 @@ const openOrder = async(table_id, user_id) => {
         throw error;
     }
 
-    // create the order for that table
-    const newOrder = await Order.create({
-        waiterId: user_id,
-        tableId: table_id
-    })
+    // treat the dublicate errors
+    try{
+        // create the order for that table
+        const newOrder = await Order.create({
+            waiterId: user_id,
+            tableId: table_id
+        })
 
-    // update the table status to occupied after the newOrder gets created
-    await Table.findByIdAndUpdate(
-        table._id, 
-        {   status: "occupied",
-            openedBy: user_id,
-            timeOpened: new Date()
-        },
-        {returnDocument: "after", runValidators: true}
-    )
+        // update the table status to occupied after the newOrder gets created
+        await Table.findByIdAndUpdate(
+            table._id, 
+            {   status: "occupied",
+                openedBy: user_id,
+                timeOpened: new Date()
+            },
+            {returnDocument: "after", runValidators: true}
+        )
 
-    return newOrder
+        return newOrder
+    }catch(error){
+        if(error.code === 11000){
+            const err = new Error("The order for this table has already been set!")
+            err.statusCode = 409
+            throw err;
+        }
+
+        throw error;
+    }
 }
 
 const updateOrderTotal = async(order_id) => {

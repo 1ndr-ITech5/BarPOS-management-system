@@ -29,4 +29,14 @@ const orderSchema = new mongoose.Schema({
     timestamps: true
 })
 
+orderSchema.index(
+    { tableId: 1 },
+    {
+        unique: true,
+        partialFilterExpression: {
+            status: "open"
+        }
+    }
+)
+
 module.exports = mongoose.model("Order", orderSchema)

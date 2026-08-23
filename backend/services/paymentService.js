@@ -74,20 +74,31 @@ const createPayment = async(paymentData, order_id, user) => {
         throw error
     }
 
-    // save payment in the database
-    const payment = await Payment.create({
-        orderId: order_id,
-        waiterId: user._id,
-        totalAmount: order.total,
-        amountPaid: amountPaid,
-        change: amountPaid - order.total,
-        method: method
-    })
+    // treat the case when facing a dublicate error
+    try{
+        // save payment in the database
+        const payment = await Payment.create({
+            orderId: order_id,
+            waiterId: user._id,
+            totalAmount: order.total,
+            amountPaid: amountPaid,
+            change: amountPaid - order.total,
+            method: method
+        })
 
-    // with payment creation, close the order
-    await closeOrder(order._id, order.tableId)
+        // with payment creation, close the order
+        await closeOrder(order._id, order.tableId)
+        return payment
 
-    return payment
+    }catch(error){
+        if(error.code === 11000){
+            const err = new Error("The payment for this order has already finished!")
+            err.statusCode = 409
+            throw err
+        }
+
+        throw error
+    }
 }
 
 module.exports = {getCreatedPayment, getPayments, createPayment}
