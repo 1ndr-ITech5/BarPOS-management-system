@@ -8,7 +8,8 @@ import {setTableModal, setSelectedTable} from "../store/slices/modalSlice.js";
 import './Tables.css';
 
 const Tables = () => {
-    const {data: tables, isLoading, refetch} = useGetTablesQuery(undefined, {refetchOnMountOrArgChange: true})
+
+    const {data: tables, isLoading} = useGetTablesQuery(undefined, {refetchOnMountOrArgChange: true})
     const dispatch = useDispatch();
 
     const {tableModal, selectedTable, warningModal, loginModal} = useSelector((state) => state.modals)

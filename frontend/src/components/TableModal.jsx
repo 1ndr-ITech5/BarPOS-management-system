@@ -3,20 +3,27 @@ import {setTableModal, setWarningModal} from "../store/slices/modalSlice.js";
 import {useCreateOrderMutation} from "../store/apis/orderApi.js";
 import {useNavigate} from "react-router-dom";
 import {setCurrentOrder} from "../store/slices/orderSlice.js";
+import {removeSelectedTable} from "../store/slices/modalSlice.js";
 import {useGetOrderQuery} from "../store/apis/orderApi.js";
 
 const TableModal = ({selectedTableId, allTables}) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const table = allTables.find(t => t._id === selectedTableId)
-
-    const [createOrder, {isloading}] = useCreateOrderMutation();
-    const {data: orderData, isLoading: orderLoading} = useGetOrderQuery(table._id, {skip: !table._id})
-
+    const [createOrder] = useCreateOrderMutation();
     const user = useSelector((state) => state.user.user)
 
+    const table = allTables.find(t => t._id === selectedTableId)
+    const {data: orderData} = useGetOrderQuery(table?._id, {skip: !table?._id})
+
+    if(!table){
+        return (
+            <div>
+                <p>Table was not found!</p>
+                <button onClick={() => {dispatch(removeSelectedTable()), navigate("/tables")}}>Back</button>
+            </div>
+        )
+    }
 
     const handleOpenOrder = async(e, table) => {
         e.preventDefault();
@@ -50,7 +57,7 @@ const TableModal = ({selectedTableId, allTables}) => {
 
     const backToTables = () => {
         dispatch(setTableModal(false))
-        localStorage.removeItem("currentTableId")
+        dispatch(removeSelectedTable())
     }
 
     const handleCheckout = () => {

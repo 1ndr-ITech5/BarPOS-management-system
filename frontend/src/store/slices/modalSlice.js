@@ -31,6 +31,10 @@ const modalSlice = createSlice({
             state.selectedTable = action.payload
             localStorage.setItem("currentTableId", action.payload)
         },
+        removeSelectedTable(state){
+            state.selectedTable = null
+            localStorage.removeItem("currentTableId")
+        },
         setViewReceipt(state, action){
             if (state.receiptModal !== action.payload){
                 state.receiptModal = action.payload
@@ -39,5 +43,5 @@ const modalSlice = createSlice({
     }
 })
 
-export const {setLoginModal, setWarningModal, setTableModal, setSelectedTable, setViewReceipt} = modalSlice.actions;
+export const {setLoginModal, setWarningModal, setTableModal, setSelectedTable, removeSelectedTable, setViewReceipt} = modalSlice.actions;
 export default modalSlice.reducer;

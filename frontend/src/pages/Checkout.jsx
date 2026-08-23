@@ -22,6 +22,15 @@ const Checkout = () => {
         return <p>Fetching current order state...</p>
     }
 
+    if (!orderData) {
+        return (
+            <div>
+                <p>This order was not found!</p>
+                <button onClick={() => nav(-1)}>Back</button>
+            </div>
+        )
+    }
+
     const total = orderData.orderItems.reduce((sum, item) => sum += (item.unitPrice * item.quantity) , 0)
 
     const handleChange = (e) => {
