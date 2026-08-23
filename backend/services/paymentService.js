@@ -3,7 +3,8 @@ const Order = require("../models/orderModel.js")
 const OrderItem = require("../models/orderItemModel.js")
 const {closeOrder} = require("./orderService.js")
 
-const getCreatedPayment = async({orderId}) => {
+const getCreatedPayment = async({orderId, userData}) => {
+    // find the completed payment
     const createdPayment = await Payment.findOne({orderId: orderId})
     .populate({path: "orderId", populate: {path: "tableId", select: "tableNumber"}})
     .populate("waiterId", "first_name last_name")
@@ -11,6 +12,13 @@ const getCreatedPayment = async({orderId}) => {
     // return if no payment was found
     if(!createdPayment){
         return null
+    }
+
+    // check the user who completed payment can see the final receipt
+    if(createdPayment.waiterId._id.toString() !== userData._id.toString() && userData.role !== "admin"){
+        const error = new Error("You are not authorized to view this receipt!")
+        error.statusCode = 403
+        throw error;
     }
 
     const orderItems = await OrderItem.find({orderId: createdPayment.orderId._id}).populate("menuItemId", "productName")

@@ -4,8 +4,9 @@ const {getCreatedPayment, getPayments, createPayment} = require("../services/pay
 const getClosedPayment = asyncHandler(async(req,res) => {
     
     const {orderId} = req.params
+    const userData = req.user
 
-    const createdPayment = await getCreatedPayment({orderId})
+    const createdPayment = await getCreatedPayment({orderId, userData})
     res.status(200).json(createdPayment)
 })
 
