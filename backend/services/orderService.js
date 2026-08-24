@@ -1,6 +1,8 @@
 const Order = require("../models/orderModel.js")
 const Table = require("../models/tableModel.js")
 const OrderItem = require("../models/orderItemModel.js")
+const {deleteOrderItems} = require("./orderItemService.js")
+const mongoose = require("mongoose")
 
 // get the pre-bill of order based on the table id
 const getPreBill = async(table_id, userData) => {
@@ -174,21 +176,34 @@ const deleteOrder = async(table_id, userData) => {
         throw error;
     }
 
-    // delete the found order
-    const deletedOrder = await Order.findByIdAndDelete(order._id)
+    const session = await mongoose.startSession();
 
-    // update table occupation
-    await Table.findByIdAndUpdate(
-        table_id,
-        {   status: "available",
-            openedBy: null,
-            timeOpened: null
-        },
-        {returnDocument: "after", runValidators: true}
-    )
+    try{
+        await session.startTransaction();
+        // delete the found order
+        const deletedOrder = await Order.findByIdAndDelete(order._id, {session})
 
+        // delete its items
+        await deleteOrderItems(order._id, session)
 
-    return deletedOrder
+        // update table occupation
+        await Table.findByIdAndUpdate(
+            table_id,
+            {   status: "available",
+                openedBy: null,
+                timeOpened: null
+            },
+            {returnDocument: "after", runValidators: true, session}
+        )
+
+        await session.commitTransaction();
+        return deletedOrder
+    }catch(error){
+        await session.abortTransaction();
+        throw error
+    }finally{
+        await session.endSession();
+    }
 }
 
 module.exports = {getPreBill, getAllOrders, getWaiterOrders, openOrder, updateOrderTotal, closeOrder, deleteOrder}

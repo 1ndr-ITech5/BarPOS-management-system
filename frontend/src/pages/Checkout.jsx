@@ -10,7 +10,7 @@ const Checkout = () => {
     const tableId = useSelector(state => state.modals.selectedTable)
     const orderId = useSelector(state => state.order.currentOrderId)
 
-    const {data: orderData, isLoading: orderLoading} = useGetOrderQuery(tableId, {skip: !tableId})
+    const {data: orderData, isLoading: orderLoading, isError, error} = useGetOrderQuery(tableId, {skip: !tableId})
     const [createPayment] = useCreatePaymentMutation();
 
     const [paymentData, setPaymentData] = useState({
@@ -20,6 +20,42 @@ const Checkout = () => {
 
     if (orderLoading) {
         return <p>Fetching current order state...</p>
+    }
+
+    if (isError) {
+        if (error?.status === 403) {
+            return (
+                <div>
+                    <p>You are not authorized to complete this payment!</p>
+                    <button onClick={() => nav(-1)}>Back</button>
+                </div>
+            )
+        }
+
+        if (error?.status === 404) {
+            return (
+                <div>
+                    <p>This order was not found!</p>
+                    <button onClick={() => nav(-1)}>Back</button>
+                </div>
+            )
+        }
+
+        if (error?.status === 500) {
+            return (
+                <div>
+                    <p>Server error. Please try again later.</p>
+                    <button onClick={() => nav(-1)}>Back</button>
+                </div>
+            )
+        }
+
+        return (
+            <div>
+                <p>Unable to fetch the order data. Please try again.</p>
+                <button onClick={() => nav(-1)}>Back</button>
+            </div>
+        )
     }
 
     if (!orderData) {

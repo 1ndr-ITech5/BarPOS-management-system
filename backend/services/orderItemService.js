@@ -27,39 +27,48 @@ const addOrderItem = async(order_id, menuItem_id, userData) => {
         throw error
     }
 
-    // check if same orderItem has been created for that order
-    const orderItem = await OrderItem.findOne({
-        orderId: order_id,
-        menuItemId: menuItem_id
-    })
-    if (!orderItem){
-        const quantity = 1
-        const newOrderItem = await OrderItem.create({
+    try{
+        // check if same orderItem has been created for that order
+        const orderItem = await OrderItem.findOne({
             orderId: order_id,
-            menuItemId: menuItem_id,
-            quantity,
-            unitPrice: item.price,
-            linePrice: quantity * item.price
+            menuItemId: menuItem_id
         })
-        // update the order's total
-        await updateOrderTotal(order_id)
-
-        // return the newly created / updated order item
-        return newOrderItem
-    }else{
-        const newQuantity = orderItem.quantity + 1
-        const updatedOrderItem = await OrderItem.findByIdAndUpdate(
-            orderItem._id,
-            {   quantity: newQuantity,
-                linePrice: newQuantity * orderItem.unitPrice
-            },
-            {
-                returnDocument: "after", runValidators: true
+        if (!orderItem){
+            const quantity = 1
+            const newOrderItem = await OrderItem.create({
+                orderId: order_id,
+                menuItemId: menuItem_id,
+                quantity,
+                unitPrice: item.price,
+                linePrice: quantity * item.price
             })
-        // update the order's total
-        await updateOrderTotal(order_id)
+            // update the order's total
+            await updateOrderTotal(order_id)
 
-        return updatedOrderItem
+            // return the newly created / updated order item
+            return newOrderItem
+        }else{
+            const newQuantity = orderItem.quantity + 1
+            const updatedOrderItem = await OrderItem.findByIdAndUpdate(
+                orderItem._id,
+                {   quantity: newQuantity,
+                    linePrice: newQuantity * orderItem.unitPrice
+                },
+                {
+                    returnDocument: "after", runValidators: true
+                })
+            // update the order's total
+            await updateOrderTotal(order_id)
+
+            return updatedOrderItem
+        }
+    }catch(error){
+        if(error.code === 11000){
+            const err = new Error("Error occured during items adding on order!")
+            err.statusCode = 409
+            throw err;
+        }
+        throw error
     }
 }
 
@@ -112,4 +121,9 @@ const removeOrderItem = async(order_id, menuItem_id, userData) => {
     }
 }
 
-module.exports = {addOrderItem, removeOrderItem}
+const deleteOrderItems = async(orderId, session) => {
+    // delete the order items
+    await OrderItem.deleteMany({orderId}, {session})
+}
+
+module.exports = {addOrderItem, removeOrderItem, deleteOrderItems}

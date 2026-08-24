@@ -12,10 +12,22 @@ const AllOrders = () => {
         dispatch(clearCurrentOrder())
     }, [])
 
-    const {data: allOrders, isLoading} = useGetAllOrdersQuery();
+    const {data: allOrders, isLoading, isError, error} = useGetAllOrdersQuery();
 
     if (isLoading){
         return <p>Waiting for all orders...</p>
+    }
+
+    if (isError) {
+        if (error?.status === 404) {
+            return <p>Orders could not be found.</p>
+        }
+
+        if (error?.status === 500) {
+            return <p>Server error. Please try again later.</p>
+        }
+
+        return <p>Unable to fetch all orders. Please try again.</p>
     }
 
     return (

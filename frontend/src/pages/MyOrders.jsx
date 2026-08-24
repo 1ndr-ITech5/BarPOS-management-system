@@ -12,11 +12,23 @@ const MyOrders = () => {
         dispatch(clearCurrentOrder())
     }, [])
 
-    const {data: myOrders, isLoading, refetch} = useGetMyOrdersQuery(undefined, {refetchOnMountOrArgChange: true});
+    const {data: myOrders, isLoading, isError, error} = useGetMyOrdersQuery(undefined, {refetchOnMountOrArgChange: true});
     console.log(myOrders)
 
     if(isLoading){
         return <p>Loading your active orders...</p>
+    }
+
+    if (isError) {
+        if (error?.status === 404) {
+            return <p>Orders could not be found.</p>
+        }
+
+        if (error?.status === 500) {
+            return <p>Server error. Please try again later.</p>
+        }
+
+        return <p>Unable to fetch all orders. Please try again.</p>
     }
 
     return (

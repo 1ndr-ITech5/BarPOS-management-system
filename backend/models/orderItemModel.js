@@ -29,4 +29,9 @@ const orderItemSchema = new mongoose.Schema({
     timestamps: true
 })
 
+orderItemSchema.index(
+    { orderId: 1, menuItemId: 1 },
+    { unique: true }
+)
+
 module.exports = mongoose.model("OrderItem", orderItemSchema)

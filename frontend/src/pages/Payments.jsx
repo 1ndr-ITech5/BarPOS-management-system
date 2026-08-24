@@ -13,11 +13,23 @@ const Payments = () => {
     const methodFilter = useSelector(state => state.filters.payMethodFilter)
     const receiptModal = useSelector(state => state.modals.receiptModal)
 
-    const {data: allPayments, isLoading} = useGetAllPaymentsQuery();
+    const {data: allPayments, isLoading, isError, error} = useGetAllPaymentsQuery();
     console.log(allPayments)
 
     if(isLoading){
         return <p>Loading all payments...</p>
+    }
+
+    if (isError) {
+        if (error?.status === 404) {
+            return <p>Payments could not be found.</p>
+        }
+
+        if (error?.status === 500) {
+            return <p>Server error. Please try again later.</p>
+        }
+
+        return <p>Unable to fetch all payments. Please try again.</p>
     }
 
     const filterPaymentsByDate = (allPayments, timeFilter) => {
