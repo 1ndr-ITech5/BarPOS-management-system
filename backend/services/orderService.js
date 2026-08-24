@@ -133,14 +133,14 @@ const updateOrderTotal = async(order_id) => {
     )
 }
 
-const closeOrder = async(order_id, table_id) => {
+const closeOrder = async(order_id, table_id, session) => {
     // update the order status
     await Order.findByIdAndUpdate(
         order_id,
         {   status: "closed",
             closedAt: new Date()
         },
-        {returnDocument: "after", runValidators: true}
+        {returnDocument: "after", runValidators: true, session}
     )
 
     // update table occupation
@@ -150,7 +150,7 @@ const closeOrder = async(order_id, table_id) => {
             openedBy: null,
             timeOpened: null
         },
-        {returnDocument: "after", runValidators: true}
+        {returnDocument: "after", runValidators: true, session}
     )
 }
 

@@ -2,6 +2,7 @@ const Payment = require("../models/paymentModel.js")
 const Order = require("../models/orderModel.js")
 const OrderItem = require("../models/orderItemModel.js")
 const {closeOrder} = require("./orderService.js")
+const mongoose = require("mongoose")
 
 const getCreatedPayment = async({orderId, userData}) => {
     // find the completed payment
@@ -74,23 +75,29 @@ const createPayment = async(paymentData, order_id, user) => {
         throw error
     }
 
+    const session = await mongoose.startSession()
+
     // treat the case when facing a dublicate error
     try{
+        session.startTransaction();
         // save payment in the database
-        const payment = await Payment.create({
+        const [payment] = await Payment.create([{
             orderId: order_id,
             waiterId: user._id,
             totalAmount: order.total,
             amountPaid: amountPaid,
             change: amountPaid - order.total,
             method: method
-        })
+        }], {session})
 
         // with payment creation, close the order
-        await closeOrder(order._id, order.tableId)
+        await closeOrder(order._id, order.tableId, session)
+        await session.commitTransaction();
         return payment
 
     }catch(error){
+        await session.abortTransaction();
+
         if(error.code === 11000){
             const err = new Error("The payment for this order has already finished!")
             err.statusCode = 409
@@ -98,6 +105,8 @@ const createPayment = async(paymentData, order_id, user) => {
         }
 
         throw error
+    }finally{
+        await session.endSession()
     }
 }
 
