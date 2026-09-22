@@ -73,6 +73,13 @@ const createPayment = async(paymentData, order_id, user) => {
         throw error
     }
 
+    // check if the amount paid is a valid number
+    if ( typeof amountPaid !== "number" || !Number.isFinite(amountPaid) || amountPaid <= 0) {
+        const error = new Error("Amount paid must be a positive number")
+        error.statusCode = 400
+        throw error;
+    }
+
     // check if amount paid by user is greater or equal to total order amount
     if (amountPaid < totalAmount){
         const error = new Error(`Amount paid should be greater or equal to total order amount! Amount needed to be added: ${totalAmount - amountPaid}`)

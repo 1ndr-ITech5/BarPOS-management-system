@@ -130,9 +130,9 @@ const openOrder = async(table_id, user_id) => {
     }
 }
 
-const updateOrderTotal = async(order_id) => {
+const updateOrderTotal = async(order_id, session) => {
     // get all the items in this order
-    const items = await OrderItem.find({orderId: order_id})
+    const items = await OrderItem.find({orderId: order_id}).session(session)
 
     // calculate the total of these items
     const totalPrice = items.reduce(
@@ -144,7 +144,7 @@ const updateOrderTotal = async(order_id) => {
         const updatedOrder = await Order.findByIdAndUpdate(
         order_id,
         {total: totalPrice},
-            {new: true, runValidators: true}
+            {session, new: true, runValidators: true}
     )
 
         if (!updatedOrder) {
