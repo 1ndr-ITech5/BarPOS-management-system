@@ -5,6 +5,7 @@ import "../comp-style/UserPanel.css";
 import {useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {setLoginModal} from "../store/slices/modalSlice.js";
+import {clearCurrentOrder} from "../store/slices/orderSlice.js";
 import {logout} from '../store/slices/authSlice.js';
 
 const UserPanel = () => {
@@ -21,6 +22,7 @@ const UserPanel = () => {
 
     const handleLogout = () => {
         localStorage.removeItem("user")
+        dispatch(clearCurrentOrder())
         dispatch(logout())
     }
 
