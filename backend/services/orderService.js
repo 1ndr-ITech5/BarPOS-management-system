@@ -48,7 +48,13 @@ const getAllOrders = async() => {
     const activeOrders = await Order.find({status: "open"}).populate("waiterId", "first_name last_name")
     .populate("tableId", "tableNumber")
     
-    return activeOrders
+        const ordersWithTotals = await Promise.all(activeOrders.map(async(order) => {
+            const items = await OrderItem.find({orderId: order._id})
+            order.total = items.reduce((sum, item) => sum + Number(item.linePrice), 0)
+            return order
+        }))
+
+        return ordersWithTotals
 }
 
 // get the active orders based on the waiter id
@@ -57,7 +63,13 @@ const getWaiterOrders = async(user_id) => {
     const waiterOrders = await Order.find({waiterId: user_id, status: "open"})
     .populate("tableId", "tableNumber")
 
-    return waiterOrders
+        const ordersWithTotals = await Promise.all(waiterOrders.map(async(order) => {
+            const items = await OrderItem.find({orderId: order._id})
+            order.total = items.reduce((sum, item) => sum + Number(item.linePrice), 0)
+            return order
+        }))
+
+        return ordersWithTotals
 }
 
 // create the order
@@ -124,15 +136,24 @@ const updateOrderTotal = async(order_id) => {
 
     // calculate the total of these items
     const totalPrice = items.reduce(
-        (sum, item) => sum += item.linePrice , 0
+            (sum, item) => sum + Number(item.linePrice),
+            0
     );
 
     // update the order with the new total
-    await Order.findByIdAndUpdate(
+        const updatedOrder = await Order.findByIdAndUpdate(
         order_id,
         {total: totalPrice},
-        {returnDocument: "after", runValidators: true}
+            {new: true, runValidators: true}
     )
+
+        if (!updatedOrder) {
+            const error = new Error("Order total could not be updated because the order does not exist!")
+            error.statusCode = 404
+            throw error
+        }
+
+        return updatedOrder
 }
 
 const closeOrder = async(order_id, table_id, session) => {

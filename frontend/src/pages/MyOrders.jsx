@@ -34,11 +34,14 @@ const MyOrders = () => {
     return (
         <div>
             <h1>My-Orders</h1>
-            <div className="cards-container">
+            {myOrders.length > 0 ? (
+                <div className="cards-container">
                 {myOrders.map(order => (
                     <MyOrdersCard key={order._id} order={order}/>
                 ))}
-            </div>
+                </div>
+            ) : 
+            ( <p>No active orders found right now!</p> )}
         </div>
     )
 }

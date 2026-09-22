@@ -53,6 +53,11 @@ const createPayment = async(paymentData, order_id, user) => {
         throw error
     }
 
+    const totalAmount = orderItems.reduce(
+        (sum, item) => sum + item.linePrice,
+        0
+    )
+
     // check if the waiter who opened the order will be the one who closes it
     if (order.waiterId._id.toString() !== user._id.toString() && user.role !== "admin"){
         const error = new Error(`The waiter: ${order.waiterId.first_name} ${order.waiterId.last_name} and admin have the rights to close the order!`)
@@ -69,8 +74,8 @@ const createPayment = async(paymentData, order_id, user) => {
     }
 
     // check if amount paid by user is greater or equal to total order amount
-    if (amountPaid < order.total){
-        const error = new Error(`Amount paid should be greater or equal to total order amount! Amount needed to be added: ${order.total - amountPaid}`)
+    if (amountPaid < totalAmount){
+        const error = new Error(`Amount paid should be greater or equal to total order amount! Amount needed to be added: ${totalAmount - amountPaid}`)
         error.statusCode = 400
         throw error
     }
@@ -84,9 +89,9 @@ const createPayment = async(paymentData, order_id, user) => {
         const [payment] = await Payment.create([{
             orderId: order_id,
             waiterId: user._id,
-            totalAmount: order.total,
+            totalAmount,
             amountPaid: amountPaid,
-            change: amountPaid - order.total,
+            change: amountPaid - totalAmount,
             method: method
         }], {session})
 

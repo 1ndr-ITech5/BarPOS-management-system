@@ -27,13 +27,15 @@ export const orderApi = api.injectEndpoints({
             query: () => ({
                 url: "/api/order/my-orders",
                 method: "GET"
-            })
+            }),
+            providesTags: ["Orders"]
         }),
         getAllOrders: builder.query({
             query: () => ({
                 url: "/api/order/all-orders",
                 method: "GET"
-            })
+            }),
+            providesTags: ["Orders"]
         })
     })
 });
