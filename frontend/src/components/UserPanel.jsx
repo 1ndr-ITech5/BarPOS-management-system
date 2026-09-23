@@ -7,6 +7,8 @@ import {useSelector, useDispatch} from "react-redux";
 import {setLoginModal} from "../store/slices/modalSlice.js";
 import {clearCurrentOrder} from "../store/slices/orderSlice.js";
 import {logout} from '../store/slices/authSlice.js';
+import {api} from "../store/apis/api.js";
+import {itemsApi} from "../store/apis/itemsApi.js";
 
 const UserPanel = () => {
     // login modal
@@ -23,6 +25,8 @@ const UserPanel = () => {
     const handleLogout = () => {
         localStorage.removeItem("user")
         dispatch(clearCurrentOrder())
+        dispatch(api.util.resetApiState())
+        dispatch(itemsApi.util.resetApiState())
         dispatch(logout())
     }
 
