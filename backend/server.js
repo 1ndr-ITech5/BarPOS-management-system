@@ -12,7 +12,7 @@ const app = express();
 
 // enable communication with frontend port
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
     allowedHeaders: ["Content-Type", "Authorization"]
 }))
 

@@ -47,14 +47,20 @@ const getAllOrders = async() => {
     // find in db all orders that have status open
     const activeOrders = await Order.find({status: "open"}).populate("waiterId", "first_name last_name")
     .populate("tableId", "tableNumber")
-    
-        const ordersWithTotals = await Promise.all(activeOrders.map(async(order) => {
-            const items = await OrderItem.find({orderId: order._id})
-            order.total = items.reduce((sum, item) => sum + Number(item.linePrice), 0)
-            return order
-        }))
 
-        return ordersWithTotals
+    const orderIds = activeOrders.map(order => order._id)
+    const allItems = await OrderItem.find({orderId: {$in: orderIds}})
+    const totals = new Map()
+
+    for (const item of allItems) {
+        const orderId = item.orderId.toString()
+        totals.set(orderId, (totals.get(orderId) || 0) + Number(item.linePrice))
+    }
+
+    return activeOrders.map(order => {
+        order.total = totals.get(order._id.toString()) || 0
+        return order
+    })
 }
 
 // get the active orders based on the waiter id
@@ -63,13 +69,19 @@ const getWaiterOrders = async(user_id) => {
     const waiterOrders = await Order.find({waiterId: user_id, status: "open"})
     .populate("tableId", "tableNumber")
 
-        const ordersWithTotals = await Promise.all(waiterOrders.map(async(order) => {
-            const items = await OrderItem.find({orderId: order._id})
-            order.total = items.reduce((sum, item) => sum + Number(item.linePrice), 0)
-            return order
-        }))
+    const orderIds = waiterOrders.map(order => order._id)
+    const allItems = await OrderItem.find({orderId: {$in: orderIds}})
+    const totals = new Map()
 
-        return ordersWithTotals
+    for (const item of allItems) {
+        const orderId = item.orderId.toString()
+        totals.set(orderId, (totals.get(orderId) || 0) + Number(item.linePrice))
+    }
+
+    return waiterOrders.map(order => {
+        order.total = totals.get(order._id.toString()) || 0
+        return order
+    })
 }
 
 // create the order
