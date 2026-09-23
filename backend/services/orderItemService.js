@@ -1,7 +1,7 @@
 const OrderItem = require("../models/orderItemModel.js")
 const Order = require("../models/orderModel.js")
 const Menu = require("../models/menuModel.js")
-const {updateOrderTotal} = require("./orderService.js")
+const {updateOrderTotal} = require("./orderTotalService.js")
 const mongoose = require("mongoose")
 
 const addOrderItem = async(order_id, menuItem_id, userData) => {
