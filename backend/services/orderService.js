@@ -112,13 +112,16 @@ const openOrder = async(table_id, user_id) => {
         throw error;
     }
 
+    const session = await mongoose.startSession();
+
     // treat the dublicate errors
     try{
+        await session.startTransaction();
         // create the order for that table
         const newOrder = await Order.create({
             waiterId: user_id,
             tableId: table_id
-        })
+        }, {session})
 
         // update the table status to occupied after the newOrder gets created
         await Table.findByIdAndUpdate(
@@ -127,18 +130,20 @@ const openOrder = async(table_id, user_id) => {
                 openedBy: user_id,
                 timeOpened: new Date()
             },
-            {returnDocument: "after", runValidators: true}
+            {session, returnDocument: "after", runValidators: true}
         )
-
+        await session.commitTransaction();
         return newOrder
     }catch(error){
+        await session.abortTransaction();
         if(error.code === 11000){
             const err = new Error("The order for this table has already been set!")
             err.statusCode = 409
             throw err;
         }
-
         throw error;
+    }finally{
+        await session.endSession();
     }
 }
 
