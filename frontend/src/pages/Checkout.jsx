@@ -11,7 +11,7 @@ const Checkout = () => {
     const orderId = useSelector(state => state.order.currentOrderId)
 
     const {data: orderData, isLoading: orderLoading, isError, error} = useGetOrderQuery(tableId, {skip: !tableId})
-    const [createPayment] = useCreatePaymentMutation();
+    const [createPayment, {isLoading}] = useCreatePaymentMutation();
 
     const [paymentData, setPaymentData] = useState({
         amountPaid: "",
@@ -129,7 +129,7 @@ const Checkout = () => {
                 </div>
             </div>
             <div>
-                <button onClick={(e) => handlePayment(e)}>Confirm</button>
+                <button disabled={isLoading} onClick={(e) => handlePayment(e)}>{isLoading ? "Processing payment" : "Confirm Payment"}</button>
                 <button onClick={() => nav(-1)}>Back</button>
             </div>
         </div>
