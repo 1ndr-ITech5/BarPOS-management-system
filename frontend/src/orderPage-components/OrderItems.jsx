@@ -5,7 +5,7 @@ import {useSelector} from "react-redux";
 const OrderItems = ({orderItems = [], addProduct, removeProduct}) => {
 
     const currentOrder = useSelector(state => state.order.currentOrderId)
-    const orderTotal = orderItems.reduce((sum, item) => {return sum += (item.unitPrice * item.quantity)}, 0)
+    const orderTotal = orderItems.reduce((sum, item) => sum + (item.unitPrice * item.quantity),0)
 
     return (
         <div>

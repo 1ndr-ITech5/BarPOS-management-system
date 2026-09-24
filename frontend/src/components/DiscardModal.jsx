@@ -1,5 +1,4 @@
 import {useDeleteOrderMutation} from "../store/apis/orderApi.js";
-import {useDispatch} from "react-redux";
 
 const DiscardModal = ({changeDiscardModal, setShowDiscard, tableId}) => {
 

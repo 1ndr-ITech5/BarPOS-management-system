@@ -47,7 +47,7 @@ const OrderPage = () => {
     const handleAddItems = async(e, orderId, productId) => {
         e.preventDefault()
         try{
-            const response = await addItem({orderId, menuItemId: productId}).unwrap()
+            await addItem({orderId, menuItemId: productId}).unwrap()
         }catch(error){
             console.log(error)
         }
@@ -58,7 +58,7 @@ const OrderPage = () => {
         e.preventDefault()
 
         try{
-            const response = await removeItem({orderId, menuItemId: productId})
+            await removeItem({orderId, menuItemId: productId})
         }catch(error){
             console.log(error)
         }

@@ -13,7 +13,6 @@ const Register = ({changeModal}) => {
         role: "waiter"
     })
     const [error, setError] = useState(null)
-    const [success, setSuccess] = useState(null)
 
     // change the value of register fields live
     const handleChange = (e) => {

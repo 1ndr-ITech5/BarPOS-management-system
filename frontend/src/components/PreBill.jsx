@@ -1,5 +1,4 @@
 import { CiCircleRemove } from "react-icons/ci";
-import {useSelector} from "react-redux";
 import "../comp-style/PreBill.css";
 
 const PreBill = ({changePreBillModal, orderData}) => {
@@ -30,8 +29,6 @@ const PreBill = ({changePreBillModal, orderData}) => {
         hour12: false
     });
 
-    const total = orderData.orderItems.reduce((sum, item) => sum += (item.unitPrice * item.quantity), 0)
-
     return(
         <div className="pre-bill">
             <CiCircleRemove onClick={() => changePreBillModal(false)}/>
@@ -59,7 +56,7 @@ const PreBill = ({changePreBillModal, orderData}) => {
             <p>-------------------------------------------------------------------</p>
             <div className="total-bill">
                 <h2>Total ALL</h2>
-                <h2>{total}</h2>
+                <h2>{orderData.order.total}</h2>
             </div>
             <p>Thank you!</p>
             <p>Powered by BarPOS</p>

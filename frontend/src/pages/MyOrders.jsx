@@ -10,7 +10,7 @@ const MyOrders = () => {
 
     useEffect(() => {
         dispatch(clearCurrentOrder())
-    }, [])
+    }, [dispatch])
 
     const {data: myOrders, isLoading, isError, error} = useGetMyOrdersQuery(undefined, {refetchOnMountOrArgChange: true});
     console.log(myOrders)

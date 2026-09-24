@@ -67,8 +67,6 @@ const Checkout = () => {
         )
     }
 
-    const total = orderData.orderItems.reduce((sum, item) => sum += (item.unitPrice * item.quantity) , 0)
-
     const handleChange = (e) => {
         const {name, value} = e.target;
 
@@ -82,7 +80,7 @@ const Checkout = () => {
         e.preventDefault();
 
         try{
-            const paymentResponse = await createPayment({orderId, paymentData}).unwrap()
+            await createPayment({orderId, paymentData}).unwrap()
             nav("/payment-completed")
         }catch(error){
             console.log(error)
@@ -112,7 +110,7 @@ const Checkout = () => {
                     <p>-----------------------------------------------------</p>
                     <div>
                         <h2>Total in ALL - </h2>
-                        <h2>{total}</h2>
+                        <h2>{orderData.order.total}</h2>
                     </div>
                 </div>
             </div>

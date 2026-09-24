@@ -10,7 +10,7 @@ const AllOrders = () => {
 
     useEffect(() => {
         dispatch(clearCurrentOrder())
-    }, [])
+    }, [dispatch])
 
     const {data: allOrders, isLoading, isError, error} = useGetAllOrdersQuery();
 
