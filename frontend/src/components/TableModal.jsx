@@ -4,7 +4,8 @@ import {useCreateOrderMutation} from "../store/apis/orderApi.js";
 import {useNavigate} from "react-router-dom";
 import {setCurrentOrder} from "../store/slices/orderSlice.js";
 import {removeSelectedTable} from "../store/slices/modalSlice.js";
-import {useGetOrderQuery} from "../store/apis/orderApi.js";
+import {useLazyGetOrderQuery} from "../store/apis/orderApi.js";
+import { toast } from "react-toastify";
 
 const TableModal = ({selectedTableId, allTables}) => {
 
@@ -14,30 +15,13 @@ const TableModal = ({selectedTableId, allTables}) => {
     const user = useSelector((state) => state.user.user)
 
     const table = allTables.find(t => t._id === selectedTableId)
-    const {data: orderData, isLoading: orderLoading, isError: orderError, error} = useGetOrderQuery(table?._id,
-        {skip: !table?._id || table.status === "available"})
+    const [getOrder, {isLoading: orderLoading}] = useLazyGetOrderQuery()
 
     if(!table){
         return (
             <div>
                 <p>Table was not found!</p>
                 <button onClick={() => {dispatch(removeSelectedTable()), navigate("/tables")}}>Back</button>
-            </div>
-        )
-    }
-
-    if (orderLoading) {
-        return <p>Checking order access...</p>
-    }
-
-    if (orderError) {
-        return (
-            <div>
-                <p>{error?.status === 403 ? "You are not authorized to access this order." : "Unable to load this order."}</p>
-                <button onClick={() => {
-                    dispatch(setTableModal(false))
-                    dispatch(removeSelectedTable())
-                }}>Back</button>
             </div>
         )
     }
@@ -49,24 +33,36 @@ const TableModal = ({selectedTableId, allTables}) => {
             const orderResponse = await createOrder({tableId: table._id}).unwrap()
             dispatch(setTableModal(false))
             dispatch(setCurrentOrder(orderResponse.createdOrder._id))
+            toast.success(orderResponse.response)
             navigate("/order-page")
         }catch(error){
-            console.log(error)
+            toast.error(error)
         }
     }
 
-    const handleUpdateOrder = (e) => {
+    const handleUpdateOrder = async(e) => {
         e.preventDefault();
 
-        try{
+        try {
+            const response = await getOrder(table._id).unwrap()
             dispatch(setTableModal(false))
-            dispatch(setCurrentOrder(orderData.order._id))
+            dispatch(setCurrentOrder(response.order._id))
             navigate("/order-page")
-        }catch(error){
-            console.log(error)
+        } catch (error) {
+            toast.error(error?.data?.message || "You are not authorized to access this order.")
         }
     }
- 
+
+    const handleCheckout = async () => {
+        try {
+            const response = await getOrder(table._id).unwrap()
+            dispatch(setCurrentOrder(response.order._id))
+            navigate("/checkout")
+        } catch (error) {
+            toast.error(error?.data?.message || "You are not authorized to access this order.")
+        }
+    }
+
     const handleWarning = () => {
         dispatch(setTableModal(false))
         dispatch(setWarningModal(true))
@@ -77,11 +73,6 @@ const TableModal = ({selectedTableId, allTables}) => {
         dispatch(removeSelectedTable())
     }
 
-    const handleCheckout = () => {
-        dispatch(setCurrentOrder(orderData.order._id))
-        navigate("/checkout")
-    }
-
     return (
         <div className="table-modal">
             <h3>Table no.{table.tableNumber}</h3>
@@ -90,8 +81,8 @@ const TableModal = ({selectedTableId, allTables}) => {
                 (<button onClick={(e) => user ? handleOpenOrder(e, table) : handleWarning()}>Open Table</button>)
             :
                 (<>
-                    <button onClick={(e) => user ? handleUpdateOrder(e) : handleWarning()}>Update Table</button>
-                    <button onClick={() => handleCheckout()}>Checkout</button>
+                    <button onClick={handleUpdateOrder} disabled={orderLoading}>{orderLoading ? "Checking..." : "Update Table"}</button>
+                    <button onClick={handleCheckout} disabled={orderLoading}>{orderLoading ? "Checking..." : "Checkout"}</button>
                 </>)
             }
             <button onClick={() => backToTables()}>Back</button>

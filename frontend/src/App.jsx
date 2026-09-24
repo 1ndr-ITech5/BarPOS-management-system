@@ -11,6 +11,8 @@ import Checkout from "./pages/Checkout.jsx";
 import PayCompleted from "./pages/PayCompleted.jsx";
 import './App.css';
 import ProtectedRoutes from "./utils/ProtectedRoutes.jsx";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
     return(
@@ -33,6 +35,7 @@ const App = () => {
             </Routes>
           </main>
           <Footer/>
+          <ToastContainer/>
       </div>
     )
 }

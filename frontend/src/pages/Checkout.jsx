@@ -3,6 +3,7 @@ import {useSelector} from "react-redux";
 import {useGetOrderQuery} from "../store/apis/orderApi.js";
 import {useCreatePaymentMutation} from "../store/apis/paymentApi.js";
 import {useState} from "react";
+import { toast } from "react-toastify";
 
 const Checkout = () => {
 
@@ -83,7 +84,7 @@ const Checkout = () => {
             await createPayment({orderId, paymentData}).unwrap()
             nav("/payment-completed")
         }catch(error){
-            console.log(error)
+            toast.error(error.data.message)
         }
     }
 

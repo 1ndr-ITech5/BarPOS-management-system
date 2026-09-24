@@ -14,7 +14,7 @@ export const orderApi = api.injectEndpoints({
                 method: "DELETE",
                 url: `/api/order/${tableId}/delete`
             }),
-            invalidatesTags: ["Tables"],
+            invalidatesTags: ["Tables", "Orders"],
         }),
         getOrder: builder.query({
             query: (tableId) => ({
@@ -40,4 +40,4 @@ export const orderApi = api.injectEndpoints({
     })
 });
 
-export const {useCreateOrderMutation, useDeleteOrderMutation, useGetOrderQuery, useGetMyOrdersQuery, useGetAllOrdersQuery} = orderApi; 
+export const {useCreateOrderMutation, useDeleteOrderMutation, useGetOrderQuery, useGetMyOrdersQuery, useGetAllOrdersQuery, useLazyGetOrderQuery} = orderApi; 

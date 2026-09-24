@@ -1,4 +1,5 @@
 import {useDeleteOrderMutation} from "../store/apis/orderApi.js";
+import { toast } from "react-toastify";
 
 const DiscardModal = ({changeDiscardModal, setShowDiscard, tableId}) => {
 
@@ -9,10 +10,10 @@ const DiscardModal = ({changeDiscardModal, setShowDiscard, tableId}) => {
 
         try{
             const response = await deleteOrder(tableId).unwrap()
-            console.log(response)
+            toast.success(response.response)
             changeDiscardModal()
         }catch(error){
-            console.log(error)
+            toast.error(error)
         }
     }
 

@@ -3,6 +3,7 @@ import {useDispatch} from 'react-redux';
 import {useLoginMutation} from '../store/apis/authApi.js';
 import {loginSuccess} from '../store/slices/authSlice.js';
 import {setLoginModal} from "../store/slices/modalSlice.js";
+import { toast } from "react-toastify";
 
 const Login = () => {
 
@@ -13,20 +14,19 @@ const Login = () => {
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
-    const [error, setError] = useState(null)
 
     // what happens after button login gets clicked
     const handleSubmit = async(e) => {
         e.preventDefault();
-        setError(null)
 
         const response = await login({username, password})
         if (response.error){
-            setError(response.error?.data?.message || "Login Failed!")
+            toast.error(response.error?.data?.message || "Login Failed!")
         }else{
             // set the user info in localstorage
             localStorage.setItem("user", JSON.stringify(response.data))
             dispatch(loginSuccess(response.data))
+            toast.success(response.data.response);
             dispatch(setLoginModal(false))
         }
     }
@@ -40,7 +40,6 @@ const Login = () => {
                 <label>Password</label>
                 <input type="password" value={password} placeholder="Type password..." onChange={(e) => setPassword(e.target.value)}/>
             </div>
-            <p style={{color: "red"}}>{error ? error : null}</p>
             <button onClick={(e) => handleSubmit(e)} disabled={isLoading}>{isLoading ? "Logging in..." : "Log In"}</button>
             <button onClick={() => dispatch(setLoginModal(false))} disabled={isLoading}>Back</button>
         </section>

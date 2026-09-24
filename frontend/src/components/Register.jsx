@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {useRegisterMutation} from '../store/apis/authApi.js';
+import { toast } from "react-toastify";
 
 const Register = ({changeModal}) => {
 
@@ -12,7 +13,6 @@ const Register = ({changeModal}) => {
         password: "",
         role: "waiter"
     })
-    const [error, setError] = useState(null)
 
     // change the value of register fields live
     const handleChange = (e) => {
@@ -27,12 +27,12 @@ const Register = ({changeModal}) => {
     // function that inits the checks of fields in backend
     const handleSubmit = async(e) => {
         e.preventDefault();
-        setError(null)
 
         const response = await register(registerData)
         if (response.error){
-            setError(response.error?.data?.message || "Register Failed!")
+            toast.error(response.error?.data?.message || "Register Failed!")
         }else{
+            toast.success(response.data.response)
             changeModal(false)
         }
     }
@@ -55,7 +55,6 @@ const Register = ({changeModal}) => {
                     <option value="admin">Admin</option>
                 </select>
             </div>
-            {error ? <p style={{color: "red"}}>{error}</p> : null}
             <div className="register-buttons">
                 <button onClick={(e) => handleSubmit(e)} disabled={isloading}>Register</button>
                 <button onClick={() => changeModal(false)} disabled={isloading}>Back</button>

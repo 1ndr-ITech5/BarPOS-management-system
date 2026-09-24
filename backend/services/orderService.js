@@ -30,7 +30,7 @@ const getPreBill = async(table_id, userData) => {
 
     // check that only the waiter who opened it or the admin has permission to get it
     if(order.waiterId._id.toString() !== userData._id.toString() && userData.role !== "admin"){
-        const error = new Error(`The pre-bill can be viewed by ${order.waiterId.first_name} ${order.waiterId.last_name} and the admin!`)
+        const error = new Error(`Only ${order.waiterId.first_name} ${order.waiterId.last_name} and the admin have access on this order!`)
         error.statusCode = 403
         throw error;
     }
@@ -118,10 +118,10 @@ const openOrder = async(table_id, user_id) => {
     try{
         await session.startTransaction();
         // create the order for that table
-        const newOrder = await Order.create({
+        const [newOrder] = await Order.create([{
             waiterId: user_id,
             tableId: table_id
-        }, {session})
+        }], {session})
 
         // update the table status to occupied after the newOrder gets created
         await Table.findByIdAndUpdate(
