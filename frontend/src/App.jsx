@@ -29,9 +29,11 @@ const App = () => {
                 <Route path="/all-orders" element={<AllOrders/>}/>
                 <Route path="/payments" element={<Payments/>}/>
               </Route>
-              <Route path="/order-page" element={<OrderPage/>}/>
-              <Route path="/checkout" element={<Checkout/>}/>
-              <Route path="/payment-completed" element={<PayCompleted/>}/>
+              <Route element={<ProtectedRoutes allowedRoles={["waiter", "admin"]}/> }>
+                <Route path="/order-page" element={<OrderPage/>}/>
+                <Route path="/checkout" element={<Checkout/>}/>
+                <Route path="/payment-completed" element={<PayCompleted/>}/>
+              </Route>
             </Routes>
           </main>
           <Footer/>

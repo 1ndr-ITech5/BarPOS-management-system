@@ -2,7 +2,7 @@ import userlogo from "../assets/user.png";
 import { MdOutlinePayment } from "react-icons/md";
 import {setCurrentOrder} from "../store/slices/orderSlice.js";
 import {setViewReceipt} from "../store/slices/modalSlice.js";
-import {formatDate} from "../utils/DateFormat.js"
+import {formatDate} from "../utils/DateFormat.jsx";
 import {useDispatch} from "react-redux";
 import "../comp-style/PaymentCard.css";
 

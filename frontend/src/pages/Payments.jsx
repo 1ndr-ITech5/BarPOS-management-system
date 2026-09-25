@@ -1,6 +1,6 @@
 import {useGetAllPaymentsQuery} from "../store/apis/paymentApi.js";
 import {setTimeFilter, setPayMethodFilter} from "../store/slices/filterSlice.js";
-import {filterPaymentsByDate, filterPaymentsByMethod} from "../utils/paymentFilters.js";
+import {filterPaymentsByDate, filterPaymentsByMethod} from "../utils/FilterUtils.jsx";
 import {useSelector, useDispatch} from "react-redux";
 import PaymentCard from "../components/PaymentCard.jsx";
 import ViewReceipt from "../components/ViewReceipt.jsx";

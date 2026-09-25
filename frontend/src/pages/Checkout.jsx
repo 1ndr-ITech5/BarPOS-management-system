@@ -38,7 +38,6 @@ const Checkout = () => {
                 </div>
             )
         }
-
         if (error?.status === 404) {
             return (
                 <div>
@@ -47,7 +46,6 @@ const Checkout = () => {
                 </div>
             )
         }
-
         if (error?.status === 500) {
             return (
                 <div>
@@ -56,7 +54,6 @@ const Checkout = () => {
                 </div>
             )
         }
-
         return (
             <div>
                 <p>Unable to fetch the order data. Please try again.</p>
