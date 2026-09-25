@@ -4,8 +4,9 @@ import {useGetTablesQuery} from "../store/apis/tablesApi.js";
 import TableModal from "../components/TableModal.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import Warning from "../components/Warning.jsx";
+import Spinner from "../components/Spinner.jsx";
 import {setTableModal, setSelectedTable} from "../store/slices/modalSlice.js";
-import './Tables.css';
+import '../pages-style/Tables.css';
 
 const Tables = () => {
 
@@ -14,7 +15,12 @@ const Tables = () => {
 
     const {tableModal, selectedTable, warningModal, loginModal} = useSelector((state) => state.modals)
     
-    if (isLoading) return (<p>Loading tables...</p>);
+    if (isLoading) return (
+        <div>
+            <h1>Loading tables...</h1>
+            <Spinner/>
+        </div>
+    );
 
     const handleClick = (table) => {
         if (warningModal || loginModal){

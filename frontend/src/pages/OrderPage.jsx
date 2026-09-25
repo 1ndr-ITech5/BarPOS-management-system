@@ -11,6 +11,7 @@ import {useGetItemsQuery} from "../store/apis/itemsApi.js";
 import {clearCurrentOrder} from "../store/slices/orderSlice.js";
 import {useAddItemMutation, useRemoveItemMutation} from "../store/apis/orderItemsApi.js";
 import {useGetOrderQuery} from "../store/apis/orderApi.js";
+import Spinner from "../components/Spinner.jsx";
 
 const OrderPage = () => {
 
@@ -30,12 +31,13 @@ const OrderPage = () => {
 
     const [showDiscard, setShowDiscard] = useState(false)
 
-    if(isLoading){
-        return <p>Loading menu items...</p>
-    }
-
     if (isLoading || orderLoading) {
-        return <p>Loading order...</p>
+        return (
+            <div>
+                <h2>Loading order...</h2>
+                <Spinner/>
+            </div>      
+        )
     }
 
     const handleDiscard = () => {

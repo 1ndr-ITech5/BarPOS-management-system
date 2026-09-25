@@ -3,6 +3,7 @@ import {setTimeFilter, setPayMethodFilter} from "../store/slices/filterSlice.js"
 import {useSelector, useDispatch} from "react-redux";
 import PaymentCard from "../components/PaymentCard.jsx";
 import ViewReceipt from "../components/ViewReceipt.jsx";
+import Spinner from "../components/Spinner.jsx";
 import "../pages-style/Payments.css";
 
 const Payments = () => {
@@ -14,10 +15,14 @@ const Payments = () => {
     const receiptModal = useSelector(state => state.modals.receiptModal)
 
     const {data: allPayments, isLoading, isError, error} = useGetAllPaymentsQuery();
-    console.log(allPayments)
 
     if(isLoading){
-        return <p>Loading all payments...</p>
+        return (
+            <div>
+                <h2>Loading all payments...</h2>
+                <Spinner/>
+            </div>      
+        )
     }
 
     if (isError) {
@@ -76,9 +81,6 @@ const Payments = () => {
     const filterByPaymentMethod = filteredPayments.filter(payment => (
         methodFilter === "all" ? payment : (methodFilter === "cash" ? payment.method === "cash" : payment.method === "card")
     ))
-
-    console.log(filteredPayments)
-    console.log(filterByPaymentMethod)
 
     return (
         <div>

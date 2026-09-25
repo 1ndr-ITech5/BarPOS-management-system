@@ -1,6 +1,7 @@
 import {useGetAllOrdersQuery} from "../store/apis/orderApi.js";
 import MyOrdersCard from "../components/MyOrdersCard.jsx";
 import {clearCurrentOrder} from "../store/slices/orderSlice.js";
+import Spinner from "../components/Spinner.jsx";
 import {useDispatch} from "react-redux";
 import {useEffect} from "react";
 
@@ -15,7 +16,12 @@ const AllOrders = () => {
     const {data: allOrders, isLoading, isError, error} = useGetAllOrdersQuery();
 
     if (isLoading){
-        return <p>Waiting for all orders...</p>
+        return (
+            <div>
+                <h2>Loading all current orders...</h2>
+                <Spinner/>
+            </div>      
+        )
     }
 
     if (isError) {

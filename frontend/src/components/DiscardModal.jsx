@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 const DiscardModal = ({changeDiscardModal, setShowDiscard, tableId}) => {
 
-    const [deleteOrder] = useDeleteOrderMutation();
+    const [deleteOrder, {isLoading}] = useDeleteOrderMutation();
 
     const handleDeleteOrder = async(e) => {
         e.preventDefault();
@@ -21,8 +21,8 @@ const DiscardModal = ({changeDiscardModal, setShowDiscard, tableId}) => {
         <div className="discard">
             <h2>Do you want to discard changes?</h2>
             <div className="buttons">
-                <button onClick={(e) => handleDeleteOrder(e)}>Yes</button>
-                <button onClick={() => setShowDiscard(false)}>No</button>
+                <button onClick={(e) => handleDeleteOrder(e)} disabled={isLoading}>Yes</button>
+                <button onClick={() => setShowDiscard(false)} disabled={isLoading}>No</button>
             </div>
         </div>
     )

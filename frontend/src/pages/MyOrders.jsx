@@ -1,6 +1,7 @@
 import {useGetMyOrdersQuery} from "../store/apis/orderApi.js";
 import MyOrdersCard from "../components/MyOrdersCard.jsx";
 import {clearCurrentOrder} from "../store/slices/orderSlice.js";
+import Spinner from "../components/Spinner.jsx";
 import {useDispatch} from "react-redux";
 import {useEffect} from "react";
 
@@ -16,7 +17,12 @@ const MyOrders = () => {
     console.log(myOrders)
 
     if(isLoading){
-        return <p>Loading your active orders...</p>
+        return (
+            <div>
+                <h2>Loading your active orders...</h2>
+                <Spinner/>
+            </div>      
+        )
     }
 
     if (isError) {

@@ -2,6 +2,7 @@ import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {useGetOrderQuery} from "../store/apis/orderApi.js";
 import {useCreatePaymentMutation} from "../store/apis/paymentApi.js";
+import Spinner from "../components/Spinner.jsx";
 import {useState} from "react";
 import { toast } from "react-toastify";
 
@@ -20,7 +21,12 @@ const Checkout = () => {
     })
 
     if (orderLoading) {
-        return <p>Fetching current order state...</p>
+        return (
+            <div>
+                <h2>Fetching current order state...</h2>
+                <Spinner/>
+            </div>      
+        )
     }
 
     if (isError) {

@@ -2,6 +2,7 @@ import {useGetPaymentQuery} from "../store/apis/paymentApi.js";
 import {useSelector, useDispatch} from "react-redux";
 import { CiCircleRemove } from "react-icons/ci";
 import {setViewReceipt} from "../store/slices/modalSlice.js";
+import Spinner from "../components/Spinner.jsx";
 
 const ViewReceipt = () => {
 
@@ -12,7 +13,12 @@ const ViewReceipt = () => {
     const {data: payment, isLoading} = useGetPaymentQuery(orderId, {skip: !orderId});
 
     if(isLoading || !payment){
-        return <p>Loading the created payment info...</p>
+        return (
+            <div>
+                <h2>Loading the order's payment info...</h2>
+                <Spinner/>
+            </div>      
+        )
     }
 
     const dateObj = new Date(payment.createdPayment.createdAt);
