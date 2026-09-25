@@ -2,6 +2,7 @@ import {useGetPaymentQuery} from "../store/apis/paymentApi.js";
 import {useSelector, useDispatch} from "react-redux";
 import { CiCircleRemove } from "react-icons/ci";
 import {setViewReceipt} from "../store/slices/modalSlice.js";
+import {formatDate, formatTime} from "../utils/DateFormat.js"
 import Spinner from "../components/Spinner.jsx";
 
 const ViewReceipt = () => {
@@ -21,19 +22,8 @@ const ViewReceipt = () => {
         )
     }
 
-    const dateObj = new Date(payment.createdPayment.createdAt);
-
-    const datePart = dateObj.toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    });
-
-    const timePart = dateObj.toLocaleTimeString('en-GB', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-    });
+    const datePart = formatDate(payment.createdPayment.createdAt)
+    const timePart = formatTime(payment.createdPayment.createdAt)
 
     return(
         <div>

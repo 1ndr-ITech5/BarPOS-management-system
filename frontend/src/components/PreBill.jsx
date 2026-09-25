@@ -1,4 +1,5 @@
 import { CiCircleRemove } from "react-icons/ci";
+import {formatDate, formatTime} from "../utils/DateFormat.js"
 import "../comp-style/PreBill.css";
 
 const PreBill = ({changePreBillModal, orderData}) => {
@@ -13,21 +14,8 @@ const PreBill = ({changePreBillModal, orderData}) => {
         )
     }
 
-    const dateTime = new Date(orderData.order.createdAt);
-
-    // format the date part
-    const date = dateTime.toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    });
-
-    // format the time part in 24-hour style
-    const time = dateTime.toLocaleTimeString('en-GB', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false
-    });
+    const date = formatDate(orderData.order.createdAt)
+    const time = formatTime(orderData.order.createdAt)
 
     return(
         <div className="pre-bill">

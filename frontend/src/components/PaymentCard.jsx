@@ -2,6 +2,7 @@ import userlogo from "../assets/user.png";
 import { MdOutlinePayment } from "react-icons/md";
 import {setCurrentOrder} from "../store/slices/orderSlice.js";
 import {setViewReceipt} from "../store/slices/modalSlice.js";
+import {formatDate} from "../utils/DateFormat.js"
 import {useDispatch} from "react-redux";
 import "../comp-style/PaymentCard.css";
 
@@ -9,13 +10,7 @@ const PaymentCard = ({payment}) => {
 
     const dispatch = useDispatch();
 
-    const dateObj = new Date(payment.createdAt);
-
-    const datePart = dateObj.toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    });
+    const datePart = formatDate(payment.createdAt)
 
     const handleClick = () => {
         dispatch(setCurrentOrder(payment.orderId._id))
