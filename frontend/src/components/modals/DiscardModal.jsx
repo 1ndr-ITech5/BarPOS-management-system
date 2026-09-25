@@ -1,4 +1,4 @@
-import {useDeleteOrderMutation} from "../store/apis/orderApi.js";
+import {useDeleteOrderMutation} from "../../store/apis/orderApi.js";
 import { toast } from "react-toastify";
 
 const DiscardModal = ({changeDiscardModal, setShowDiscard, tableId}) => {

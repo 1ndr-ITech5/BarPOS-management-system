@@ -1,7 +1,7 @@
 import logo from "../assets/logo.png";
 import {Link} from "react-router-dom";
 import {useSelector} from "react-redux";
-import './Navbar.css'
+import '../layout-style/Navbar.css'
 
 const Navbar = () => {
 

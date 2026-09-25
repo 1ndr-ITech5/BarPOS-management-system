@@ -1,9 +1,9 @@
-import {useGetPaymentQuery} from "../store/apis/paymentApi.js";
+import {useGetPaymentQuery} from "../../store/apis/paymentApi.js";
 import {useSelector, useDispatch} from "react-redux";
 import { CiCircleRemove } from "react-icons/ci";
-import {setViewReceipt} from "../store/slices/modalSlice.js";
-import {formatDate, formatTime} from "../utils/DateFormat.jsx"
-import Spinner from "../components/Spinner.jsx";
+import {setViewReceipt} from "../../store/slices/modalSlice.js";
+import {formatDate, formatTime} from "../../utils/DateFormat.jsx"
+import Spinner from "./Spinner.jsx";
 
 const ViewReceipt = () => {
 

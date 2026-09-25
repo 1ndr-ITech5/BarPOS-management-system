@@ -1,8 +1,8 @@
 import {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {useLoginMutation} from '../store/apis/authApi.js';
-import {loginSuccess} from '../store/slices/authSlice.js';
-import {setLoginModal} from "../store/slices/modalSlice.js";
+import {useLoginMutation} from '../../store/apis/authApi.js';
+import {loginSuccess} from '../../store/slices/authSlice.js';
+import {setLoginModal} from "../../store/slices/modalSlice.js";
 import { toast } from "react-toastify";
 
 const Login = () => {

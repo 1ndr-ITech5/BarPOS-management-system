@@ -1,17 +1,17 @@
 import {useNavigate} from "react-router-dom";
-import Categories from "../orderPage-components/Categories.jsx";
-import Products from "../orderPage-components/Products.jsx";
-import OrderItems from "../orderPage-components/OrderItems.jsx";
-import PreBill from "../components/PreBill.jsx";
-import DiscardModal from "../components/DiscardModal.jsx";
-import "../orderPage-style/OrderPage.css";
+import Categories from "../components/orderPage/Categories.jsx";
+import Products from "../components/orderPage/Products.jsx";
+import OrderItems from "../components/orderPage/OrderItems.jsx";
+import PreBill from "../components/other/PreBill.jsx";
+import DiscardModal from "../components/modals/DiscardModal.jsx";
+import "../comp-style/orderPage-style/OrderPage.css";
 import {useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {useGetItemsQuery} from "../store/apis/itemsApi.js";
 import {clearCurrentOrder} from "../store/slices/orderSlice.js";
 import {useAddItemMutation, useRemoveItemMutation} from "../store/apis/orderItemsApi.js";
 import {useGetOrderQuery} from "../store/apis/orderApi.js";
-import Spinner from "../components/Spinner.jsx";
+import Spinner from "../components/other/Spinner.jsx";
 
 const OrderPage = () => {
 

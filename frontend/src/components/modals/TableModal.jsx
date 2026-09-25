@@ -1,10 +1,10 @@
 import {useDispatch, useSelector} from "react-redux";
-import {setTableModal, setWarningModal} from "../store/slices/modalSlice.js";
-import {useCreateOrderMutation} from "../store/apis/orderApi.js";
+import {setTableModal, setWarningModal} from "../../store/slices/modalSlice.js";
+import {useCreateOrderMutation} from "../../store/apis/orderApi.js";
 import {useNavigate} from "react-router-dom";
-import {setCurrentOrder} from "../store/slices/orderSlice.js";
-import {removeSelectedTable} from "../store/slices/modalSlice.js";
-import {useLazyGetOrderQuery} from "../store/apis/orderApi.js";
+import {setCurrentOrder} from "../../store/slices/orderSlice.js";
+import {removeSelectedTable} from "../../store/slices/modalSlice.js";
+import {useLazyGetOrderQuery} from "../../store/apis/orderApi.js";
 import { toast } from "react-toastify";
 
 const TableModal = ({selectedTableId, allTables}) => {

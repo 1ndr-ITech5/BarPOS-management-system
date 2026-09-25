@@ -2,9 +2,9 @@ import {useGetAllPaymentsQuery} from "../store/apis/paymentApi.js";
 import {setTimeFilter, setPayMethodFilter} from "../store/slices/filterSlice.js";
 import {filterPaymentsByDate, filterPaymentsByMethod} from "../utils/FilterUtils.jsx";
 import {useSelector, useDispatch} from "react-redux";
-import PaymentCard from "../components/PaymentCard.jsx";
-import ViewReceipt from "../components/ViewReceipt.jsx";
-import Spinner from "../components/Spinner.jsx";
+import PaymentCard from "../components/cards/PaymentCard.jsx";
+import ViewReceipt from "../components/other/ViewReceipt.jsx";
+import Spinner from "../components/other/Spinner.jsx";
 import "../pages-style/Payments.css";
 
 const Payments = () => {

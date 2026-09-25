@@ -1,10 +1,10 @@
-import userlogo from "../assets/user.png";
+import userlogo from "../../assets/user.png";
 import { MdOutlinePayment } from "react-icons/md";
-import {setCurrentOrder} from "../store/slices/orderSlice.js";
-import {setViewReceipt} from "../store/slices/modalSlice.js";
-import {formatDate} from "../utils/DateFormat.jsx";
+import {setCurrentOrder} from "../../store/slices/orderSlice.js";
+import {setViewReceipt} from "../../store/slices/modalSlice.js";
+import {formatDate} from "../../utils/DateFormat.jsx";
 import {useDispatch} from "react-redux";
-import "../comp-style/PaymentCard.css";
+import "../../comp-style/cards-style/PaymentCard.css";
 
 const PaymentCard = ({payment}) => {
 

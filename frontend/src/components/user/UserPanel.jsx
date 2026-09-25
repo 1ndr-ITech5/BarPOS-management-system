@@ -1,14 +1,14 @@
-import user from "../assets/user.png";
-import Login from "../components/Login.jsx";
-import Register from "../components/Register.jsx";
-import "../comp-style/UserPanel.css";
+import user from "../../assets/user.png";
+import Login from "./Login.jsx";
+import Register from "./Register.jsx";
+import "../../comp-style/user-style/UserPanel.css";
 import {useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
-import {setLoginModal} from "../store/slices/modalSlice.js";
-import {clearCurrentOrder} from "../store/slices/orderSlice.js";
-import {logout} from '../store/slices/authSlice.js';
-import {api} from "../store/apis/api.js";
-import {itemsApi} from "../store/apis/itemsApi.js";
+import {setLoginModal} from "../../store/slices/modalSlice.js";
+import {clearCurrentOrder} from "../../store/slices/orderSlice.js";
+import {logout} from '../../store/slices/authSlice.js';
+import {api} from "../../store/apis/api.js";
+import {itemsApi} from "../../store/apis/itemsApi.js";
 
 const UserPanel = () => {
     // login modal

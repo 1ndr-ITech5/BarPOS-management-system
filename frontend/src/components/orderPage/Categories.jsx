@@ -1,4 +1,4 @@
-import "../orderPage-style/Categories.css";
+import "../../comp-style/orderPage-style/Categories.css";
 
 const Categories = ({menuItems, selectedCategory, setCategory}) => {
 

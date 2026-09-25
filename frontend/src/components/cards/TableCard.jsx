@@ -1,4 +1,4 @@
-import '../comp-style/TableCard.css';
+import '../../comp-style/cards-style/TableCard.css';
 
 const TableCard = ({table, onClick}) => {
     return(

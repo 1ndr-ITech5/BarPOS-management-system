@@ -1,4 +1,4 @@
-import "../orderPage-style/Products.css";
+import "../../comp-style/orderPage-style/Products.css";
 
 const Products = ({menuItems, selectedCategory, addProduct, orderId}) => {
 

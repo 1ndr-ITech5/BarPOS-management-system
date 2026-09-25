@@ -1,4 +1,4 @@
-import {setLoginModal, setWarningModal} from "../store/slices/modalSlice.js";
+import {setLoginModal, setWarningModal} from "../../store/slices/modalSlice.js";
 import {useDispatch} from "react-redux";
 
 const Warning = () => {

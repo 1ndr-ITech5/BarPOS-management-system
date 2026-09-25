@@ -1,10 +1,10 @@
-import TableCard from "../components/TableCard.jsx";
-import UserPanel from "../components/UserPanel.jsx";
+import TableCard from "../components/cards/TableCard.jsx";
+import UserPanel from "../components/user/UserPanel.jsx";
 import {useGetTablesQuery} from "../store/apis/tablesApi.js";
-import TableModal from "../components/TableModal.jsx";
+import TableModal from "../components/modals/TableModal.jsx";
 import {useDispatch, useSelector} from "react-redux";
-import Warning from "../components/Warning.jsx";
-import Spinner from "../components/Spinner.jsx";
+import Warning from "../components/modals/Warning.jsx";
+import Spinner from "../components/other/Spinner.jsx";
 import {setTableModal, setSelectedTable} from "../store/slices/modalSlice.js";
 import '../pages-style/Tables.css';
 
