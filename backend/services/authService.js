@@ -41,7 +41,7 @@ const loginExistingUser = async(user_info) => {
     }
 
     // check if this username exists
-    const user = await User.findOne({username})
+    const user = await User.findOne({username}).populate("workspaceId", "name")
     if (!user){
         const error = new Error("This user does not exist!")
         error.statusCode = 404

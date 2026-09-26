@@ -1,12 +1,12 @@
 const mongoose = require("mongoose")
 
 const workspaceSchema = new mongoose.Schema({
-    workspaceName: {
+    name: {
         type: String, 
         required: true,
         unique: true
     },
-    workspaceType: {
+    type: {
         type: String,
         enum: ["demo", "main"],
         required: true

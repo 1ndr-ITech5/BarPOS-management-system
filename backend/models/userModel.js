@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
         enum: ["admin", "waiter"],
         default: "waiter"
     },
-    partOf: {
+    workspaceId: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: "Workspace"

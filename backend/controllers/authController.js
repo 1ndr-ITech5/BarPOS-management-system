@@ -30,7 +30,8 @@ const logUser = asyncHandler(async(req, res) => {
         last_name: user.last_name, 
         username: user.username, 
         role: user.role,
-        token: generateToken(user._id),
+        workspace: user.workspaceId.name,
+        token: generateToken(user._id, user.workspaceId),
         response: "User logged in successfully!"
     })
 })
