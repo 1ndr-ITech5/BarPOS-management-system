@@ -7,7 +7,7 @@ const mongoose = require("mongoose")
 // get the pre-bill of order based on the table id
 const getPreBill = async(table_id, userData) => {
     // check if this table exists in db
-    const table = await Table.findById(table_id)
+    const table = await Table.findById({_id: table_id, ownedBy: userData.workspaceId})
     if (!table){
         const error = new Error("This table does not exist!")
         error.statusCode = 404
@@ -16,10 +16,12 @@ const getPreBill = async(table_id, userData) => {
     
     // get the order based on the table
     const order = await Order.findOne({
+        workspaceId: userData.workspaceId,
         tableId: table_id,
         status: "open"
     }).populate("waiterId", "first_name last_name")
     .populate("tableId", "tableNumber")
+    .populate("workspaceId", "name")
 
     // when order is not found
     if (!order) {
@@ -43,9 +45,9 @@ const getPreBill = async(table_id, userData) => {
 }
 
 // get all the active orders
-const getAllOrders = async() => {
+const getAllOrders = async(workspaceId) => {
     // find in db all orders that have status open
-    const activeOrders = await Order.find({status: "open"}).populate("waiterId", "first_name last_name")
+    const activeOrders = await Order.find({workspaceId, status: "open"}).populate("waiterId", "first_name last_name")
     .populate("tableId", "tableNumber")
 
     const orderIds = activeOrders.map(order => order._id)
@@ -64,9 +66,9 @@ const getAllOrders = async() => {
 }
 
 // get the active orders based on the waiter id
-const getWaiterOrders = async(user_id) => {
+const getWaiterOrders = async(user_id, workspaceId) => {
     // find all the active orders that waiter has opened
-    const waiterOrders = await Order.find({waiterId: user_id, status: "open"})
+    const waiterOrders = await Order.find({waiterId: user_id, workspaceId, status: "open"})
     .populate("tableId", "tableNumber")
 
     const orderIds = waiterOrders.map(order => order._id)

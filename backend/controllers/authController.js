@@ -6,17 +6,10 @@ const generateToken = require("../utils/generateToken.js")
 const registUser = asyncHandler(async(req, res) => {
     
     // get the result from the service
-    const newUser = await registerNewUser(req.body)
+    await registerNewUser(req.body, req.user.workspaceId)
 
     // check if the new user is created
-    res.status(201).json({
-        first_name: newUser.first_name, 
-        last_name: newUser.last_name, 
-        username: newUser.username, 
-        role: newUser.role,
-        token: generateToken(newUser._id),
-        response: "New user registed successfully!"
-    })
+    res.status(201).json({response: "New user registed successfully!"})
 })
 
 

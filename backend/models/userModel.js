@@ -49,4 +49,10 @@ userSchema.pre("save", async function() {
     this.password = hashPassword
 })
 
+// use compound index to have only an unique combination of username and workspace
+userSchema.index(
+    {username: 1, workspaceId: 1},
+    {unique: true}
+)
+
 module.exports = mongoose.model("User", userSchema)

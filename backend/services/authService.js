@@ -1,9 +1,8 @@
 const bcrypt = require("bcryptjs")
 const User = require("../models/userModel.js")
 
-
 // bussiness logic for register
-const registerNewUser = async(user_info) => {
+const registerNewUser = async(user_info, workspaceId) => {
     const { first_name, last_name, username, password, role } = user_info
 
     // check if the user has provided all the needed datas
@@ -13,8 +12,8 @@ const registerNewUser = async(user_info) => {
         throw error;
     }
 
-    // check if the username given, exists already in database
-    const user = await User.findOne({username})
+    // check if the username given, exists already in database, in its own workspace
+    const user = await User.findOne({username, workspaceId})
     if (user){
         const error = new Error("This user already exists!")
         error.statusCode = 409
@@ -22,11 +21,9 @@ const registerNewUser = async(user_info) => {
     }
 
     // save the new user to the database
-    const newUser = await User.create({
+    await User.create({
         first_name, last_name, username, 
-        password, role})
-
-    return newUser
+        password, role, workspaceId})
 }
 
 

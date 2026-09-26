@@ -1,7 +1,7 @@
 const Menu = require("../models/menuModel.js")
 
-const getMenuItems = async() => {
-    const products = await Menu.find()
+const getMenuItems = async(workspaceId) => {
+    const products = await Menu.find({offeredBy: workspaceId}).populate("offeredBy", "name")
     return products
 }
 

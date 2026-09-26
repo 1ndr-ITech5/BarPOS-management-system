@@ -11,14 +11,14 @@ const getOrderController = asyncHandler(async(req,res) => {
 
 
 const getAllOrdersController = asyncHandler(async(req,res) => {
-    const allOrders = await getAllOrders()
+    const allOrders = await getAllOrders(req.user.workspaceId)
     res.status(200).json(allOrders)
 })
 
 
 const getWaiterOrdersController = asyncHandler(async(req,res) => {
     const waiterId = req.user._id.toString()
-    const waiterOrders = await getWaiterOrders(waiterId)
+    const waiterOrders = await getWaiterOrders(waiterId, req.user.workspaceId)
     res.status(200).json(waiterOrders)
 })
 
