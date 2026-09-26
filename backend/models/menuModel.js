@@ -12,6 +12,11 @@ const menuSchema = new mongoose.Schema({
     price: {
         type: Number,
         required: true
+    },
+    offeredBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "Workspace"
     }
 },
 {

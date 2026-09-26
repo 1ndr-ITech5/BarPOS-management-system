@@ -23,6 +23,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ["admin", "waiter"],
         default: "waiter"
+    },
+    partOf: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "Workspace"
     }
     },
     {

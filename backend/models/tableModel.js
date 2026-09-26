@@ -14,6 +14,11 @@ const TableSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    ownedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "Workspace"
+    },
     openedBy: {
         type: mongoose.Schema.Types.ObjectId,
         default: null,
