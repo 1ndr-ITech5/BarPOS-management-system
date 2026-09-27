@@ -1,12 +1,10 @@
 import {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {useLoginMutation} from '../../store/apis/authApi.js';
-import {loginSuccess} from '../../store/slices/authSlice.js';
-import {setLoginModal} from "../../store/slices/modalSlice.js";
+import {useLoginMutation} from '../store/apis/authApi.js';
+import {loginSuccess} from '../store/slices/authSlice.js';
 import { toast } from "react-toastify";
 
 const Login = () => {
-
     // call our api hook for authentication
     const [login, {isLoading}] = useLoginMutation()
 
@@ -27,7 +25,6 @@ const Login = () => {
             localStorage.setItem("user", JSON.stringify(response.data))
             dispatch(loginSuccess(response.data))
             toast.success(response.data.response);
-            dispatch(setLoginModal(false))
         }
     }
 
@@ -41,7 +38,7 @@ const Login = () => {
                 <input type="password" value={password} placeholder="Type password..." onChange={(e) => setPassword(e.target.value)}/>
             </div>
             <button onClick={(e) => handleSubmit(e)} disabled={isLoading}>{isLoading ? "Logging in..." : "Log In"}</button>
-            <button onClick={() => dispatch(setLoginModal(false))} disabled={isLoading}>Back</button>
+            <button>Try Demo</button>
         </section>
     )
 }

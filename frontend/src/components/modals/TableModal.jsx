@@ -1,5 +1,5 @@
-import {useDispatch, useSelector} from "react-redux";
-import {setTableModal, setWarningModal} from "../../store/slices/modalSlice.js";
+import {useDispatch} from "react-redux";
+import {setTableModal} from "../../store/slices/modalSlice.js";
 import {useCreateOrderMutation} from "../../store/apis/orderApi.js";
 import {useNavigate} from "react-router-dom";
 import {setCurrentOrder} from "../../store/slices/orderSlice.js";
@@ -12,7 +12,6 @@ const TableModal = ({selectedTableId, allTables}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [createOrder] = useCreateOrderMutation();
-    const user = useSelector((state) => state.user.user)
 
     const table = allTables.find(t => t._id === selectedTableId)
     const [getOrder, {isLoading: orderLoading}] = useLazyGetOrderQuery()
@@ -63,11 +62,6 @@ const TableModal = ({selectedTableId, allTables}) => {
         }
     }
 
-    const handleWarning = () => {
-        dispatch(setTableModal(false))
-        dispatch(setWarningModal(true))
-    }
-
     const backToTables = () => {
         dispatch(setTableModal(false))
         dispatch(removeSelectedTable())
@@ -78,7 +72,7 @@ const TableModal = ({selectedTableId, allTables}) => {
             <h3>Table no.{table.tableNumber}</h3>
             <p style={{color: table.status === "available" ? "green" : "red"}}>Status: {table.status}</p>
             {table.status === "available" ?
-                (<button onClick={(e) => user ? handleOpenOrder(e, table) : handleWarning()}>Open Table</button>)
+                (<button onClick={(e) => handleOpenOrder(e, table)}>Open Table</button>)
             :
                 (<>
                     <button onClick={handleUpdateOrder} disabled={orderLoading}>{orderLoading ? "Checking..." : "Update Table"}</button>
