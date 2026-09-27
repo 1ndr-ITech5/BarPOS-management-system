@@ -87,9 +87,9 @@ const getWaiterOrders = async(user_id, workspaceId) => {
 }
 
 // create the order
-const openOrder = async(table_id, user_id) => {
+const openOrder = async(table_id, userData) => {
     // check if the table exists in db
-    const table = await Table.findById(table_id)
+    const table = await Table.findOne({_id: table_id, ownedBy: userData.workspaceId})
     if (!table) {
         const error = new Error("This table does not exist!")
         error.statusCode = 404
@@ -106,6 +106,7 @@ const openOrder = async(table_id, user_id) => {
     // check if any order is opened for that table
     const order = await Order.findOne({
         tableId: table_id,
+        workspaceId: userData.workspaceId,
         status: "open"
     })
     if (order) {
@@ -121,15 +122,16 @@ const openOrder = async(table_id, user_id) => {
         await session.startTransaction();
         // create the order for that table
         const [newOrder] = await Order.create([{
-            waiterId: user_id,
-            tableId: table_id
+            waiterId: userData._id,
+            tableId: table_id,
+            workspaceId: userData.workspaceId
         }], {session})
 
         // update the table status to occupied after the newOrder gets created
         await Table.findByIdAndUpdate(
             table._id, 
             {   status: "occupied",
-                openedBy: user_id,
+                openedBy: userData._id,
                 timeOpened: new Date()
             },
             {session, returnDocument: "after", runValidators: true}
@@ -174,6 +176,7 @@ const deleteOrder = async(table_id, userData) => {
     // check if the order exists
     const order = await Order.findOne({
         tableId: table_id,
+        workspaceId: userData.workspaceId,
         status: "open"
     }).populate("waiterId", "first_name last_name")
 
@@ -198,7 +201,7 @@ const deleteOrder = async(table_id, userData) => {
         const deletedOrder = await Order.findByIdAndDelete(order._id, {session})
 
         // delete its items
-        await deleteOrderItems(order._id, session)
+        await deleteOrderItems(order._id, userData.workspaceId, session)
 
         // update table occupation
         await Table.findByIdAndUpdate(

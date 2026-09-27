@@ -27,10 +27,7 @@ const openOrderController = asyncHandler(async(req, res) => {
     // destruct the url by taking the table id
     const {tableId} = req.params
 
-    // get the waiter id from the req.user
-    const userId = req.user._id.toString()
-
-    const createdOrder = await openOrder(tableId, userId)
+    const createdOrder = await openOrder(tableId, req.user)
     res.status(201).json({
         createdOrder,
         response: "Order opened successfully!"
@@ -41,10 +38,7 @@ const deleteOrderController = asyncHandler(async(req, res) => {
     // destruct the url by taking the table id
     const {tableId} = req.params
 
-    // get the user data from the req.user
-    const userData = req.user
-
-    const deletedOrder = await deleteOrder(tableId, userData)
+    const deletedOrder = await deleteOrder(tableId, req.user)
     res.status(200).json({
         deletedOrder,
         response: "Order deleted by success!"
