@@ -1,5 +1,7 @@
 const bcrypt = require("bcryptjs")
 const User = require("../models/userModel.js")
+const Workspace = require("../models/workspaceModel.js")
+const {verifyPassword} = require("./checkPasswordService.js")
 
 // bussiness logic for register
 const registerNewUser = async(user_info, workspaceId) => {
@@ -46,14 +48,32 @@ const loginExistingUser = async(user_info) => {
     }
 
     // check if the passwords match
-    const passmatch = await bcrypt.compare(password, user.password)
-    if (!passmatch){
-        const error = new Error("Wrong password provided for this user!")
-        error.statusCode = 401
+    await verifyPassword(password, user.password)
+    return user;
+}
+
+const loginOnDemo = async() => {
+    // find the demo workspace
+    const demoWorkspace = await Workspace.findOne({type: "demo"})
+    if (!demoWorkspace)
+    {
+        const error = new Error("This workspace does not exist!")
+        error.statusCode = 404
         throw error;
     }
 
-    return user
+    // find the admin on that workspace
+    const demoUser = await User.findOne({workspaceId: demoWorkspace._id, role: "admin"})
+    if (!demoUser)
+    {
+        const error = new Error("This demo user was not found!")
+        error.statusCode = 404
+        throw error;
+    }
+
+    // call the helper function that checks for password match
+    await verifyPassword(process.env.DEMO_PASSWORD, demoUser.password)
+    return demoUser;
 }
 
-module.exports = {registerNewUser, loginExistingUser};
+module.exports = {registerNewUser, loginExistingUser, loginOnDemo};

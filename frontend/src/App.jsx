@@ -3,7 +3,7 @@ import Login from "./pages/Login.jsx";
 import Header from "./layout/Header.jsx";
 import Footer from "./layout/Footer.jsx";
 import ProtectedLayout from "./layout/ProtectedLayout.jsx";
-import {Routes, Route} from "react-router-dom";
+import {Routes, Route, Navigate} from "react-router-dom";
 import MyOrders from "./pages/MyOrders.jsx";
 import AllOrders from "./pages/AllOrders.jsx";
 import Payments from "./pages/Payments.jsx";
@@ -21,6 +21,7 @@ const App = () => {
         <Header/>
           <main>
             <Routes>
+              <Route path="/" element={<Navigate to="/login-page" replace />} />
               <Route path="/login-page" element={<Login/>}/>
               <Route element={<ProtectedRoutes allowedRoles={"waiter"}/>}>
                 <Route element={<ProtectedLayout/>}>

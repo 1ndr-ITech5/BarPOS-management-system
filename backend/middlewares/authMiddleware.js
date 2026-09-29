@@ -11,7 +11,7 @@ const protect = async(req, res, next) => {
             // extract the user's id from token
             const decode = jwt.verify(token, process.env.JWT_SECRET)
             // check in the db if this user exists
-            const user = await User.findById(decode.id).select("-password")
+            const user = await User.findById(decode.userId).select("-password")
             if (!user){
                 const error = new Error("This user does not exist anymore!")
                 error.statusCode = 401

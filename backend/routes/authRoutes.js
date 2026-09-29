@@ -1,5 +1,5 @@
 const express = require("express")
-const {registUser, logUser} = require("../controllers/authController.js")
+const {registUser, logUser, logDemoUser} = require("../controllers/authController.js")
 const authLimiter = require("../middlewares/rateLimiter.js")
 const {protect} = require("../middlewares/authMiddleware.js")
 const {adminOnly} = require("../middlewares/adminOnlyMiddleware.js")
@@ -10,5 +10,8 @@ router.post("/register", protect, adminOnly, registUser)
 
 // path to login controller
 router.post("/login", authLimiter, logUser)
+
+// path to login controller for demo account
+router.post("/login-demo", logDemoUser)
 
 module.exports = router;

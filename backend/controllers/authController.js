@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler")
-const {registerNewUser, loginExistingUser} = require("../services/authService.js")
+const {registerNewUser, loginExistingUser, loginOnDemo} = require("../services/authService.js")
 const generateToken = require("../utils/generateToken.js")
 
 // bussiness logic for register
@@ -23,10 +23,26 @@ const logUser = asyncHandler(async(req, res) => {
         last_name: user.last_name, 
         username: user.username, 
         role: user.role,
+        workspaceId: user.workspaceId._id,
         workspace: user.workspaceId.name,
         token: generateToken(user._id, user.workspaceId),
         response: "User logged in successfully!"
     })
 })
 
-module.exports = {registUser, logUser}
+const logDemoUser = asyncHandler(async(req, res) => {
+    const demoUser = await loginOnDemo()
+
+    res.status(200).json({
+        first_name: demoUser.first_name, 
+        last_name: demoUser.last_name, 
+        username: demoUser.username, 
+        role: demoUser.role,
+        workspaceId: demoUser.workspaceId._id,
+        workspace: demoUser.workspaceId.name,
+        token: generateToken(demoUser._id, demoUser.workspaceId),
+        response: "Demo User logged in successfully!"
+    })
+})
+
+module.exports = {registUser, logUser, logDemoUser}

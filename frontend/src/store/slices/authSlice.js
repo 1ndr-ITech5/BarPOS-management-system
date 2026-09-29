@@ -14,6 +14,7 @@ const authSlice = createSlice({
             state.isAuthenticated = true
         },
         logout(state){
+            localStorage.removeItem("currentWorkspaceId")
             state.user = null
             state.isAuthenticated = false
         }

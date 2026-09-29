@@ -30,7 +30,7 @@ const createAdmin = async() => {
             }
         ]
 
-        await User.insertMany(admins)
+        await User.create(admins)
         process.exit(0)
     }catch(error){
         console.log(`${error.message}`)
