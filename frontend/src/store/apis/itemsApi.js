@@ -1,14 +1,13 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {api} from "./api.js";
 
-export const itemsApi = createApi({
-    reducerPath: "itemsApi",
-    baseQuery: fetchBaseQuery({baseUrl: import.meta.env.VITE_API_URL}),
+export const itemsApi = api.injectEndpoints({
     endpoints: (builder) => ({
         getItems: builder.query({
             query: () => ({
                 url: "/api/menu-items",
                 method: "GET"
-            })
+            }),
+            providesTags: ["Items"]  // shto tag nese do invalidosh me vone
         })
     })
 })

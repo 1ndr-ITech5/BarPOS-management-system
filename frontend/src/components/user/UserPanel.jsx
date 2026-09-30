@@ -6,7 +6,6 @@ import {useSelector, useDispatch} from "react-redux";
 import {clearCurrentOrder} from "../../store/slices/orderSlice.js";
 import {logout} from '../../store/slices/authSlice.js';
 import {api} from "../../store/apis/api.js";
-import {itemsApi} from "../../store/apis/itemsApi.js";
 
 const UserPanel = () => {
     // register modal
@@ -21,7 +20,6 @@ const UserPanel = () => {
         localStorage.removeItem("user")
         dispatch(clearCurrentOrder())
         dispatch(api.util.resetApiState())
-        dispatch(itemsApi.util.resetApiState())
         dispatch(logout())
     }
 
