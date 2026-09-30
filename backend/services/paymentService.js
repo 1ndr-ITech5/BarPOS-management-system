@@ -6,7 +6,7 @@ const mongoose = require("mongoose")
 
 const getCreatedPayment = async({orderId, userData}) => {
     // find the completed payment
-    const createdPayment = await Payment.findOne({orderId: orderId})
+    const createdPayment = await Payment.findOne({orderId: orderId, workspaceId: userData.workspaceId})
     .populate({path: "orderId", populate: {path: "tableId", select: "tableNumber"}})
     .populate("waiterId", "first_name last_name")
 
@@ -27,16 +27,17 @@ const getCreatedPayment = async({orderId, userData}) => {
     return {createdPayment, orderItems}
 }
 
-const getPayments = async() => {
-    const payments = await Payment.find().populate({path: "orderId", populate: {path: "tableId", select: "tableNumber"}})
+const getPayments = async(workspaceId) => {
+    const payments = await Payment.find({workspaceId}).populate({path: "orderId", populate: {path: "tableId", select: "tableNumber"}})
     .populate("waiterId", "first_name last_name role")
     return payments
 }
 
-const createPayment = async(paymentData, order_id, user) => {
+const createPayment = async(paymentData, order_id, userData) => {
     // check if the open order exists
     const order = await Order.findOne({
         _id: order_id,
+        workspaceId: userData.workspaceId,
         status: "open"
     }).populate("waiterId", "first_name last_name")
     if (!order){
@@ -59,7 +60,7 @@ const createPayment = async(paymentData, order_id, user) => {
     )
 
     // check if the waiter who opened the order will be the one who closes it
-    if (order.waiterId._id.toString() !== user._id.toString() && user.role !== "admin"){
+    if (order.waiterId._id.toString() !== userData._id.toString() && userData.role !== "admin"){
         const error = new Error(`The waiter: ${order.waiterId.first_name} ${order.waiterId.last_name} and admin have the rights to close the order!`)
         error.statusCode = 403
         throw error
@@ -95,7 +96,8 @@ const createPayment = async(paymentData, order_id, user) => {
         // save payment in the database
         const [payment] = await Payment.create([{
             orderId: order_id,
-            waiterId: user._id,
+            waiterId: userData._id,
+            workspaceId: userData.workspaceId,
             totalAmount,
             amountPaid: amountPaid,
             change: amountPaid - totalAmount,

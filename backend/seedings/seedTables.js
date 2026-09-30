@@ -72,16 +72,6 @@ const insertTables = async() => {
                 tableNumber: 6,
                 capacity: 8,
                 ownedBy: demoWorkspace._id
-            },
-            {
-                tableNumber: 7,
-                capacity: 4,
-                ownedBy: demoWorkspace._id
-            },
-            {
-                tableNumber: 8,
-                capacity: 4,
-                ownedBy: demoWorkspace._id
             }
         ]
 

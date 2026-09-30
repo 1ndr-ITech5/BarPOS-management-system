@@ -150,7 +150,31 @@ const insertProducts = async() => {
         category: "Soups",
         price: 300,
         offeredBy: demoWorkspace._id
-        }
+        },
+        {
+        productName: "Still Water",
+        category: "Drinks",
+        price: 100,
+        offeredBy: demoWorkspace._id
+        },
+        {
+        productName: "Coca Cola 0.33L",
+        category: "Drinks",
+        price: 180,
+        offeredBy: demoWorkspace._id
+        },
+        {
+        productName: "Tea 0.33L",
+        category: "Drinks",
+        price: 160,
+        offeredBy: demoWorkspace._id
+        },
+        {
+        productName: "Alfa Beer 0.5L",
+        category: "Drinks",
+        price: 200,
+        offeredBy: demoWorkspace._id
+        },
         ]
 
         await Menu.insertMany(menu)

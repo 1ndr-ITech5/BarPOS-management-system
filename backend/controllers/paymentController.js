@@ -11,7 +11,7 @@ const getClosedPayment = asyncHandler(async(req,res) => {
 })
 
 const getAllPayments = asyncHandler(async(req,res) => {
-    const payments = await getPayments()
+    const payments = await getPayments(req.user.workspaceId)
     res.status(200).json(payments)
 })
 

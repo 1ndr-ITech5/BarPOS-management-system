@@ -12,6 +12,11 @@ const paymentSchema = new mongoose.Schema({
         required: true,
         ref: "User"
     },
+    workspaceId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "Workspace"
+    },
     totalAmount: {
         type: Number,
         required: true
