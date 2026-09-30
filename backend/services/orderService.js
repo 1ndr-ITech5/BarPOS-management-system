@@ -201,7 +201,7 @@ const deleteOrder = async(table_id, userData) => {
         const deletedOrder = await Order.findByIdAndDelete(order._id, {session})
 
         // delete its items
-        await deleteOrderItems(order._id, userData.workspaceId, session)
+        await deleteOrderItems(order._id, session)
 
         // update table occupation
         await Table.findByIdAndUpdate(

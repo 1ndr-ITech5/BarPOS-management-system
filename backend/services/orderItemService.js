@@ -149,7 +149,7 @@ const removeOrderItem = async(order_id, menuItem_id, userData) => {
 
 const deleteOrderItems = async(orderId, session) => {
     // delete the order items
-    await OrderItem.deleteMany({orderId}, {session})
+    await OrderItem.deleteMany(orderId, {session})
 }
 
 module.exports = {addOrderItem, removeOrderItem, deleteOrderItems}
