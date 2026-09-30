@@ -6,17 +6,15 @@ const authSlice = createSlice({
     name: "user",
     initialState: {
         user: localUser ? localUser : null,
-        isAuthenticated: false
+        isAuthenticated: !!localUser
     },
     reducers: {
         loginSuccess(state, action){
             state.user = action.payload
-            state.isAuthenticated = true
         },
         logout(state){
             localStorage.removeItem("currentWorkspaceId")
             state.user = null
-            state.isAuthenticated = false
         }
     }
 })

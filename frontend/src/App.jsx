@@ -12,6 +12,7 @@ import Checkout from "./pages/Checkout.jsx";
 import PayCompleted from "./pages/PayCompleted.jsx";
 import './App.css';
 import ProtectedRoutes from "./utils/ProtectedRoutes.jsx";
+import PublicRoute from "./utils/PublicRoute.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -21,8 +22,10 @@ const App = () => {
         <Header/>
           <main>
             <Routes>
-              <Route path="/" element={<Navigate to="/login-page" replace />} />
-              <Route path="/login-page" element={<Login/>}/>
+              <Route element={<PublicRoute />}>
+                <Route path="/" element={<Navigate to="/login-page" replace />} />
+                <Route path="/login-page" element={<Login />} />
+              </Route>
               <Route element={<ProtectedRoutes allowedRoles={"waiter"}/>}>
                 <Route element={<ProtectedLayout/>}>
                   <Route path="/my-orders" element={<MyOrders/>}/>
