@@ -1,5 +1,5 @@
 import { CiCircleRemove } from "react-icons/ci";
-import {formatDate, formatTime} from "../../utils/DateFormat.jsx";
+import {formatDate, formatTime} from "../../utils/DateFormat.js";
 import "../../comp-style/other-style/PreBill.css";
 
 const PreBill = ({changePreBillModal, orderData}) => {

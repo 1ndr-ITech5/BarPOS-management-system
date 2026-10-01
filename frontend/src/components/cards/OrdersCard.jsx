@@ -2,7 +2,7 @@ import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {setCurrentOrder} from "../../store/slices/orderSlice.js";
 import {setSelectedTable} from "../../store/slices/modalSlice.js";
-import {TimeReform} from "../../utils/DateFormat.jsx";
+import {TimeReform} from "../../utils/DateFormat.js";
 import {useSelector} from "react-redux";
 
 const MyOrdersCard = ({order}) => {
