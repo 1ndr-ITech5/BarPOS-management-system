@@ -10,6 +10,10 @@ const workspaceSchema = new mongoose.Schema({
         type: String,
         enum: ["demo", "main"],
         required: true
+    },
+    lastDemoReset: {
+        type: Date,
+        default: null
     }
     }, 
     {

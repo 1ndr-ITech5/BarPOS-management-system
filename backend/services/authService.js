@@ -1,4 +1,3 @@
-const bcrypt = require("bcryptjs")
 const User = require("../models/userModel.js")
 const Workspace = require("../models/workspaceModel.js")
 const {verifyPassword} = require("./checkPasswordService.js")

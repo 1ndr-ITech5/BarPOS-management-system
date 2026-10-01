@@ -2,12 +2,12 @@ const express = require("express")
 const dotenv = require("dotenv").config()
 const connectDB = require('./config/db.js')
 const {errorHandler} = require("./middlewares/errorMiddleware.js")
+const {checkDemoReset} = require("./services/demoResetService.js")
+require("./jobs/demoResetJob.js")
 const helmet = require("helmet")
 const cors = require("cors")
 const port = process.env.PORT || 5000
 
-// call the connection with mongo
-connectDB();
 const app = express();
 
 // enable communication with frontend port
@@ -44,4 +44,11 @@ app.use("/api", require("./routes/paymentRoutes.js"))
 // call middleware to catch the errors
 app.use(errorHandler)
 
-app.listen(port, () => console.log(`Server running on port ${port}`))
+const startServer = async () => {
+    await connectDB()
+    await checkDemoReset()
+
+    app.listen(port, () => {console.log(`Server running on port ${port}`)})
+}
+
+startServer()
