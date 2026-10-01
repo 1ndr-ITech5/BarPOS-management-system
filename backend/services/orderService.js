@@ -7,7 +7,7 @@ const mongoose = require("mongoose")
 // get the pre-bill of order based on the table id
 const getPreBill = async(table_id, userData) => {
     // check if this table exists in db
-    const table = await Table.findById({_id: table_id, ownedBy: userData.workspaceId})
+    const table = await Table.findOne({_id: table_id, ownedBy: userData.workspaceId})
     if (!table){
         const error = new Error("This table does not exist!")
         error.statusCode = 404
