@@ -6,7 +6,8 @@ const mongoose = require("mongoose")
 
 const addOrderItem = async(order_id, menuItem_id, userData) => {
     // check if order exists
-    const order = await Order.findOne({_id: order_id, status: "open"}).populate("waiterId", "first_name last_name")
+    const order = await Order.findOne({_id: order_id, workspaceId: userData.workspaceId, status: "open"})
+    .populate("waiterId", "first_name last_name")
     if (!order) {
         const error = new Error("Order does not exists!")
         error.statusCode = 404
@@ -14,7 +15,7 @@ const addOrderItem = async(order_id, menuItem_id, userData) => {
     }
 
     // check if the order item is in the menu
-    const item = await Menu.findById(menuItem_id)
+    const item = await Menu.findOne({_id: menuItem_id, offeredBy: userData.workspaceId})
     if (!item){
         const error = new Error("Item does not exists in the menu!")
         error.statusCode = 404
@@ -86,7 +87,8 @@ const addOrderItem = async(order_id, menuItem_id, userData) => {
 const removeOrderItem = async(order_id, menuItem_id, userData) => {
 
     // check if the order exists
-    const order = await Order.findOne({_id: order_id, status: "open"}).populate("waiterId", "first_name last_name")
+    const order = await Order.findOne({_id: order_id, workspaceId: userData.workspaceId, status: "open"})
+    .populate("waiterId", "first_name last_name")
     if (!order) {
         const error = new Error("Order does not exists!")
         error.statusCode = 404
@@ -149,7 +151,7 @@ const removeOrderItem = async(order_id, menuItem_id, userData) => {
 
 const deleteOrderItems = async(orderId, session) => {
     // delete the order items
-    await OrderItem.deleteMany(orderId, {session})
+    await OrderItem.deleteMany({orderId}, {session})
 }
 
 module.exports = {addOrderItem, removeOrderItem, deleteOrderItems}
