@@ -6,10 +6,6 @@ export const filterPaymentsByDate = (allPayments, timeFilter) => {
     return allPayments.filter(payment => {
         const date = new Date(payment.createdAt);
 
-        if (timeFilter === "All") {
-            return true;
-        }
-
         if (timeFilter === "Today") {
             return (
                 date.getDate() === today.getDate() &&
@@ -33,6 +29,12 @@ export const filterPaymentsByDate = (allPayments, timeFilter) => {
             startOfWeek.setHours(0, 0, 0, 0);
 
             return date >= startOfWeek;
+        }
+
+        if (timeFilter === "This year") {
+            return (
+                date.getFullYear() === today.getFullYear()
+            );
         }
 
         return true;

@@ -18,7 +18,7 @@
     padding: 16px;
     margin: 12px;
   
-    max-width: 350px;
+    max-width: calc((100% - 40px) / 3);;
     background-color: white;
 }
 
