@@ -2,6 +2,7 @@ import {useGetAllPaymentsQuery} from "../store/apis/paymentApi.js";
 import {setTimeFilter, setPayMethodFilter} from "../store/slices/filterSlice.js";
 import {filterPaymentsByDate, filterPaymentsByMethod, filterPaymentsByLastMonth} from "../utils/FilterUtils.js";
 import {useSelector, useDispatch} from "react-redux";
+import {useState} from "react";
 import PaymentCard from "../components/cards/PaymentCard.jsx";
 import ViewReceipt from "../components/other/ViewReceipt.jsx";
 import Spinner from "../components/other/Spinner.jsx";
@@ -11,6 +12,7 @@ import "../pages-style/Payments.css";
 const Payments = () => {
 
     const dispatch = useDispatch();
+    const [currentPage, setCurrentPage] = useState(1)
 
     const timeFilter = useSelector(state => state.filters.timeFilter)
     const methodFilter = useSelector(state => state.filters.payMethodFilter)
@@ -43,6 +45,13 @@ const Payments = () => {
     const lastMonthPayments = filterPaymentsByLastMonth(allPayments)
     const filterByPaymentMethod = filterPaymentsByMethod(filteredPayments, methodFilter)
 
+    const cardsPerPage = 9;
+    const totalPages = Math.ceil(filterByPaymentMethod.length / cardsPerPage);
+
+    const start = (currentPage - 1) * cardsPerPage;
+    const end = currentPage * cardsPerPage;
+    const renderedCards = filterByPaymentMethod.slice(start, end);
+
     return (
         <div>
             <h1>Payments</h1>
@@ -65,11 +74,16 @@ const Payments = () => {
                 <Revenue title="All time" payments={allPayments}/>
             </div>
             <div className="payments-container">
-                {filterByPaymentMethod.map(payment => (
+                {renderedCards.map(payment => (
                     <PaymentCard key={payment._id} payment={payment}/>
                 ))}
             </div>
             {receiptModal && <ViewReceipt/>}
+            <div className="page">
+                <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage == 1}>Previous</button>
+                <p>Page {currentPage}</p>
+                <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage >= totalPages}>Next</button>
+            </div>
         </div>
     )
 }

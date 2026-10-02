@@ -3,7 +3,7 @@ import {createSlice} from "@reduxjs/toolkit";
 const filterSlice = createSlice({
     name: "filterSlice",
     initialState: {
-        timeFilter: "all",
+        timeFilter: "Today",
         payMethodFilter: "all"
     },
     reducers: {
