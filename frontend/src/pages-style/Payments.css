@@ -4,3 +4,10 @@
     align-items: center;
     gap: 20px;
 }
+
+.revenue-container {
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    gap: 80px;
+}

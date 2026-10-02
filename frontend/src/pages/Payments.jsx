@@ -1,10 +1,11 @@
 import {useGetAllPaymentsQuery} from "../store/apis/paymentApi.js";
 import {setTimeFilter, setPayMethodFilter} from "../store/slices/filterSlice.js";
-import {filterPaymentsByDate, filterPaymentsByMethod} from "../utils/FilterUtils.js";
+import {filterPaymentsByDate, filterPaymentsByMethod, filterPaymentsByLastMonth} from "../utils/FilterUtils.js";
 import {useSelector, useDispatch} from "react-redux";
 import PaymentCard from "../components/cards/PaymentCard.jsx";
 import ViewReceipt from "../components/other/ViewReceipt.jsx";
 import Spinner from "../components/other/Spinner.jsx";
+import Revenue from "../components/other/Revenue.jsx";
 import "../pages-style/Payments.css";
 
 const Payments = () => {
@@ -39,6 +40,7 @@ const Payments = () => {
     }
 
     const filteredPayments = filterPaymentsByDate(allPayments, timeFilter)
+    const lastMonthPayments = filterPaymentsByLastMonth(allPayments)
     const filterByPaymentMethod = filterPaymentsByMethod(filteredPayments, methodFilter)
 
     return (
@@ -46,10 +48,10 @@ const Payments = () => {
             <h1>Payments</h1>
             <label>Time</label>
             <select value={timeFilter} onChange={(e) => dispatch(setTimeFilter(e.target.value))}>
-                <option value="all">All</option>
-                <option value="today">Today</option>
-                <option value="week">This week</option>
-                <option value="month">This month</option>
+                <option value="All">All</option>
+                <option value="Today">Today</option>
+                <option value="This week">This week</option>
+                <option value="This month">This month</option>
             </select>
             <label>Payment Method</label>
             <select value={methodFilter} onChange={(e) => dispatch(setPayMethodFilter(e.target.value))}>
@@ -57,6 +59,11 @@ const Payments = () => {
                 <option value="cash">Cash</option>
                 <option value="card">Card</option>
             </select>
+            <div className="revenue-container">
+                <Revenue title={`${timeFilter}`} payments={filteredPayments} />
+                <Revenue title="Last month" payments={lastMonthPayments}/>
+                <Revenue title="All time" payments={allPayments}/>
+            </div>
             <div className="payments-container">
                 {filterByPaymentMethod.map(payment => (
                     <PaymentCard key={payment._id} payment={payment}/>
