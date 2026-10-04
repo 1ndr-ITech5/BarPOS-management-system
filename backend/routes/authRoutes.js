@@ -1,9 +1,11 @@
 const express = require("express")
-const {registUser, logUser, logDemoUser} = require("../controllers/authController.js")
+const {registUser, logUser, logDemoUser, getMe} = require("../controllers/authController.js")
 const authLimiter = require("../middlewares/rateLimiter.js")
 const {protect} = require("../middlewares/authMiddleware.js")
 const {adminOnly} = require("../middlewares/adminOnlyMiddleware.js")
 const router = express.Router()
+
+router.get("/me", protect, getMe)
 
 // path to register controller
 router.post("/register", protect, adminOnly, registUser)

@@ -10,6 +10,7 @@ import Payments from "./pages/Payments.jsx";
 import OrderPage from "./pages/OrderPage.jsx";
 import Checkout from "./pages/Checkout.jsx";
 import PayCompleted from "./pages/PayCompleted.jsx";
+import Profile from "./pages/Profile.jsx";
 import './App.css';
 import ProtectedRoutes from "./utils/ProtectedRoutes.jsx";
 import PublicRoute from "./utils/PublicRoute.jsx";
@@ -43,6 +44,7 @@ const App = () => {
                   <Route path="/order-page" element={<OrderPage/>}/>
                   <Route path="/checkout" element={<Checkout/>}/>
                   <Route path="/payment-completed" element={<PayCompleted/>}/>
+                  <Route path="/profile" element={<Profile/>}/>
                   </Route>
               </Route>
             </Routes>

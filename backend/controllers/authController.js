@@ -1,6 +1,11 @@
 const asyncHandler = require("express-async-handler")
-const {registerNewUser, loginExistingUser, loginOnDemo} = require("../services/authService.js")
+const {registerNewUser, loginExistingUser, loginOnDemo, getUser} = require("../services/authService.js")
 const generateToken = require("../utils/generateToken.js")
+
+const getMe = asyncHandler(async(req, res) => {
+    const userInfo = await getUser(req.user)
+    res.status(200).json(userInfo);
+})
 
 // bussiness logic for register
 const registUser = asyncHandler(async(req, res) => {
@@ -45,4 +50,4 @@ const logDemoUser = asyncHandler(async(req, res) => {
     })
 })
 
-module.exports = {registUser, logUser, logDemoUser}
+module.exports = {registUser, logUser, logDemoUser, getMe}

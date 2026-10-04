@@ -75,4 +75,16 @@ const loginOnDemo = async() => {
     return demoUser;
 }
 
-module.exports = {registerNewUser, loginExistingUser, loginOnDemo};
+const getUser = async(userData) => {
+    // check if this user exists in database in his own workspace
+    const user = await User.findOne({_id: userData._id, workspaceId: userData.workspaceId}).select("-password")
+    if (!user){
+        const error = new Error("This user could not be found!")
+        error.codeStatus = 404
+        throw error;
+    }
+
+    return user
+}
+
+module.exports = {registerNewUser, loginExistingUser, loginOnDemo, getUser};
