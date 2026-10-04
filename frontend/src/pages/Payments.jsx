@@ -2,7 +2,7 @@ import {useGetAllPaymentsQuery} from "../store/apis/paymentApi.js";
 import {setTimeFilter, setPayMethodFilter} from "../store/slices/filterSlice.js";
 import {filterPaymentsByDate, filterPaymentsByMethod, filterPaymentsByLastMonth} from "../utils/FilterUtils.js";
 import {useSelector, useDispatch} from "react-redux";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import PaymentCard from "../components/cards/PaymentCard.jsx";
 import ViewReceipt from "../components/other/ViewReceipt.jsx";
 import Spinner from "../components/other/Spinner.jsx";
@@ -19,6 +19,11 @@ const Payments = () => {
     const receiptModal = useSelector(state => state.modals.receiptModal)
 
     const {data: allPayments, isLoading, isError, error} = useGetAllPaymentsQuery();
+
+    // go to first page again on filter application
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [timeFilter, methodFilter])
 
     if(isLoading){
         return (

@@ -25,7 +25,9 @@ export const filterPaymentsByDate = (allPayments, timeFilter) => {
             const startOfWeek = new Date(today);
             const day = today.getDay();
 
-            startOfWeek.setDate(today.getDate() - day);
+            const daysFromMonday = day === 0 ? 6 : day - 1;
+
+            startOfWeek.setDate(today.getDate() - daysFromMonday);
             startOfWeek.setHours(0, 0, 0, 0);
 
             return date >= startOfWeek;
