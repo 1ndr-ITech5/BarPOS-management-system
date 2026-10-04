@@ -7,7 +7,7 @@ export const itemsApi = api.injectEndpoints({
                 url: "/api/menu-items",
                 method: "GET"
             }),
-            providesTags: ["Items"]  // shto tag nese do invalidosh me vone
+            providesTags: ["Items"]
         })
     })
 })

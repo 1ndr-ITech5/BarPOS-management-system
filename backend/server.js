@@ -41,6 +41,8 @@ app.use("/api/order", require("./routes/orderItemRoutes.js"))
 // manage the payment paths
 app.use("/api", require("./routes/paymentRoutes.js"))
 
+app.use("/api/stats", require("./routes/statsRoutes.js"))
+
 // call middleware to catch the errors
 app.use(errorHandler)
 
