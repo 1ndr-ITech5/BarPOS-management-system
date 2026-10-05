@@ -29,6 +29,10 @@ const Tables = () => {
     return (
         <div className="home">
             <div className="main-page">
+                <div className="text">
+                    <h1>Tables</h1>
+                    <h2>Live floor view</h2>
+                </div>
                 <div className="tables-grid">
                     {tables?.map(table => (
                         <TableCard key={table._id} table={table} onClick={() => handleClick(table)}/>
