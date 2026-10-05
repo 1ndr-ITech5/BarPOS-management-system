@@ -1,12 +1,17 @@
 import {useGetMeQuery} from "../store/apis/authApi.js";
 import {useGetWaiterStatsQuery, useGetReportQuery} from "../store/apis/statsApi.js";
+import { IoMdArrowRoundBack } from "react-icons/io";
 import Spinner from "../components/other/Spinner.jsx";
 import {formatDate} from "../utils/DateFormat.js";
+import {useState} from "react";
 import admin from "../assets/admin.jpg";
 import waiter from "../assets/waiter.jpg";
+import Register from "../components/user/Register.jsx";
 import "../pages-style/Profile.css";
 
 const Profile = () => {
+
+    const [registerModal, setRegisterModal] = useState(false)
     const {data: user, isLoading: userLoading} = useGetMeQuery();
 
     const {data: waiterStats, isLoading: statsLoading} = useGetWaiterStatsQuery(undefined, {skip: !user || user.role === "admin"});
@@ -59,6 +64,11 @@ const Profile = () => {
                             <h3>{item.completedOrders}</h3>
                         </div>)}
                     </div>
+                    <div className="profile-buttons">
+                        <button><IoMdArrowRoundBack/> Back to tables</button>
+                        <button onClick={() => setRegisterModal(true)}>Register new users</button>
+                    </div>
+                    {registerModal && <Register changeModal={setRegisterModal}/>}
                 </div>)}
         </div>
     )
