@@ -1,4 +1,40 @@
-.navbar img {
-    width: 280px;
-    height: auto
+.navbar {
+    display: flex;
+    align-items: center;
+    padding: 20px 40px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+}
+
+.brand img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+}
+
+.brand div {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand h1 {
+    margin: 0;
+    font-size: 25px;
+}
+
+.brand h2 {
+    margin: 5px 0 0;
+    font-size: 15px;
+    font-weight: normal;
+}
+
+.navbar button:first-of-type {
+    margin-left: auto;
+}
+
+.navbar button {
+    margin-left: 50px;
 }

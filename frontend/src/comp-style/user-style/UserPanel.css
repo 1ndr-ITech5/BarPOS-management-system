@@ -1,17 +1,38 @@
-.user-panel{
+.user-panel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+}
+
+.user-name {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
+    line-height: 1.2;
 }
 
-.user-name{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.user-name h1 {
+    font-size: 14px;
+    margin: 0;
 }
 
-.user-panel div img{
-    height: 100px;
-    width: auto
+.user-name h2 {
+    font-size: 11px;
+    margin: 0;
+    color: gray;
+    font-weight: normal;
+}
+
+.user-panel img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-panel svg {
+    font-size: 22px;
+    margin-left: auto;
 }

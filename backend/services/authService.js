@@ -62,7 +62,7 @@ const loginOnDemo = async() => {
     }
 
     // find the admin on that workspace
-    const demoUser = await User.findOne({workspaceId: demoWorkspace._id, role: "admin"})
+    const demoUser = await User.findOne({workspaceId: demoWorkspace._id, role: "admin"}).populate("workspaceId", "name")
     if (!demoUser)
     {
         const error = new Error("This demo user was not found!")

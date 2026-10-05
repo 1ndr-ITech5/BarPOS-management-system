@@ -1,5 +1,4 @@
 import TableCard from "../components/cards/TableCard.jsx";
-import UserPanel from "../components/user/UserPanel.jsx";
 import {useGetTablesQuery} from "../store/apis/tablesApi.js";
 import TableModal from "../components/modals/TableModal.jsx";
 import {useDispatch, useSelector} from "react-redux";
@@ -29,14 +28,12 @@ const Tables = () => {
 
     return (
         <div className="home">
-            <h1>Bar Restaurant Natyra</h1>
             <div className="main-page">
                 <div className="tables-grid">
                     {tables?.map(table => (
                         <TableCard key={table._id} table={table} onClick={() => handleClick(table)}/>
                     ))}
                 </div>
-                <UserPanel/>
             </div>
             {/* Manage the modal state */}
             {tableModal && <TableModal selectedTableId={selectedTable} allTables={tables}/>}

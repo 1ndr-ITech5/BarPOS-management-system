@@ -2,6 +2,7 @@ import {createSlice} from "@reduxjs/toolkit";
 
 const tableId = localStorage.getItem("currentTableId")
 const workspaceId = localStorage.getItem("currentWorkspaceId")
+const toggleState = localStorage.getItem("toggle")
 
 const modalSlice = createSlice({
     name: "modalSlice",
@@ -9,7 +10,8 @@ const modalSlice = createSlice({
         tableModal: false,
         selectedTable: tableId || null,
         receiptModal: false,
-        currentWorkspace: workspaceId || null
+        currentWorkspace: workspaceId || null,
+        toggle: toggleState || "light"
     },
     reducers: {
         setTableModal(state, action){
@@ -33,9 +35,16 @@ const modalSlice = createSlice({
             if (state.receiptModal !== action.payload){
                 state.receiptModal = action.payload
             }
+        },
+        changeToggle(state){
+            if (state.toggle === "light"){
+                state.toggle = "dark"
+            }else{
+                state.toggle = "light"
+            }
         }
     }
 })
 
-export const {setTableModal, setSelectedTable, setCurrentWorkspace, removeSelectedTable, setViewReceipt} = modalSlice.actions;
+export const {setTableModal, setSelectedTable, setCurrentWorkspace, removeSelectedTable, setViewReceipt, changeToggle} = modalSlice.actions;
 export default modalSlice.reducer;
