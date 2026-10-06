@@ -1,9 +1,8 @@
 import TableCard from "../components/cards/TableCard.jsx";
 import {useGetTablesQuery} from "../store/apis/tablesApi.js";
-import TableModal from "../components/modals/TableModal.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import Spinner from "../components/other/Spinner.jsx";
-import {setTableModal, setSelectedTable, } from "../store/slices/modalSlice.js";
+import {setSelectedTable} from "../store/slices/modalSlice.js";
 import '../pages-style/Tables.css';
 
 const Tables = () => {
@@ -12,7 +11,7 @@ const Tables = () => {
     const {data: tables, isLoading} = useGetTablesQuery(undefined, {skip: !workspaceId, refetchOnMountOrArgChange: true})
     const dispatch = useDispatch();
 
-    const {tableModal, selectedTable} = useSelector((state) => state.modals)
+    const selectedTable = useSelector((state) => state.modals)
     
     if (isLoading) return (
         <div>
@@ -20,11 +19,6 @@ const Tables = () => {
             <Spinner/>
         </div>
     );
-
-    const handleClick = (table) => {
-        dispatch(setTableModal(true))
-        dispatch(setSelectedTable(table._id))
-    }
 
     return (
         <div className="home">
@@ -35,12 +29,10 @@ const Tables = () => {
                 </div>
                 <div className="tables-grid">
                     {tables?.map(table => (
-                        <TableCard key={table._id} table={table} onClick={() => handleClick(table)}/>
+                        <TableCard key={table._id} table={table}/>
                     ))}
                 </div>
             </div>
-            {/* Manage the modal state */}
-            {tableModal && <TableModal selectedTableId={selectedTable} allTables={tables}/>}
         </div>
     )
 }
