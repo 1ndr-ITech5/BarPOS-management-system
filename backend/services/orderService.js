@@ -4,8 +4,8 @@ const OrderItem = require("../models/orderItemModel.js")
 const {deleteOrderItems} = require("./orderItemService.js")
 const mongoose = require("mongoose")
 
-// get the pre-bill of order based on the table id
-const getPreBill = async(table_id, userData) => {
+// get order based on the table id
+const getOrderByTable = async(table_id, userData) => {
     // check if this table exists in db
     const table = await Table.findOne({_id: table_id, ownedBy: userData.workspaceId})
     if (!table){
@@ -14,7 +14,6 @@ const getPreBill = async(table_id, userData) => {
         throw error;
     }
     
-    // get the order based on the table
     const order = await Order.findOne({
         workspaceId: userData.workspaceId,
         tableId: table_id,
@@ -22,6 +21,35 @@ const getPreBill = async(table_id, userData) => {
     }).populate("waiterId", "first_name last_name")
     .populate("tableId", "tableNumber")
     .populate("workspaceId", "name")
+
+    // when order is not found
+    if (!order) {
+        const error = new Error(`No active order was found for table number ${table.tableNumber}!`)
+        error.statusCode = 404
+        throw error;
+    }
+
+    // check that only the waiter who opened it or the admin has permission to get it
+    if(order.waiterId._id.toString() !== userData._id.toString() && userData.role !== "admin"){
+        const error = new Error(`Only ${order.waiterId.first_name} ${order.waiterId.last_name} and the admin have access on this order!`)
+        error.statusCode = 403
+        throw error;
+    }
+
+    // query over order items
+    const orderItems = await OrderItem.find({orderId: order._id})
+    .populate("menuItemId", "productName")
+
+    return {order, orderItems}
+}
+
+// get order based on orderId
+const getOrderById = async(orderId, userData) => {
+    const order = await Order.findOne({
+        _id: orderId,
+        workspaceId: userData.workspaceId,
+        status: "open"
+    }).populate("waiterId", "first_name last_name").populate("workspaceId", "name")
 
     // when order is not found
     if (!order) {
@@ -223,4 +251,4 @@ const deleteOrder = async(table_id, userData) => {
     }
 }
 
-module.exports = {getPreBill, getAllOrders, getWaiterOrders, openOrder, closeOrder, deleteOrder}
+module.exports = {getOrderByTable, getOrderById, getAllOrders, getWaiterOrders, openOrder, closeOrder, deleteOrder}

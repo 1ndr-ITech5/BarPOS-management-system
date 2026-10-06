@@ -1,14 +1,20 @@
 const asyncHandler = require("express-async-handler")
-const {getPreBill, getAllOrders, getWaiterOrders, openOrder, deleteOrder} = require("../services/orderService.js")
+const {getOrderByTable, getOrderById, getAllOrders, getWaiterOrders, openOrder, deleteOrder} = require("../services/orderService.js")
 
 
-const getOrderController = asyncHandler(async(req,res) => {
+const getOrderByTableController = asyncHandler(async(req,res) => {
     const {tableId} = req.params
 
-    const foundOrder = await getPreBill(tableId, req.user)
+    const foundOrder = await getOrderByTable(tableId, req.user)
     res.status(200).json(foundOrder)
 })
 
+const getOrderByIdController = asyncHandler(async(req,res) => {
+    const {orderId} = req.params
+
+    const foundOrder = await getOrderById(orderId, req.user)
+    res.status(200).json(foundOrder)
+})
 
 const getAllOrdersController = asyncHandler(async(req,res) => {
     const allOrders = await getAllOrders(req.user.workspaceId)
@@ -45,4 +51,5 @@ const deleteOrderController = asyncHandler(async(req, res) => {
     })
 })
 
-module.exports = {getOrderController, getAllOrdersController, getWaiterOrdersController, openOrderController, deleteOrderController}
+module.exports = {getOrderByTableController, getOrderByIdController, getAllOrdersController, 
+    getWaiterOrdersController, openOrderController, deleteOrderController}
