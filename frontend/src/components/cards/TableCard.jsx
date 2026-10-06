@@ -1,16 +1,17 @@
 import '../../comp-style/cards-style/TableCard.css';
-import {useCreateOrderMutation, useLazyGetOrderQuery} from "../store/apis/orderApi.js";
-import {setCurrentOrder} from "../store/slices/orderSlice.js";
+import {useCreateOrderMutation, useLazyGetOrderByTableQuery} from "../../store/apis/orderApi.js";
+import {setCurrentOrder} from "../../store/slices/orderSlice.js";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
 
-const TableCard = (table) => {
+const TableCard = ({table}) => {
 
     const dispatch = useDispatch()
     const nav = useNavigate()
 
     const [createOrder, {isLoading: processLoading}] = useCreateOrderMutation();
-    const [getOrder, {isLoading: orderLoading}] = useLazyGetOrderQuery();
+    const [getOrderByTable, {isLoading: orderLoading}] = useLazyGetOrderByTableQuery();
 
     const loading = () => {
         if (table.status === "available")
@@ -34,7 +35,7 @@ const TableCard = (table) => {
 
     const handleUpdateOrder = async() => {
         try {
-            const response = await getOrder(table._id).unwrap()
+            const response = await getOrderByTable(table._id).unwrap()
             dispatch(setCurrentOrder(response.order._id))
             nav("/order-page")
         } catch (error) {
@@ -44,7 +45,7 @@ const TableCard = (table) => {
     
     const handleCheckout = async () => {
         try {
-            const response = await getOrder(table._id).unwrap()
+            const response = await getOrderByTable(table._id).unwrap()
             dispatch(setCurrentOrder(response.order._id))
             nav("/checkout")
         } catch (error) {
@@ -53,12 +54,12 @@ const TableCard = (table) => {
     }
 
     return(
-        <div className="table-card" style={{backgroundColor: table.status === "available" ? "green" : "red"}} onClick={onClick}>
+        <div className="table-card" style={{backgroundColor: table.status === "available" ? "green" : "red"}}>
             <h3>Table: {table.tableNumber}</h3>
             <h4>Seats | {table.capacity}</h4>
             <button className="table-status">{table.status}</button>
             <div className="table-actions">
-                <button onClick={table.status === "available" ? handleOpenOrder() : handleUpdateOrder()} disabled={loading()}>
+                <button onClick={() => {table.status === "available" ? handleOpenOrder() : handleUpdateOrder()}} disabled={loading()}>
                 {table.status === "available" ? "Open Order" : "Update Order"}</button>
                 {table.status === "occupied" ? <button onClick={() => handleCheckout()} disabled={loading()}>Checkout</button> : ""}
             </div>

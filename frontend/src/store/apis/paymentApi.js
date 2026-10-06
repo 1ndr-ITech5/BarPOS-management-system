@@ -8,7 +8,7 @@ export const paymentApi = api.injectEndpoints({
                 method: "POST",
                 body: paymentData
             }),
-            invalidatesTags: ["Tables", "Orders", "Payments"]
+            invalidatesTags: ["Tables", "Payments"]
         }),
         getPayment: builder.query({
             query: (orderId) => ({

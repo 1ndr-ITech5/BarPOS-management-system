@@ -2,16 +2,12 @@ import TableCard from "../components/cards/TableCard.jsx";
 import {useGetTablesQuery} from "../store/apis/tablesApi.js";
 import {useDispatch, useSelector} from "react-redux";
 import Spinner from "../components/other/Spinner.jsx";
-import {setSelectedTable} from "../store/slices/modalSlice.js";
 import '../pages-style/Tables.css';
 
 const Tables = () => {
     const workspaceId = useSelector((state) => state.modals.currentWorkspace)
 
     const {data: tables, isLoading} = useGetTablesQuery(undefined, {skip: !workspaceId, refetchOnMountOrArgChange: true})
-    const dispatch = useDispatch();
-
-    const selectedTable = useSelector((state) => state.modals)
     
     if (isLoading) return (
         <div>

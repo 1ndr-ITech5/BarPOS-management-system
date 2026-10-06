@@ -10,25 +10,24 @@ import {useSelector, useDispatch} from "react-redux";
 import {useGetItemsQuery} from "../store/apis/itemsApi.js";
 import {clearCurrentOrder} from "../store/slices/orderSlice.js";
 import {useAddItemMutation, useRemoveItemMutation} from "../store/apis/orderItemsApi.js";
-import {useGetOrderQuery} from "../store/apis/orderApi.js";
+import {useGetOrderByIdQuery} from "../store/apis/orderApi.js";
 import Spinner from "../components/other/Spinner.jsx";
 
 const OrderPage = () => {
 
     const nav = useNavigate();
     const dispatch = useDispatch();
-    const tableId = useSelector(state => state.modals.selectedTable)
 
     const [addItem] = useAddItemMutation();
     const [removeItem] = useRemoveItemMutation();
 
+    const orderId = useSelector(state => state.order.currentOrderId)
+
     const {data: items, isLoading} = useGetItemsQuery();
-    const {data: orderData, isLoading: orderLoading} = useGetOrderQuery(tableId, {skip: !tableId})
+    const {data: orderData, isLoading: orderLoading} = useGetOrderByIdQuery(orderId, {skip: !orderId})
 
     const [selectedCategory, setCategory] = useState("All")
-
     const [preBill, setPreBill] = useState(false)
-
     const [showDiscard, setShowDiscard] = useState(false)
 
     if (isLoading || orderLoading) {
@@ -67,16 +66,10 @@ const OrderPage = () => {
     }
 
 
-    const backToTables = () => {
-        dispatch(clearCurrentOrder())
-        nav(-1)
-    }
-
-
     return(
         <div className="order-page">
             <div className="page-elements">
-                <button onClick={() => backToTables()}>Go Back</button>
+                <button onClick={() => {dispatch(clearCurrentOrder()), nav(-1)}}>Go Back</button>
                 <h1>Order's Page</h1>
             </div>
             <div className="order-page-columns">
@@ -90,7 +83,7 @@ const OrderPage = () => {
                 <button onClick={() => setPreBill(true)}>Get Pre-Bill</button>
             </div>
             {preBill && <PreBill changePreBillModal={setPreBill} orderData={orderData}/>}
-            {showDiscard && <DiscardModal changeDiscardModal={handleDiscard} setShowDiscard={setShowDiscard} tableId={tableId}/>}
+            {showDiscard && <DiscardModal changeDiscardModal={handleDiscard} setShowDiscard={setShowDiscard} tableId={orderData.order.tableId._id}/>}
         </div>
     )
 }

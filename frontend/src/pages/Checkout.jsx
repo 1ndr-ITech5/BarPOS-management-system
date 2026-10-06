@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
-import {useGetOrderQuery} from "../store/apis/orderApi.js";
+import {useGetOrderByIdQuery} from "../store/apis/orderApi.js";
 import {useCreatePaymentMutation} from "../store/apis/paymentApi.js";
 import Spinner from "../components/other/Spinner.jsx";
 import {useState} from "react";
@@ -9,10 +9,9 @@ import { toast } from "react-toastify";
 const Checkout = () => {
 
     const nav = useNavigate();
-    const tableId = useSelector(state => state.modals.selectedTable)
     const orderId = useSelector(state => state.order.currentOrderId)
 
-    const {data: orderData, isLoading: orderLoading, isError, error} = useGetOrderQuery(tableId, {skip: !tableId})
+    const {data: orderData, isLoading: orderLoading, isError, error} = useGetOrderByIdQuery(orderId, {skip: !orderId})
     const [createPayment, {isLoading}] = useCreatePaymentMutation();
 
     const [paymentData, setPaymentData] = useState({

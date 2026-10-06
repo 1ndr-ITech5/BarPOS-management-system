@@ -49,7 +49,7 @@ const getOrderById = async(orderId, userData) => {
         _id: orderId,
         workspaceId: userData.workspaceId,
         status: "open"
-    }).populate("waiterId", "first_name last_name").populate("workspaceId", "name")
+    }).populate("waiterId", "first_name last_name").populate("workspaceId", "name").populate("tableId", "tableNumber")
 
     // when order is not found
     if (!order) {

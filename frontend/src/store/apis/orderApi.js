@@ -14,11 +14,18 @@ export const orderApi = api.injectEndpoints({
                 method: "DELETE",
                 url: `/api/order/${tableId}/delete`
             }),
-            invalidatesTags: ["Tables", "Orders"],
+            invalidatesTags: ["Tables"],
         }),
-        getOrder: builder.query({
+        getOrderByTable: builder.query({
             query: (tableId) => ({
-                url: `/api/order/${tableId}`,
+                url: `/api/order/tables/${tableId}`,
+                method: "GET"
+            }),
+            providesTags: ["Orders"]
+        }),
+        getOrderById: builder.query({
+            query: (orderId) => ({
+                url: `/api/order/orders/${orderId}`,
                 method: "GET"
             }),
             providesTags: ["Orders"]
@@ -40,4 +47,5 @@ export const orderApi = api.injectEndpoints({
     })
 });
 
-export const {useCreateOrderMutation, useDeleteOrderMutation, useGetOrderQuery, useGetMyOrdersQuery, useGetAllOrdersQuery, useLazyGetOrderQuery} = orderApi; 
+export const {useCreateOrderMutation, useDeleteOrderMutation, 
+    useGetOrderByIdQuery, useGetMyOrdersQuery, useGetAllOrdersQuery, useLazyGetOrderByTableQuery} = orderApi; 
