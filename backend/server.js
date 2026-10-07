@@ -1,5 +1,9 @@
 const express = require("express")
 const dotenv = require("dotenv").config()
+const validEnv = require("./config/validEnv.js")
+
+validEnv();
+
 const connectDB = require('./config/db.js')
 const {errorHandler} = require("./middlewares/errorMiddleware.js")
 const {checkDemoReset} = require("./services/demoResetService.js")

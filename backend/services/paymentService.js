@@ -88,6 +88,13 @@ const createPayment = async(paymentData, order_id, userData) => {
         throw error
     }
 
+    // check if payment method is one of the required ones
+    if (!["cash", "card"].includes(method)) {
+        const error = new Error("Invalid payment method!")
+        error.statusCode = 400
+        throw error
+    }
+
     const session = await mongoose.startSession()
 
     // treat the case when facing a dublicate error
