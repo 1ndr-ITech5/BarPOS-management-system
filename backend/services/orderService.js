@@ -53,7 +53,7 @@ const getOrderById = async(orderId, userData) => {
 
     // when order is not found
     if (!order) {
-        const error = new Error(`No active order was found for table number ${table.tableNumber}!`)
+        const error = new Error(`No active order was found for this table!`)
         error.statusCode = 404
         throw error;
     }

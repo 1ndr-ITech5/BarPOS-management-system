@@ -14,7 +14,7 @@ export const orderApi = api.injectEndpoints({
                 method: "DELETE",
                 url: `/api/order/${tableId}/delete`
             }),
-            invalidatesTags: ["Tables"],
+            invalidatesTags: ["Tables", "Orders"],
         }),
         getOrderByTable: builder.query({
             query: (tableId) => ({

@@ -1,6 +1,6 @@
 import TableCard from "../components/cards/TableCard.jsx";
 import {useGetTablesQuery} from "../store/apis/tablesApi.js";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import Spinner from "../components/other/Spinner.jsx";
 import '../pages-style/Tables.css';
 
