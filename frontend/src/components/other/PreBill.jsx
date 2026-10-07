@@ -48,7 +48,6 @@ const PreBill = ({changePreBillModal, orderData}) => {
             </div>
             <p>Thank you!</p>
             <p>Powered by BarPOS</p>
-            <button>Download PDF</button>
         </div>
     )
 }

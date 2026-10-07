@@ -90,7 +90,7 @@ const getUser = async(userData) => {
     const user = await User.findOne({_id: userData._id, workspaceId: userData.workspaceId}).select("-password")
     if (!user){
         const error = new Error("This user could not be found!")
-        error.codeStatus = 404
+        error.statusCode = 404
         throw error;
     }
 

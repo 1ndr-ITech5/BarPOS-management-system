@@ -8,10 +8,6 @@ const Header = () => {
         <div className="header">
             <h3>BarPOS System</h3>
             <h4>{formatDate(today)}</h4>
-            <select className="language-dropdown">
-                <option value="shqip">Shqip</option>
-                <option value="english">English</option>
-            </select>
         </div>
     )
 }
