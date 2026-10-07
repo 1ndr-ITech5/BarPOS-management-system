@@ -21,10 +21,20 @@ const registerNewUser = async(user_info, workspaceId) => {
         throw error;
     }
 
-    // save the new user to the database
-    await User.create({
-        first_name, last_name, username, 
-        password, role, workspaceId})
+    // try-catch block to handle the same time user registration
+    try {
+        await User.create({
+            first_name, last_name, username, 
+            password, role, workspaceId
+        })
+    } catch (error) {
+        if (error.code === 11000) {
+            const err = new Error("This user already exists!")
+            err.statusCode = 409
+            throw err
+        }
+        throw error
+    }
 }
 
 
