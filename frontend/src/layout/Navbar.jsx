@@ -1,11 +1,12 @@
 import logo from "../assets/logo.png";
 import {FiSun} from "react-icons/fi";
 import { IoMoonOutline } from "react-icons/io5";
-import {changeToggle} from "../store/slices/modalSlice.js";
+import {changeToggle, resetToggle} from "../store/slices/modalSlice.js";
 import UserPanel from "../components/user/UserPanel.jsx";
 import {clearCurrentOrder} from "../store/slices/orderSlice.js";
 import {logout} from '../store/slices/authSlice.js';
 import {api} from "../store/apis/api.js";
+import {authApi} from "../store/apis/authApi.js";
 import {useSelector, useDispatch} from "react-redux";
 import {useEffect} from "react";
 import '../layout-style/Navbar.css';
@@ -22,8 +23,9 @@ const Navbar = () => {
 
     const handleLogout = () => {
         localStorage.removeItem("user")
-        localStorage.removeItem("toggle")
+        dispatch(resetToggle())
         dispatch(clearCurrentOrder())
+        dispatch(authApi.util.resetApiState())
         dispatch(api.util.resetApiState())
         dispatch(logout())
     }

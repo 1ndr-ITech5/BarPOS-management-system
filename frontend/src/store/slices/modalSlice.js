@@ -26,9 +26,13 @@ const modalSlice = createSlice({
             }else{
                 state.toggle = "light"
             }
+        },
+        resetToggle(state){
+            state.toggle = "light"
+            localStorage.removeItem("toggle")
         }
     }
 })
 
-export const {setCurrentWorkspace, setViewReceipt, changeToggle} = modalSlice.actions;
+export const {setCurrentWorkspace, setViewReceipt, changeToggle, resetToggle} = modalSlice.actions;
 export default modalSlice.reducer;

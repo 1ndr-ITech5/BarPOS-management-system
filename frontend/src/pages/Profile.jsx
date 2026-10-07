@@ -7,16 +7,18 @@ import {useState} from "react";
 import admin from "../assets/admin.jpg";
 import waiter from "../assets/waiter.jpg";
 import Register from "../components/user/Register.jsx";
+import {useNavigate} from "react-router-dom";
 import "../pages-style/Profile.css";
 
 const Profile = () => {
+
+    const nav = useNavigate()
 
     const [registerModal, setRegisterModal] = useState(false)
     const {data: user, isLoading: userLoading} = useGetMeQuery();
 
     const {data: waiterStats, isLoading: statsLoading} = useGetWaiterStatsQuery(undefined, {skip: !user || user.role === "admin"});
     const {data: waiterPerformances, isLoading: performancesLoad} = useGetReportQuery(undefined, {skip: !user || user.role === "waiter"});
-    console.log(waiterPerformances)
 
     const loadingRole = () => {
         if (user?.role === "waiter"){
@@ -65,7 +67,7 @@ const Profile = () => {
                         </div>)}
                     </div>
                     <div className="profile-buttons">
-                        <button><IoMdArrowRoundBack/> Back to tables</button>
+                        <button onClick={() => nav("/tables")}><IoMdArrowRoundBack/> Back to tables</button>
                         <button onClick={() => setRegisterModal(true)}>Register new users</button>
                     </div>
                     {registerModal && <Register changeModal={setRegisterModal}/>}
