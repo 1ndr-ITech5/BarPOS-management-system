@@ -11,6 +11,7 @@ import { GoPerson } from "react-icons/go";
 import { LuLockKeyhole } from "react-icons/lu";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
+import '../pages-style/Login.css';
 
 const Login = () => {
     // call our api hook for authentication
@@ -69,25 +70,26 @@ const Login = () => {
 
     return (
         <section className="login">
-            <div className="login-hero">
-                <img src={logHero}/>
-                <div className="img-buttons">
-                    <button>Live Tables</button>
-                    <button>Order Control</button>
-                    <button>Sales Report</button>
-                </div>
-                <div className="description">
-                    <h1>Everything your bar needs,</h1>
-                    <h1>in one place</h1>
-                    <h3>From tables and orders, to payments and reports.</h3>
-                    <h3>BarPOS keeps the entire service under control.</h3>
+            <div className="login-hero" style={{ backgroundImage: `url(${logHero})` }}>
+                <div className="hero-overlay"></div>
+                <div className="hero-content">
+                    <div className="img-buttons">
+                        <button>Live Tables</button>
+                        <button>Order Control</button>
+                        <button>Sales Reports</button>
+                    </div>
+                    <div className="description">
+                        <h1>Everything your bar needs</h1>
+                        <h1>in one place</h1>
+                        <h3>From tables and orders, to payments and reports - BarPOS keeps the entire service under control</h3>
+                    </div>
                 </div>
             </div>
             <div className="login-form">
                 <div className="log-page-header">
                     <img src={logo}/>
                     <div>
-                        <h2>Bar Restaurant Managment System</h2>
+                        <h2>BarPOS Managment System</h2>
                         <h3>Point of Sale - Web App</h3>
                     </div>
                 </div>
