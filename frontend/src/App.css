@@ -9,5 +9,6 @@ main {
 }
 
 body {
+    margin: 0;
     background-color: rgba(204, 85, 0, 0.1);
 }

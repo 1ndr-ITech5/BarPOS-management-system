@@ -1,7 +1,5 @@
 import Tables from "./pages/Tables.jsx";
 import Login from "./pages/Login.jsx";
-import Header from "./layout/Header.jsx";
-import Footer from "./layout/Footer.jsx";
 import ProtectedLayout from "./layout/ProtectedLayout.jsx";
 import {Routes, Route, Navigate} from "react-router-dom";
 import MyOrders from "./pages/MyOrders.jsx";
@@ -20,7 +18,6 @@ import "react-toastify/dist/ReactToastify.css";
 const App = () => {
     return(
       <div className='app'>
-        <Header/>
           <main>
             <Routes>
               <Route element={<PublicRoute />}>
@@ -49,7 +46,6 @@ const App = () => {
               </Route>
             </Routes>
           </main>
-          <Footer/>
           <ToastContainer/>
       </div>
     )
