@@ -3,7 +3,8 @@ import { IoReceiptOutline } from "react-icons/io5";
 import { MdOutlinePayments } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import {useSelector} from "react-redux";
-import {Link} from "react-router-dom";
+import {NavLink} from "react-router-dom";
+import "../layout-style/SideBar.css";
 
 const SideBar = () => {
 
@@ -11,14 +12,16 @@ const SideBar = () => {
 
     return (
         <div className="sidebar">
-            <h2>Operations</h2>
-            <ul>
-                <li><Link to="/tables"><MdOutlineTableRestaurant/> Tables</Link></li>
-                <li>{user.role === "waiter" ? <Link to="/my-orders"><IoReceiptOutline /> My Orders</Link> : <Link to="/all-orders"><IoReceiptOutline /> All Orders</Link>}</li>
-                <li>{user.role === "admin" ? <Link to="/payments"><MdOutlinePayments /> Payments</Link> : null}</li>
-                <li><Link to="/profile"><CgProfile /> Profile</Link></li>
+            <h2 className="sidebar-title">Operations</h2>
+            <ul className="sidebar-menu">
+                <li className="sidebar-item"><NavLink className="sidebar-link" to="/tables"><MdOutlineTableRestaurant/> Tables</NavLink></li>
+                <li className="sidebar-item">{user.role === "waiter" ? <NavLink className="sidebar-link" to="/my-orders">
+                <IoReceiptOutline /> My Orders</NavLink> : <NavLink className="sidebar-link" to="/all-orders"><IoReceiptOutline /> All Orders</NavLink>}</li>
+                <li className="sidebar-item">{user.role === "admin" ? <NavLink className="sidebar-link" to="/payments">
+                <MdOutlinePayments /> Payments</NavLink> : null}</li>
+                <li className="sidebar-item"><NavLink className="sidebar-link" to="/profile"><CgProfile /> Profile</NavLink></li>
             </ul>
-            <h4>Powered by NDR - Crafted Solutions</h4>
+            <h4 className="sidebar-footer">Powered by <span>NDR - Crafted Solutions</span></h4>
         </div>
     )
 }

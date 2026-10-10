@@ -1,8 +1,10 @@
 .user-panel {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 14px;
+    gap: 15px;
+    padding: 8px 20px 8px 8px;
+    font-family: 'Inter', sans-serif;
+    color: white;
 }
 
 .user-name {
@@ -14,25 +16,28 @@
 }
 
 .user-name h1 {
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 700;
     margin: 0;
 }
 
 .user-name h2 {
-    font-size: 11px;
-    margin: 0;
-    color: gray;
-    font-weight: normal;
+    font-size: 12px;
+    margin: 2px 0 0;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
 }
 
 .user-panel img {
-    height: 50px;
-    width: 50px;
+    height: 45px;
+    width: 45px;
     border-radius: 50%;
     object-fit: cover;
+    background-color: #f3f4f6;
 }
 
 .user-panel svg {
-    font-size: 22px;
-    margin-left: auto;
+    font-size: 20px;
+    margin-left: 10px;
+    color: white;
 }

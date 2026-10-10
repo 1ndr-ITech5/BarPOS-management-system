@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+.sidebar {
+    width: 260px;
+    height: 100%;
+    min-height: 88vh;
+    background-color: #ffffff;
+    border-right: 1px solid #f3f4f6;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+.sidebar-title {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #6b7280;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-left: 10px;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sidebar-item {
+    margin: 0;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
+    text-decoration: none;
+    color: #4b5563;
+    font-size: 1.05rem;
+    font-weight: 500;
+    border-radius: 12px;
+    transition: all 0.2s ease-in-out;
+}
+
+.sidebar-link svg {
+    font-size: 1.5rem;
+    margin-right: 16px;
+    color: #6b7280;
+    transition: color 0.2s;
+}
+
+.sidebar-link:hover {
+    background-color: #f9fafb;
+    color: #111827;
+}
+
+.sidebar-link:hover svg {
+    color: #111827;
+}
+
+.sidebar-link.active,
+.sidebar-link:active {
+    background: linear-gradient(90deg, #fd7443 0%, #f15222 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(241, 82, 34, 0.3);
+}
+
+.sidebar-link.active svg,
+.sidebar-link:active svg {
+    color: #ffffff;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    font-size: 0.7rem;
+    color: #9ca3af;
+    text-align: center;
+    font-weight: 400;
+    padding-top: 16px;
+    border-top: 1px solid #f3f4f6;
+    margin-bottom: 0;
+}
+
+.sidebar-footer span {
+    color: #C96A3D;
+    font-weight: 600;
+}

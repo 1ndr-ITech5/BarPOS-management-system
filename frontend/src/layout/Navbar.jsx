@@ -36,14 +36,16 @@ const Navbar = () => {
         <div className="navbar">
             <div className="brand">
                 <img src={logo}/>
-                <div>
+                <div className="brand-text">
                     <h1>{user.workspace}</h1>
                     <h2>Point of Sale Web App</h2>
                 </div>
             </div>
-            <h3>{formatDate(today)}</h3>
-            <button onClick={() => dispatch(changeToggle())}>{toggle === "light" ? <FiSun/> : <IoMoonOutline/>}</button>
-            <button onClick={() => handleLogout()}><UserPanel/></button>
+            <h3 className="navbar-date">{formatDate(today)}</h3>
+            <div className="navbar-actions">
+                <button className="toggle-btn" onClick={() => dispatch(changeToggle())}>{toggle === "light" ? <FiSun/> : <IoMoonOutline/>}</button>
+                <button className="user-btn" onClick={() => handleLogout()}><UserPanel/></button>
+            </div>
         </div>
     )
 }
