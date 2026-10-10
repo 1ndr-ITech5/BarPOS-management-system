@@ -1,13 +1,19 @@
 import TableCard from "../components/cards/TableCard.jsx";
 import {useGetTablesQuery} from "../store/apis/tablesApi.js";
+import {setViewOrder} from "../store/slices/orderSlice.js";
 import {useSelector} from "react-redux";
 import Spinner from "../components/other/Spinner.jsx";
+import PreBill from "../components/other/PreBill.jsx";
+import {useState} from "react";
 import '../pages-style/Tables.css';
 
 const Tables = () => {
     const workspaceId = useSelector((state) => state.modals.currentWorkspace)
 
     const {data: tables, isLoading} = useGetTablesQuery(undefined, {skip: !workspaceId, refetchOnMountOrArgChange: true})
+
+    const [orderData, setOrderData] = useState(null)
+    const viewOrder = useSelector(state => state.order.viewOrder)
     
     if (isLoading) return (
         <div>
@@ -25,10 +31,11 @@ const Tables = () => {
                 </div>
                 <div className="tables-grid">
                     {tables?.map(table => (
-                        <TableCard key={table._id} table={table}/>
+                        <TableCard key={table._id} table={table} setOrder={setOrderData}/>
                     ))}
                 </div>
             </div>
+            {viewOrder && <PreBill orderData={orderData}/>}
         </div>
     )
 }

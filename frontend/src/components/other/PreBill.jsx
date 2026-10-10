@@ -1,14 +1,18 @@
 import { CiCircleRemove } from "react-icons/ci";
 import {formatDate, formatTime} from "../../utils/DateFormat.js";
+import {setViewOrder} from "../../store/slices/orderSlice.js"
+import {useDispatch} from "react-redux";
 import "../../comp-style/other-style/PreBill.css";
 
-const PreBill = ({changePreBillModal, orderData}) => {
+const PreBill = ({orderData}) => {
+
+    const dispatch = useDispatch()
 
     // security check when orderData might come undefined
     if(!orderData){
         return(
             <div>
-                <CiCircleRemove onClick={() => changePreBillModal(false)}/>
+                <CiCircleRemove onClick={() => dispatch(setViewOrder(false))}/>
                 <p>Order Data was not found!</p>
             </div>
         )
@@ -19,7 +23,7 @@ const PreBill = ({changePreBillModal, orderData}) => {
 
     return(
         <div className="pre-bill">
-            <CiCircleRemove onClick={() => changePreBillModal(false)}/>
+            <CiCircleRemove onClick={() => dispatch(setViewOrder(false))}/>
             <h1>Bar Restorant Natyra</h1>
             <div className="other-data">
                 <h3>Waiter: {orderData.order.waiterId.first_name} {orderData.order.waiterId.last_name}</h3>

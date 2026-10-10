@@ -1,11 +1,11 @@
 import '../../comp-style/cards-style/TableCard.css';
 import {useCreateOrderMutation, useLazyGetOrderByTableQuery} from "../../store/apis/orderApi.js";
-import {setCurrentOrder} from "../../store/slices/orderSlice.js";
+import {setCurrentOrder, setViewOrder} from "../../store/slices/orderSlice.js";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 
-const TableCard = ({table}) => {
+const TableCard = ({table, setOrder}) => {
 
     const dispatch = useDispatch()
     const nav = useNavigate()
@@ -30,6 +30,16 @@ const TableCard = ({table}) => {
             nav("/order-page")
         }catch(error){
             toast.error(error)
+        }
+    }
+
+    const handleGetOrder = async() => {
+        try {
+            const response = await getOrderByTable(table._id).unwrap()
+            setOrder(response)
+            dispatch(setViewOrder(true))
+        } catch (error) {
+            toast.error(error?.data?.message || "You are not authorized to access this order.")
         }
     }
 
@@ -61,6 +71,7 @@ const TableCard = ({table}) => {
             <div className="table-actions">
                 <button onClick={() => {table.status === "available" ? handleOpenOrder() : handleUpdateOrder()}} disabled={loading()}>
                 {table.status === "available" ? "Open Order" : "Update Order"}</button>
+                {table.status === "occupied" ? <button onClick={() => handleGetOrder()} disabled={loading()}>View Order</button> : ""}
                 {table.status === "occupied" ? <button onClick={() => handleCheckout()} disabled={loading()}>Checkout</button> : ""}
             </div>
         </div>
