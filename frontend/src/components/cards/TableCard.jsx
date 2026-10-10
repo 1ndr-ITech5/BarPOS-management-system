@@ -4,6 +4,11 @@ import {setCurrentOrder, setViewOrder} from "../../store/slices/orderSlice.js";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
+import { IoMdAdd } from "react-icons/io";
+import { MdOutlineUpdate } from "react-icons/md";
+import { GrView } from "react-icons/gr";
+import { MdOutlineShoppingCartCheckout } from "react-icons/md";
+
 
 const TableCard = ({table, setOrder}) => {
 
@@ -65,14 +70,16 @@ const TableCard = ({table, setOrder}) => {
 
     return(
         <div className="table-card" style={{backgroundColor: table.status === "available" ? "green" : "red"}}>
-            <h3>Table: {table.tableNumber}</h3>
-            <h4>Seats | {table.capacity}</h4>
+            <h3>Table #{table.tableNumber}</h3>
             <button className="table-status">{table.status}</button>
+            <h4>Size: {table.capacity <= 5 ? "Small" : table.capacity >= 8 ? "Large" : "Medium"}</h4>
+            <h4>Capacity: {table.capacity} seats</h4>
             <div className="table-actions">
                 <button onClick={() => {table.status === "available" ? handleOpenOrder() : handleUpdateOrder()}} disabled={loading()}>
+                {table.status === "available" ? <IoMdAdd /> : <MdOutlineUpdate />}
                 {table.status === "available" ? "Open Order" : "Update Order"}</button>
-                {table.status === "occupied" ? <button onClick={() => handleGetOrder()} disabled={loading()}>View Order</button> : ""}
-                {table.status === "occupied" ? <button onClick={() => handleCheckout()} disabled={loading()}>Checkout</button> : ""}
+                {table.status === "occupied" ? <button onClick={() => handleGetOrder()} disabled={loading()}><GrView /> View Order</button> : ""}
+                {table.status === "occupied" ? <button onClick={() => handleCheckout()} disabled={loading()}><MdOutlineShoppingCartCheckout /> Checkout</button> : ""}
             </div>
         </div>
     )

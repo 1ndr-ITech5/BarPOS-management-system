@@ -1,6 +1,6 @@
 import TableCard from "../components/cards/TableCard.jsx";
 import {useGetTablesQuery} from "../store/apis/tablesApi.js";
-import {setViewOrder} from "../store/slices/orderSlice.js";
+import StatusCard from "../components/other/StatusCard.jsx";
 import {useSelector} from "react-redux";
 import Spinner from "../components/other/Spinner.jsx";
 import PreBill from "../components/other/PreBill.jsx";
@@ -28,6 +28,11 @@ const Tables = () => {
                 <div className="text">
                     <h1>Tables</h1>
                     <h2>Live floor view</h2>
+                </div>
+                <div className="table-stats">
+                    <StatusCard tables={tables} filter="all"/>
+                    <StatusCard tables={tables} filter="available"/>
+                    <StatusCard tables={tables} filter="occupied"/>
                 </div>
                 <div className="tables-grid">
                     {tables?.map(table => (
