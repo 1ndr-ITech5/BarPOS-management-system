@@ -27,6 +27,10 @@ const TableSchema = new mongoose.Schema({
     timeOpened: {
         type: Date,
         default: null
+    },
+    isActive: {
+        type: Boolean,
+        default: true
     }
 },
 {
