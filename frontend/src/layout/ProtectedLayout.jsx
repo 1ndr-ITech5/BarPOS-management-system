@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./Navbar.jsx";
 import SideBar from "./SideBar.jsx";
-import Footer from "./Footer.jsx";
 import "../layout-style/ProtectedLayout.css";
 
 const ProtectedLayout = () => {
@@ -12,7 +11,6 @@ const ProtectedLayout = () => {
                 <SideBar/>
                 <main className="main-content">
                     <Outlet />
-                    <Footer/>
                 </main>
             </div>
         </div>

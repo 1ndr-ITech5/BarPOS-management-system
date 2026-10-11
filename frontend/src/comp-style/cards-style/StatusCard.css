@@ -1,0 +1,38 @@
+.table-status-card {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    min-width: 240px;
+    padding: 22px 26px;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+}
+
+.table-status-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.table-status-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.table-status-header svg {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.table-status-card h1 {
+    margin: 0;
+    font-size: 44px;
+    color: #111827;
+}
+
+.table-status-card:nth-child(1) .table-status-header { color: #111827; }
+.table-status-card:nth-child(2) .table-status-header { color: #dc2626; }
+.table-status-card:nth-child(3) .table-status-header { color: #15803d; }
