@@ -10,30 +10,32 @@ const getTables = async(workspaceId) => {
 
 const createTable = async(tableData, userData) => {
     // check the fields
-    const {tabName, tableCapacity} = tableData
+    const {name, capacity} = tableData
 
-    if (!tabName || !tableCapacity){
+    if (!name || !capacity){
         const error = new Error("Please fill all the fields required!")
         error.statusCode = 400
         throw error
     }
 
-    if (typeof tabName !== "string" || tabName.trim() === "")
+    if (typeof name !== "string" || name.trim() === "")
     {
         const error = new Error("Please give a proper name for the table!")
         error.statusCode = 400
         throw error
     }
 
-    if (typeof tableCapacity !== "number" || !Number.isFinite(tableCapacity) 
-    || !Number.isInteger(tableCapacity) || tableCapacity < 1){
+    const tableName = name.trim()
+
+    if (typeof capacity !== "number" || !Number.isFinite(capacity) || !Number.isInteger(capacity) || capacity < 1)
+    {
         const error = new Error("Please provide a positive number for capacity field!")
         error.statusCode = 400
         throw error
     }
 
     // check if the table exists in this workspace
-    const table = await Table.findOne({tableName: tabName.trim(), ownedBy: userData.workspaceId})
+    const table = await Table.findOne({tableName: tableName, ownedBy: userData.workspaceId})
     if (table){
         const error = new Error("This table exists already in your workspace!")
         error.statusCode = 409
@@ -41,7 +43,7 @@ const createTable = async(tableData, userData) => {
     }
 
     const newTable = await Table.create({
-        tableName: tabName.trim(),
+        tableName: tableName,
         capacity: tableCapacity,
         ownedBy: userData.workspaceId
     })
@@ -66,16 +68,17 @@ const updateTable = async(tableId, tableData, userData) => {
     } 
 
     // check the given fields
-    const {tabName, tableCapacity} = tableData
+    const {name, capacity} = tableData
 
-    if (tabName !== undefined){
-        if (typeof tabName !== "string" || tabName.trim() === "") {
+    if (name !== undefined){
+        const tableName = name.trim()
+        if (typeof tableName !== "string" || tableName === "") {
             const error = new Error("Please give a proper name for the table!");
             error.statusCode = 400;
             throw error;
         }
         // ensure that the name is unique in its own workspace
-        const existingTable = await Table.findOne({_id: {$ne: tableId}, tableName: tabName.trim(), ownedBy: userData.workspaceId})
+        const existingTable = await Table.findOne({_id: {$ne: tableId}, tableName: tableName, ownedBy: userData.workspaceId})
         if (existingTable)
         {
             const error = new Error("The name of the table should be unique within its own workspace!")
@@ -83,27 +86,26 @@ const updateTable = async(tableId, tableData, userData) => {
             throw error
         }
     }
-    if (tableCapacity !== undefined){
-        if (typeof tableCapacity !== "number" || !Number.isFinite(tableCapacity) 
-        || !Number.isInteger(tableCapacity) || tableCapacity < 1){
+    if (capacity !== undefined){
+        if (typeof capacity !== "number" || !Number.isFinite(capacity) || !Number.isInteger(capacity) || capacity < 1)
+        {
             const error = new Error("Please provide a positive number for capacity field!")
             error.statusCode = 400
             throw error
         }
     }
-    if (tabName === undefined && tableCapacity === undefined) {
+    if (name === undefined && capacity === undefined) {
         const error = new Error("At least one field must be provided")
         error.statusCode = 400
         throw error
     }
 
     const updates = {};
-    if (tabName !== undefined) {
-        updates.tableName = tabName.trim();
+    if (name !== undefined) {
+        updates.tableName = name.trim();
     }
-
-    if (tableCapacity !== undefined) {
-        updates.capacity = tableCapacity;
+    if (capacity !== undefined) {
+        updates.capacity = capacity;
     }
 
     await Table.findByIdAndUpdate(
@@ -132,8 +134,10 @@ const deleteTable = async(tableId, userData) => {
     const closedOrders = await Order.find({tableId: tableId, workspaceId: userData.workspaceId, status: "closed"})
     if (closedOrders.length > 0){
         await Table.findByIdAndUpdate(tableId, {isActive: false}, {runValidators: true, new: true})
+        return "archived"
     }else{
         await Table.findByIdAndDelete(tableId)
+        return "deleted"
     }
 }
 

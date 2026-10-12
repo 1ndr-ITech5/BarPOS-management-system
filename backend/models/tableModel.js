@@ -1,8 +1,8 @@
 const mongoose = require("mongoose")
 
 const TableSchema = new mongoose.Schema({
-    tableNumber: {
-        type: Number,
+    tableName: {
+        type: String,
         required: true
     },
     status: {
