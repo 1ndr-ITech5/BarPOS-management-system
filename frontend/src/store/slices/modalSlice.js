@@ -7,6 +7,7 @@ const modalSlice = createSlice({
     name: "modalSlice",
     initialState: {
         receiptModal: false,
+        tableModal: false,
         currentWorkspace: workspaceId || null,
         toggle: toggleState || "light"
     },
@@ -18,6 +19,13 @@ const modalSlice = createSlice({
         setViewReceipt(state, action){
             if (state.receiptModal !== action.payload){
                 state.receiptModal = action.payload
+            }
+        },
+        setTableModal(state){
+            if (state.tableModal === false){
+                state.tableModal = true
+            }else{
+                state.tableModal = false
             }
         },
         changeToggle(state){
@@ -34,5 +42,5 @@ const modalSlice = createSlice({
     }
 })
 
-export const {setCurrentWorkspace, setViewReceipt, changeToggle, resetToggle} = modalSlice.actions;
+export const {setCurrentWorkspace, setViewReceipt, setTableModal, changeToggle, resetToggle} = modalSlice.actions;
 export default modalSlice.reducer;

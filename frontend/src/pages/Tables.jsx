@@ -1,19 +1,24 @@
 import TableCard from "../components/cards/TableCard.jsx";
 import {useGetTablesQuery} from "../store/apis/tablesApi.js";
 import StatusCard from "../components/cards/StatusCard.jsx";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import Spinner from "../components/other/Spinner.jsx";
 import PreBill from "../components/other/PreBill.jsx";
+import TableModal from "../components/modals/TableModal.jsx";
+import {setTableModal} from "../store/slices/modalSlice.js";
 import {useState} from "react";
+import { IoMdAdd } from "react-icons/io";
 import '../pages-style/Tables.css';
 
 const Tables = () => {
+    const dispatch = useDispatch()
     const workspaceId = useSelector((state) => state.modals.currentWorkspace)
 
     const {data: tables, isLoading} = useGetTablesQuery(undefined, {skip: !workspaceId, refetchOnMountOrArgChange: true})
 
     const [orderData, setOrderData] = useState(null)
     const viewOrder = useSelector(state => state.order.viewOrder)
+    const tableModal = useSelector(state => state.modals.tableModal)
     
     if (isLoading) return (
         <div>
@@ -29,6 +34,7 @@ const Tables = () => {
                     <h1>Tables</h1>
                     <h2>Live floor view</h2>
                 </div>
+                <button onClick={() => dispatch(setTableModal())}><IoMdAdd /> Add table</button>
                 <div className="table-stats">
                     <StatusCard tables={tables} filter="all"/>
                     <StatusCard tables={tables} filter="available"/>
@@ -41,6 +47,7 @@ const Tables = () => {
                 </div>
             </div>
             {viewOrder && <PreBill orderData={orderData}/>}
+            {tableModal && <TableModal/>}
         </div>
     )
 }
