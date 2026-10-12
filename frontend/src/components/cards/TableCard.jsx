@@ -70,7 +70,7 @@ const TableCard = ({table, setOrder}) => {
 
     return(
         <div className="table-card" style={{backgroundColor: table.status === "available" ? "green" : "red"}}>
-            <h3>Table #{table.tableNumber}</h3>
+            <h3>Table: {table.tableName}</h3>
             <button className="table-status">{table.status}</button>
             <h4>Size: {table.capacity <= 5 ? "Small" : table.capacity >= 8 ? "Large" : "Medium"}</h4>
             <h4>Capacity: {table.capacity} seats</h4>

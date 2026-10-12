@@ -12,7 +12,7 @@ export const tablesApi = api.injectEndpoints({
         createTable: builder.mutation({
             query: (tableData) => ({
                 url: "/api/tables/create",
-                method: POST,
+                method: "POST",
                 body: tableData
             }),
             invalidatesTags: ["Tables"]

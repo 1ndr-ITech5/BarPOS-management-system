@@ -44,7 +44,7 @@ const createTable = async(tableData, userData) => {
 
     const newTable = await Table.create({
         tableName: tableName,
-        capacity: tableCapacity,
+        capacity: capacity,
         ownedBy: userData.workspaceId
     })
 

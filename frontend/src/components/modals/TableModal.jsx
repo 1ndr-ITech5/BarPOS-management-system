@@ -3,6 +3,7 @@ import { CiCircleRemove } from "react-icons/ci";
 import {useDispatch} from "react-redux";
 import {setTableModal} from "../../store/slices/modalSlice.js";
 import {useState} from "react";
+import {toast} from "react-toastify";
 
 const TableModal = () => {
     const dispatch = useDispatch()
@@ -23,6 +24,18 @@ const TableModal = () => {
         }))
     }
 
+    const handleCreateTable = async(e) => {
+        e.preventDefault()
+
+        try{
+            const response = await createTable(tableData)
+            toast.success(response.data.response)
+            dispatch(setTableModal())
+        }catch(error){
+            toast.error(error.data.message)
+        }
+    }
+
     return (
         <div className="table-modal">
             <CiCircleRemove onClick={() => dispatch(setTableModal())}/>
@@ -36,7 +49,7 @@ const TableModal = () => {
                 <input type="number" name="capacity" min={1} max={20} step={1} value={tableData.capacity}
                 onChange={(e) => handleChangeFields(e)}/>
             </div>
-            <button onClick={() => createTable(tableData)} disabled={isLoading}>Create Table</button>
+            <button onClick={(e) => handleCreateTable(e)} disabled={isLoading}>Create Table</button>
         </div>
     )
 }
