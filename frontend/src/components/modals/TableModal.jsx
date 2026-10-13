@@ -31,7 +31,7 @@ const TableModal = () => {
 
         try{
             const response = await createTable(tableData).unwrap()
-            toast.success(response.data.response)
+            toast.success(response.response)
             dispatch(setTableModal())
         }catch(error){
             toast.error(error.data.message)

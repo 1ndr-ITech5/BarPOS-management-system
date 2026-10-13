@@ -1,5 +1,6 @@
 import '../../comp-style/cards-style/TableCard.css';
 import {useCreateOrderMutation, useLazyGetOrderByTableQuery} from "../../store/apis/orderApi.js";
+import {useDeleteTableMutation} from "../../store/apis/tablesApi.js";
 import {setCurrentOrder, setViewOrder} from "../../store/slices/orderSlice.js";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
@@ -9,6 +10,7 @@ import { IoMdAdd } from "react-icons/io";
 import { MdOutlineUpdate } from "react-icons/md";
 import { GrView } from "react-icons/gr";
 import { MdOutlineShoppingCartCheckout } from "react-icons/md";
+import { RiDeleteBinLine } from "react-icons/ri";
 import { TfiWrite } from "react-icons/tfi";
 
 
@@ -19,6 +21,7 @@ const TableCard = ({table, setOrder}) => {
 
     const [createOrder, {isLoading: processLoading}] = useCreateOrderMutation();
     const [getOrderByTable, {isLoading: orderLoading}] = useLazyGetOrderByTableQuery();
+    const [deleteTable, {isLoading: deletingTable}] = useDeleteTableMutation();
 
     const loading = () => {
         if (table.status === "available")
@@ -70,6 +73,15 @@ const TableCard = ({table, setOrder}) => {
         }
     }
 
+    const handleDeleteTable = async() => {
+        try {
+            const response = await deleteTable(table._id).unwrap()
+            toast.success(response.response)
+        }catch(error){
+            toast.error(error)
+        }
+    }
+
     return(
         <div className="table-card" style={{backgroundColor: table.status === "available" ? "green" : "red"}}>
             <h3>Table: {table.tableName}</h3>
@@ -82,6 +94,8 @@ const TableCard = ({table, setOrder}) => {
                 {table.status === "available" ? "Open Order" : "Update Order"}</button>
                 {table.status === "available" ? <button onClick={() => {dispatch(setTableforUpdate(table._id)), dispatch(setTableModal())}}>
                     <TfiWrite /> Update Table</button> : ""}
+                {table.status === "available" ? <button onClick={() => handleDeleteTable()}>
+                    <RiDeleteBinLine /></button> : ""}
                 {table.status === "occupied" ? <button onClick={() => handleGetOrder()} disabled={loading()}><GrView /> View Order</button> : ""}
                 {table.status === "occupied" ? <button onClick={() => handleCheckout()} disabled={loading()}>
                     <MdOutlineShoppingCartCheckout /> Checkout</button> : ""}
