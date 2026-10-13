@@ -98,7 +98,7 @@ const TableCard = ({table, setOrder}) => {
                     <RiDeleteBinLine /></button> : ""}
                 {table.status === "occupied" ? <button onClick={() => handleGetOrder()} disabled={loading()}><GrView /> View Order</button> : ""}
                 {table.status === "occupied" ? <button onClick={() => handleCheckout()} disabled={loading()}>
-                    <MdOutlineShoppingCartCheckout /> Checkout</button> : ""}
+                    <MdOutlineShoppingCartCheckout /></button> : ""}
             </div>
         </div>
     )

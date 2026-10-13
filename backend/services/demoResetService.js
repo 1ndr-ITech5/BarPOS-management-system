@@ -43,24 +43,14 @@ const demoReset = async() => {
         await Payment.deleteMany({workspaceId: demoWorkspace._id}).session(session)
         await Order.deleteMany({workspaceId: demoWorkspace._id}).session(session)
 
-        // reset table status
-        await Table.updateMany({
-            ownedBy: demoWorkspace._id,
-            },
-            {$set: 
-                {   
-                    status: "available",
-                    timeOpened: null,
-                    openedBy: null
-                }
-            }).session(session)
+        // delete all tables on demo
+        await Table.deleteMany({ownedBy: demoWorkspace._id}).session(session)
 
         // update the reset time on demo workspace 
         await Workspace.updateOne(
             { _id: demoWorkspace._id },
-            {$set: 
-                {lastDemoReset: new Date()}
-            }).session(session)
+            {$set: {lastDemoReset: new Date()}})
+            .session(session)
 
         await session.commitTransaction()
     }
