@@ -3,11 +3,13 @@ import {useCreateOrderMutation, useLazyGetOrderByTableQuery} from "../../store/a
 import {setCurrentOrder, setViewOrder} from "../../store/slices/orderSlice.js";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import {setTableModal, setTableforUpdate} from "../../store/slices/modalSlice.js";
 import {toast} from "react-toastify";
 import { IoMdAdd } from "react-icons/io";
 import { MdOutlineUpdate } from "react-icons/md";
 import { GrView } from "react-icons/gr";
 import { MdOutlineShoppingCartCheckout } from "react-icons/md";
+import { TfiWrite } from "react-icons/tfi";
 
 
 const TableCard = ({table, setOrder}) => {
@@ -78,8 +80,11 @@ const TableCard = ({table, setOrder}) => {
                 <button onClick={() => {table.status === "available" ? handleOpenOrder() : handleUpdateOrder()}} disabled={loading()}>
                 {table.status === "available" ? <IoMdAdd /> : <MdOutlineUpdate />}
                 {table.status === "available" ? "Open Order" : "Update Order"}</button>
+                {table.status === "available" ? <button onClick={() => {dispatch(setTableforUpdate(table._id)), dispatch(setTableModal())}}>
+                    <TfiWrite /> Update Table</button> : ""}
                 {table.status === "occupied" ? <button onClick={() => handleGetOrder()} disabled={loading()}><GrView /> View Order</button> : ""}
-                {table.status === "occupied" ? <button onClick={() => handleCheckout()} disabled={loading()}><MdOutlineShoppingCartCheckout /> Checkout</button> : ""}
+                {table.status === "occupied" ? <button onClick={() => handleCheckout()} disabled={loading()}>
+                    <MdOutlineShoppingCartCheckout /> Checkout</button> : ""}
             </div>
         </div>
     )

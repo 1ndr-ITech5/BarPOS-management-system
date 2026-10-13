@@ -16,8 +16,16 @@ export const tablesApi = api.injectEndpoints({
                 body: tableData
             }),
             invalidatesTags: ["Tables"]
+        }),
+        updateTable: builder.mutation({
+            query: ({tableId, tableData}) => ({
+                url: `/api/tables/update/${tableId}`,
+                method: "PATCH",
+                body: tableData
+            }),
+            invalidatesTags: ["Tables"]
         })
     })
 })
 
-export const {useGetTablesQuery, useCreateTableMutation} = tablesApi;
+export const {useGetTablesQuery, useCreateTableMutation, useUpdateTableMutation} = tablesApi;
