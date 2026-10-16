@@ -16,7 +16,9 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    background-color: #f9fafb;
+    background-color: rgba(235, 238, 242, 0.85);
+    padding-top: 6vh;
+    padding-bottom: 10vh;
 }
 
 .main-content > :last-child {
