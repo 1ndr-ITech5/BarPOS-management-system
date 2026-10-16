@@ -1,54 +1,206 @@
+
+/* ==========================================================================
+   Table Card
+   ========================================================================== */
+
 .table-card {
-    width: 180px;
-    min-height: 180px;
-
-    padding: 16px;
-
-    border-radius: 12px;
+    width: 290px;
+    min-height: 190px;
+    padding: 18px 20px;
+    box-sizing: border-box;
 
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    gap: 14px;
 
-    box-sizing: border-box;
+    border-radius: 18px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
-.table-card h3,
-.table-card h4 {
+.table-card:hover {
+    transform: translateY(-3px);
+}
+
+/* Available — green */
+
+.table-card.available {
+    background: #66c487;
+    border: 1.5px solid #86efac;
+    color: #166534;
+    box-shadow: 0 4px 16px rgba(22, 101, 52, 0.10);
+}
+
+.table-card.available:hover {
+    border-color: #4ade80;
+    box-shadow: 0 8px 24px rgba(22, 101, 52, 0.16);
+}
+
+/* Occupied — red */
+
+.table-card.occupied {
+    background: #e27e7e;
+    border: 1.5px solid #fca5a5;
+    color: #b91c1c;
+    box-shadow: 0 4px 16px rgba(185, 28, 28, 0.10);
+}
+
+.table-card.occupied:hover {
+    border-color: #f87171;
+    box-shadow: 0 8px 24px rgba(185, 28, 28, 0.16);
+}
+
+/* Header */
+
+.table-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.table-card-header h3 {
     margin: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: -0.2px;
+    color: #111827;
 }
 
-.table-card h3 {
-    font-size: 18px;
+.table-card-header h3 span {
+    font-size: 1.15rem;
+    font-weight: 700;
 }
 
-.table-card h4 {
-    margin-top: 6px;
-    font-size: 14px;
-    font-weight: normal;
+.table-card-header button {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid currentColor;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    color: inherit;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
+
+.table-card-header button:disabled,
+.table-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Status */
 
 .table-status {
-    margin: 14px auto 0;
+    align-self: flex-start;
+    padding: 4px 12px;
 
-    padding: 5px 12px;
-
-    border: none;
+    border: 1px solid currentColor;
     border-radius: 20px;
+    background: rgba(255, 255, 255, 0.65);
+    color: inherit;
 
-    background: rgba(255, 255, 255, 0.25);
-    color: white;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+
+    cursor: default;
+    pointer-events: none;
 }
 
-.table-actions {
-    margin-top: auto;
+/* Capacity and size */
 
+.table-card-stats {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 10px 14px;
+    border: 1px dashed rgba(0, 0, 0, 0.12);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.table-card-stats h4 {
+    margin: 0;
+    white-space: nowrap;
+    color: #1f2937;
+}
+
+.table-card-stats > div h4:first-child {
+    font-size: 0.82rem;
+    font-weight: 400;
+    color: #6b7280;
+}
+
+.table-card-stats > div h4:last-child {
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+/* Actions */
+
+.table-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
 }
 
 .table-actions button {
-    padding: 7px 10px;
-    border: none;
-    border-radius: 6px;
+    flex: 1;
+    min-width: 0;
+    padding: 9px 12px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    border: 1.5px solid currentColor;
+    border-radius: 10px;
+    background: #ffffff;
+    color: inherit;
+
+    font-size: 0.84rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease,
+                border-color 0.2s ease, transform 0.2s ease;
+}
+
+.table-actions button svg {
+    flex-shrink: 0;
+    font-size: 1rem;
+}
+
+/* Available button hover — darker green */
+
+.table-card.available .table-actions button:hover:not(:disabled),
+.table-card.available .table-card-header button:hover:not(:disabled) {
+    background: #15803d;
+    border-color: #15803d;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+/* Occupied button hover — darker red */
+
+.table-card.occupied .table-actions button:hover:not(:disabled),
+.table-card.occupied .table-card-header button:hover:not(:disabled) {
+    background: #b91c1c;
+    border-color: #b91c1c;
+    color: #ffffff;
+    transform: translateY(-1px);
 }

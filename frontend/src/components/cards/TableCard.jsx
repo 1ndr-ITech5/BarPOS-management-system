@@ -83,22 +83,32 @@ const TableCard = ({table, setOrder}) => {
     }
 
     return(
-        <div className="table-card" style={{backgroundColor: table.status === "available" ? "green" : "red"}}>
-            <h3>Table: {table.tableName}</h3>
+        <div className={`table-card ${table.status}`}>
+            <div className="table-card-header">
+                <h3>Table: <span>{table.tableName}</span></h3>
+                {table.status === "available" ? <button onClick={() => handleDeleteTable()} disabled={deletingTable}>
+                    <RiDeleteBinLine /></button> : ""}
+                {table.status === "occupied" ? <button onClick={() => handleCheckout()} disabled={loading()}>
+                    <MdOutlineShoppingCartCheckout /></button> : ""}
+            </div>
             <button className="table-status">{table.status}</button>
-            <h4>Size: {table.capacity <= 5 ? "Small" : table.capacity >= 8 ? "Large" : "Medium"}</h4>
-            <h4>Capacity: {table.capacity} seats</h4>
+            <div className="table-card-stats">
+                <div>
+                    <h4>Size:</h4>
+                    <h4>{table.capacity <= 5 ? "Small" : table.capacity >= 8 ? "Large" : "Medium"}</h4>
+                </div>
+                <div>
+                    <h4>Capacity:</h4>
+                    <h4>{table.capacity} people</h4>
+                </div>
+            </div>
             <div className="table-actions">
                 <button onClick={() => {table.status === "available" ? handleOpenOrder() : handleUpdateOrder()}} disabled={loading()}>
                 {table.status === "available" ? <IoMdAdd /> : <MdOutlineUpdate />}
                 {table.status === "available" ? "Open Order" : "Update Order"}</button>
                 {table.status === "available" ? <button onClick={() => {dispatch(setTableforUpdate(table._id)), dispatch(setTableModal())}}>
                     <TfiWrite /> Update Table</button> : ""}
-                {table.status === "available" ? <button onClick={() => handleDeleteTable()}>
-                    <RiDeleteBinLine /></button> : ""}
                 {table.status === "occupied" ? <button onClick={() => handleGetOrder()} disabled={loading()}><GrView /> View Order</button> : ""}
-                {table.status === "occupied" ? <button onClick={() => handleCheckout()} disabled={loading()}>
-                    <MdOutlineShoppingCartCheckout /></button> : ""}
             </div>
         </div>
     )
