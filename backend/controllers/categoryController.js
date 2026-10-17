@@ -19,7 +19,7 @@ const createNewCategory = asyncHandler(async(req,res) => {
 const toggleCategoryActivity = asyncHandler(async(req, res) => {
     const {categoryId} = req.params
     await changeCatActivity(req.user, categoryId)
-    res.status(200)
+    res.status(200).json({response: "Status activity changed!"})
 }) 
 
 const editCategory = asyncHandler(async(req, res) => {
@@ -32,7 +32,7 @@ const editCategory = asyncHandler(async(req, res) => {
 const deleteCategoryController = asyncHandler(async(req, res) => {
     const {categoryId} = req.params
     await deleteCategory(req.user, categoryId)
-    req.status(200).json({response: "Category deleted successfully!"})
+    res.status(200).json({response: "Category deleted successfully!"})
 })
 
 module.exports = {getAllCategories, createNewCategory, toggleCategoryActivity, editCategory, deleteCategoryController}

@@ -1,6 +1,6 @@
 const express = require("express")
 const {getAllCategories, createNewCategory, toggleCategoryActivity, 
-    editCategory, deleteCategoryController} = require("../controller/categoryController.js")
+    editCategory, deleteCategoryController} = require("../controllers/categoryController.js")
 const {protect} = require("../middlewares/authMiddleware.js")
 const {adminOnly} = require("../middlewares/adminOnlyMiddleware.js")
 const router = express.Router()

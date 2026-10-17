@@ -2,7 +2,7 @@ const Category = require("../models/categoryModel.js")
 
 // get all the categories
 const getCategories = async(workspaceId) => {
-    const categories = await Category.find({workspaceId: workspaceId, isArchive: false})
+    const categories = await Category.find({workspaceId: workspaceId, isArchived: false})
     return categories
 }
 
@@ -44,7 +44,7 @@ const changeCatActivity = async(adminData, categoryId) => {
         throw error
     }
 
-    await Category.findByIdAndUpdate(categoryId, {isActive: !category.isActive }, {runValidators: true, new: true})
+    await Category.findByIdAndUpdate(categoryId, {$set: {isActive: !category.isActive} }, {runValidators: true, new: true})
 } 
 
 // edit the category
