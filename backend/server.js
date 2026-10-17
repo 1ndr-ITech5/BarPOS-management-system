@@ -47,6 +47,8 @@ app.use("/api", require("./routes/paymentRoutes.js"))
 
 app.use("/api/stats", require("./routes/statsRoutes.js"))
 
+app.use("/api/categories", require("./routes/categoryRoutes.js"))
+
 // call middleware to catch the errors
 app.use(errorHandler)
 

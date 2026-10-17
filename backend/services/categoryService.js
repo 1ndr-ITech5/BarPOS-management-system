@@ -44,11 +44,7 @@ const changeCatActivity = async(adminData, categoryId) => {
         throw error
     }
 
-    if (category.isActive === true){
-        await Category.findByIdAndUpdate({_id: categoryId, isActive: false })
-    }else{
-        await Category.findByIdAndUpdate({_id: categoryId, isActive: true })
-    }
+    await Category.findByIdAndUpdate(categoryId, {isActive: !category.isActive }, {runValidators: true, new: true})
 } 
 
 // edit the category
@@ -80,7 +76,7 @@ const editCategoryName = async(adminData, categoryId, categoryName) => {
         throw error
     }
 
-    await Category.findByIdAndUpdate({_id: categoryId, categoryName: clearCategoryName})
+    await Category.findByIdAndUpdate(categoryId, {categoryName: clearCategoryName}, {runValidators: true, new: true})
 }
 
 // delete the category 
@@ -93,7 +89,7 @@ const deleteCategory = async(adminData, categoryId) => {
         throw error
     }
 
-    await Category.findByIdAndDelete({_id: categoryId, workspaceId: adminData.workspaceId})
+    await Category.findOneAndDelete({_id: categoryId, workspaceId: adminData.workspaceId})
 }
 
 module.exports = {getCategories, createCategory, changeCatActivity, editCategoryName, deleteCategory}
