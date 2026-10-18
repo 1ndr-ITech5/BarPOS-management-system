@@ -1,17 +1,26 @@
 const mongoose = require("mongoose")
 
-const menuSchema = new mongoose.Schema({
+const productSchema = new mongoose.Schema({
     productName: {
         type: String,
         required: true
     },
     category: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "Category"
     },
     price: {
         type: Number,
         required: true
+    },
+    isAvailable: {
+        type: Boolean,
+        default: true
+    },
+    isArchived: {
+        type: Boolean,
+        default: false
     },
     offeredBy: {
         type: mongoose.Schema.Types.ObjectId,
@@ -23,4 +32,4 @@ const menuSchema = new mongoose.Schema({
     timestamps: true
 })
 
-module.exports = mongoose.model("Menu", menuSchema)
+module.exports = mongoose.model("Product", productSchema)
