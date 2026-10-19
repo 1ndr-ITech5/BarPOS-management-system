@@ -5,7 +5,7 @@ const OrderItem = require("../models/orderItemModel.js")
 
 const getMenuItems = async(workspaceId) => {
     const products = await Product.find({offeredBy: workspaceId})
-    .populate("offeredBy", "name").populate("category", "categoryName")
+    .populate("offeredBy", "name").populate("categoryId", "categoryName")
     return products
 }
 
@@ -41,7 +41,7 @@ const createNewMenuItem = async(productData, workspaceId) => {
     }
 
     // check if the product is unique in its own category and workspace
-    const dubProduct = await Product.findOne({productName: clearProductName, category: activeCategory._id, offeredBy: workspaceId})
+    const dubProduct = await Product.findOne({productName: clearProductName, categoryId: activeCategory._id, offeredBy: workspaceId})
     if (dubProduct){
         const error = new Error("This product exists already in this category!")
         error.statusCode = 409
@@ -58,7 +58,7 @@ const createNewMenuItem = async(productData, workspaceId) => {
     // create the product
     const newProduct = await Product.create({
         productName: clearProductName, 
-        category: activeCategory._id,
+        categoryId: activeCategory._id,
         price: price,
         offeredBy: workspaceId
     })
@@ -89,7 +89,7 @@ const editMenuItem = async(productData, choosenProduct, workspaceId) => {
         }
         //check if the product's name is unique
         const dubProduct = await Product.findOne({productName: productName.trim(), 
-            category: choosenProduct.category._id, offeredBy: workspaceId, _id: {$ne: choosenProduct._id}})
+            categoryId: choosenProduct.category._id, offeredBy: workspaceId, _id: {$ne: choosenProduct._id}})
         if (dubProduct){
             const error = new Error("The provided product name is figured already in its category!")
             error.statusCode = 409
@@ -106,7 +106,7 @@ const editMenuItem = async(productData, choosenProduct, workspaceId) => {
         }
         if (productName !== undefined){
             const dubProduct = await Product.findOne({productName: productName.trim(), 
-                category: activeCategory._id, offeredBy: workspaceId, _id: {$ne: choosenProduct._id}})
+                categoryId: activeCategory._id, offeredBy: workspaceId, _id: {$ne: choosenProduct._id}})
             if (dubProduct){
                 const error = new Error("The provided product name is figured already in its category!")
                 error.statusCode = 409
@@ -114,7 +114,7 @@ const editMenuItem = async(productData, choosenProduct, workspaceId) => {
             }
         }else{
             const dubProduct = await Product.findOne({productName: choosenProduct.productName, 
-                category: activeCategory._id, offeredBy: workspaceId, _id: {$ne: choosenProduct._id}})
+                categoryId: activeCategory._id, offeredBy: workspaceId, _id: {$ne: choosenProduct._id}})
             if (dubProduct){
                 const error = new Error("The provided product name is figured already in its category!")
                 error.statusCode = 409
@@ -142,7 +142,7 @@ const editMenuItem = async(productData, choosenProduct, workspaceId) => {
         editedAttributes.productName = productName.trim()
     }
     if(category !== undefined){
-        editedAttributes.category = activeCategory._id
+        editedAttributes.categoryId = activeCategory._id
     }
     if(price !== undefined){
         editedAttributes.price = price
@@ -164,6 +164,15 @@ const toggleMenuItemActivity = async(productId, workspaceId) => {
         error.statusCode = 404
         throw error
     } 
+
+    // check if its category is inactive
+    const productsCategory = await Category.findOne(
+        {_id: product.categoryId, workspaceId})
+    if(productsCategory.isActive === false){
+        const error = new Error("Cannot change product's activity when its category is inactive!")
+        error.statusCode = 409
+        throw error
+    }
 
     if(product.isArchived === true){
         const error = new Error("Cannot change status on archived products!")
