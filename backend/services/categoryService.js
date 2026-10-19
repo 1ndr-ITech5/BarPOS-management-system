@@ -177,4 +177,26 @@ const deleteCategory = async(adminData, categoryId) => {
     }
 }
 
-module.exports = {getCategories, createCategory, changeCatActivity, editCategoryName, deleteCategory}
+const restoreCategory = async(categoryId, workspaceId) => {
+    // find the category object
+    const category = await Category.findOne({_id: categoryId, workspaceId: workspaceId})
+    if (!category){
+        const error = new Error("Cannot perform this operation on a category that does not even exist!")
+        error.statusCode = 404
+        throw error
+    }
+    // check if that category is archived
+    if(category.isArchived !== true){
+        const error = new Error("How can you restore a category that is not even archived?")
+        error.statusCode = 409
+        throw error
+    }
+
+    // perform its restore
+    category.isArchived = false
+    category.isActive = true
+    await category.save()
+    return category
+}
+
+module.exports = {getCategories, createCategory, changeCatActivity, editCategoryName, deleteCategory, restoreCategory}

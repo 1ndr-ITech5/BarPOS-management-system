@@ -231,4 +231,36 @@ const deleteMenuItem = async(productId, workspaceId) => {
     }
 }
 
-module.exports = {getMenuItems, createNewMenuItem, editMenuItem, toggleMenuItemActivity, deleteMenuItem}
+const restoreProduct = async(productId, workspaceId) => {
+    // find the product on the workspace
+    const product = await Product.findOne({_id: productId, offeredBy: workspaceId})
+    if (!product){
+        const error = new Error("This product does not exist!")
+        error.statusCode = 404
+        throw error
+    }
+    // make sure the product is archived
+    if (product.isArchived !== true){
+        const error = new Error("The product choosen to restore is actually not archived!")
+        error.statusCode = 409
+        throw error
+    }
+    // check if the product's category is archived
+    const category = await Category.findOne({_id: product.categoryId, workspaceId: workspaceId})
+    if(!category){
+        const error = new Error("The product's category was not found!")
+        error.statusCode = 404
+        throw error
+    }
+    if (category.isArchived === true){
+        const error = new Error("Not possible on restoring a product, when its category is archived!")
+        error.statusCode = 409
+        throw error
+    }
+
+    product.isArchived = false
+    await product.save()
+    return product
+}
+
+module.exports = {getMenuItems, createNewMenuItem, editMenuItem, toggleMenuItemActivity, deleteMenuItem, restoreProduct}
