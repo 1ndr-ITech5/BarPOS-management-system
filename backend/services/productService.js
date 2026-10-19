@@ -2,6 +2,7 @@ const Product = require("../models/productModel.js")
 const Category = require("../models/categoryModel.js")
 const Order = require("../models/orderModel.js")
 const OrderItem = require("../models/orderItemModel.js")
+const {messageError} = require("../utils/messageErrors.js")
 
 const getMenuItems = async(workspaceId) => {
     const products = await Product.find({offeredBy: workspaceId})
@@ -13,16 +14,12 @@ const createNewMenuItem = async(productData, workspaceId) => {
     // check if all fields are given by the user
     const {productName, category, price} = productData
     if (!productName || !category || price === undefined){
-        const error = new Error("Please fill all the required fields!")
-        error.statusCode = 400
-        throw error
+        throw messageError("Please fill all the required fields!", 400)
     }
 
     // check for the product's name
     if (typeof productName !== "string"){
-        const error = new Error("Please ensure that the product's name is in a string form!")
-        error.statusCode = 422
-        throw error
+        throw messageError("The product's name must be given in a string data type form!", 422)
     }
 
     const clearProductName = productName.trim()
@@ -41,119 +38,99 @@ const createNewMenuItem = async(productData, workspaceId) => {
     }
 
     // check if the product is unique in its own category and workspace
-    const dubProduct = await Product.findOne({productName: clearProductName, categoryId: activeCategory._id, offeredBy: workspaceId})
+    const dubProduct = await Product.findOne({productName: clearProductName, offeredBy: workspaceId})
     if (dubProduct){
-        const error = new Error("This product exists already in this category!")
+        const error = new Error("This product exists already in your workspace!")
         error.statusCode = 409
         throw error
     }
 
     // check for the product's price value
     if (typeof price !== "number" || !Number.isFinite(price) || price <= 0){
-        const error = new Error("Please give a positive number for the product's price!")
-        error.statusCode = 422
-        throw error
+        throw messageError("Please give a positive number for the product's price!", 422)
     }
 
     // create the product
-    const newProduct = await Product.create({
-        productName: clearProductName, 
+    let newProduct
+
+    try {
+        newProduct = await Product.create({
+        productName: clearProductName,
         categoryId: activeCategory._id,
-        price: price,
-        offeredBy: workspaceId
-    })
+        price,
+        offeredBy: workspaceId })
+    } catch (error) {
+        if (error.code === 11000) {
+            throw messageError("A product with this name already exists in your workspace!", 409)
+        }
+    }
 
     return newProduct
 }
 
 const editMenuItem = async(productData, choosenProduct, workspaceId) => {
     if (choosenProduct.isArchived === true){
-        const error = new Error("Archived products cannot be edited!")
-        error.statusCode = 409
-        throw error
+        throw messageError("Archived products cannot be edited!", 409)
     }
+
+    // after checks, create the object that is going to set the product's new data
+    const editedAttributes = {}
 
     const {productName, category, price} = productData
-
-    if(productName !== undefined){
-        // check for the product's name
-        if (typeof productName !== "string"){
-            const error = new Error("Please ensure that the product's name is in a string form!")
-            error.statusCode = 422
-            throw error
-        }
-        if (productName.trim() === ""){
-            const error = new Error("Please ensure the name to be written in alphabetical symbols!")
-            error.statusCode = 400
-            throw error
-        }
-        //check if the product's name is unique
-        const dubProduct = await Product.findOne({productName: productName.trim(), 
-            categoryId: choosenProduct.category._id, offeredBy: workspaceId, _id: {$ne: choosenProduct._id}})
-        if (dubProduct){
-            const error = new Error("The provided product name is figured already in its category!")
-            error.statusCode = 409
-            throw error
-        }
-    }
-
-    const activeCategory = await Category.findOne({categoryName: category, isActive: true, workspaceId})
-    if(category !== undefined){
-        if (!activeCategory){
-            const error = new Error("Cannot edit a menu's item category in a non-existing or inactive/archived one!")
-            error.statusCode = 404
-            throw error
-        }
-        if (productName !== undefined){
-            const dubProduct = await Product.findOne({productName: productName.trim(), 
-                categoryId: activeCategory._id, offeredBy: workspaceId, _id: {$ne: choosenProduct._id}})
-            if (dubProduct){
-                const error = new Error("The provided product name is figured already in its category!")
-                error.statusCode = 409
-                throw error
-            }
-        }else{
-            const dubProduct = await Product.findOne({productName: choosenProduct.productName, 
-                categoryId: activeCategory._id, offeredBy: workspaceId, _id: {$ne: choosenProduct._id}})
-            if (dubProduct){
-                const error = new Error("The provided product name is figured already in its category!")
-                error.statusCode = 409
-                throw error
-            }
-        }
-    }
-
-    if(price !== undefined){
-        if (typeof price !== "number" || !Number.isFinite(price) || price <= 0){
-            const error = new Error("Please give a positive number for the product's price!")
-            error.statusCode = 422
-            throw error
-        }
-    }
-
+    // check if any data is given for edit
     if(productName === undefined && category === undefined && price === undefined){
-        const error = new Error("Please ensure giving atleast one new data to edit for any of the fields!")
-        error.statusCode = 400
-        throw error
+        throw messageError("Please ensure giving atleast one new data to edit for any of the fields!", 400)
     }
 
-    const editedAttributes = {}
+    // check the product's name
     if(productName !== undefined){
+        if (typeof productName !== "string" || productName.trim() === ""){
+            throw messageError("The product's name must be a non-empty text!", 422)
+        }
+        
+        //check if the product's name is unique in its workspace
+        const dubProduct = await Product.findOne({
+            productName: productName.trim(),
+            offeredBy: workspaceId,
+            _id: { $ne: choosenProduct._id }})
+        if (dubProduct){
+            throw messageError("This product exists already in your menu!", 409)
+        }
         editedAttributes.productName = productName.trim()
     }
+
+    // check the category
+    const activeCategory = await Category.findOne({categoryName: category, isActive: true, workspaceId})
     if(category !== undefined){
+        if (typeof activeCategory !== "string"){
+            throw messageError("The category name should be given in a string data type format!")
+        }
+        if (!activeCategory){
+            throw messageError("Cannot move a product in a non-existing or inactive/archived category!", 404)
+        }
         editedAttributes.categoryId = activeCategory._id
     }
+
+    // check the price
     if(price !== undefined){
+        if (typeof price !== "number" || !Number.isFinite(price) || price <= 0){
+            throw messageError("Please give a positive number for the product's price!", 422)
+        }
         editedAttributes.price = price
     }
 
-    const updatedItem = await Product.findOneAndUpdate(
-        { _id: choosenProduct._id, offeredBy: workspaceId },
-        { $set: editedAttributes },
-        { runValidators: true, new: true }
-    );
-    return updatedItem
+    try{
+        return await Product.findOneAndUpdate(
+            {_id: choosenProduct._id, offeredBy: workspaceId},
+            {$set: editedAttributes},
+            {runValidators: true, returnDocument: "after"}
+        )
+    }catch(error){
+        if (error.code === 11000){
+            throw messageError("A product with this name already exists in your menu!", 409)
+        }
+        throw error
+    }
 }
 
 const toggleMenuItemActivity = async(productId, workspaceId) => {
