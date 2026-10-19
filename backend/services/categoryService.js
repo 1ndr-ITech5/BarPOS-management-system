@@ -1,8 +1,12 @@
 const Category = require("../models/categoryModel.js")
+const Product = require("../models/productModel.js")
+const Order = require("../models/orderModel.js")
+const OrderItem = require("../models/orderItemModel.js")
+const mongoose = require("mongoose")
 
 // get all the categories
 const getCategories = async(workspaceId) => {
-    const categories = await Category.find({workspaceId: workspaceId, isArchived: false})
+    const categories = await Category.find({workspaceId: workspaceId})
     return categories
 }
 
@@ -44,7 +48,33 @@ const changeCatActivity = async(adminData, categoryId) => {
         throw error
     }
 
-    await Category.findByIdAndUpdate(categoryId, {$set: {isActive: !category.isActive} }, {runValidators: true, new: true})
+    // ensure this category is not archived
+    if(category.isArchived === true){
+        const error = new Error("An archived category cannot be edited!")
+        error.statusCode = 409
+        throw error
+    }
+
+    const session = await mongoose.startSession()
+
+    try{
+        await session.startTransaction()
+
+        const newStatus = category.isActive === true ? false : true
+        // find all the category's products
+        await Product.updateMany(
+            {categoryId: category._id, isArchived: false, offeredBy: adminData.workspaceId},
+            {$set: {isAvailable: newStatus}},
+            {runValidators: true, new: true, session})
+
+        await Category.findByIdAndUpdate(categoryId, {$set: {isActive: newStatus} }, {runValidators: true, new: true, session})
+        await session.commitTransaction()
+    }catch(error){
+        await session.abortTransaction()
+        throw error
+    }finally{
+        await session.endSession()
+    }
 } 
 
 // edit the category
@@ -54,6 +84,13 @@ const editCategoryName = async(adminData, categoryId, categoryName) => {
     if (!category){
         const error = new Error("Cannot edit a category that does not even exist!")
         error.statusCode = 404
+        throw error
+    }
+
+    // ensure this category is not archived
+    if(category.isArchived === true){
+        const error = new Error("An archived category cannot be edited!")
+        error.statusCode = 409
         throw error
     }
 
@@ -70,11 +107,11 @@ const editCategoryName = async(adminData, categoryId, categoryName) => {
     // check if this category name is unique on its own workspace
     const dublicatedCategory = await Category.findOne({workspaceId: adminData.workspaceId, 
         categoryName: clearCategoryName, _id:{$ne: categoryId}})
-    if (dublicatedCategory){
-        const error = new Error("The new category name should be unique!")
-        error.statusCode = 409
-        throw error
-    }
+        if (dublicatedCategory){
+            const error = new Error("The new category name should be unique!")
+            error.statusCode = 409
+            throw error
+        }
 
     await Category.findByIdAndUpdate(categoryId, {categoryName: clearCategoryName}, {runValidators: true, new: true})
 }
@@ -89,7 +126,55 @@ const deleteCategory = async(adminData, categoryId) => {
         throw error
     }
 
-    await Category.findOneAndDelete({_id: categoryId, workspaceId: adminData.workspaceId})
+    if(category.isArchived === true){
+        const error = new Error("Cannot perform delete for an archived category!")
+        error.statusCode = 409
+        throw error
+    }
+
+    const session = await mongoose.startSession()
+
+    try{
+        await session.startTransaction()
+        const products = await Product.find({categoryId: category._id, 
+            offeredBy: adminData.workspaceId}).select("_id").session(session)
+        const productIds = products.map(prod => prod._id)
+        // check if any of these products is on an active order
+        const activeOrders = await Order.find({status: "open", 
+            workspaceId: adminData.workspaceId}).select("_id").session(session)
+        const activeOrderIds = activeOrders.map(order => order._id)
+        const activeOrderItems = await OrderItem.exists(
+            {orderId: {$in: activeOrderIds}, menuItemId: {$in: productIds}}).session(session)
+        if (activeOrderItems){
+            const error = new Error("This operation is not available when a product on this category is on an active order")
+            error.statusCode = 409
+            throw error
+        }
+        // check if the products have historical orders
+        const closedOrders = await Order.find(
+            {status: "closed", workspaceId: adminData.workspaceId}).select("_id").session(session)
+        const closedOrderIds = closedOrders.map(order => order._id)
+        const closedOrderItems = await OrderItem.exists(
+            {orderId: {$in: closedOrderIds}, menuItemId: {$in: productIds}}).session(session)
+        if (closedOrderItems){
+            await Product.updateMany(
+                {categoryId: category._id, isArchived: false, offeredBy: adminData.workspaceId},
+                {$set: {isArchived: true, isAvailable: false}},
+                {runValidators: true, session})
+            await Category.findByIdAndUpdate(categoryId, 
+                {isArchived: true, isActive: false}, 
+                {runValidators: true, new: true, session})
+        }else{
+            await Product.deleteMany({categoryId: category._id, isArchived: false, offeredBy: adminData.workspaceId}, {session})
+            await Category.findOneAndDelete({_id: categoryId, workspaceId: adminData.workspaceId}, {session})
+        }
+        await session.commitTransaction()
+    }catch(error){
+        await session.abortTransaction()
+        throw error
+    }finally{
+        await session.endSession()
+    }
 }
 
 module.exports = {getCategories, createCategory, changeCatActivity, editCategoryName, deleteCategory}
