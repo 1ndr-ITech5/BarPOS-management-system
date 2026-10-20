@@ -1,10 +1,11 @@
 const OrderItem = require("../models/orderItemModel.js")
 const Order = require("../models/orderModel.js")
-const Menu = require("../models/menuModel.js")
+const Product = require("../models/productModel.js")
 const {updateOrderTotal} = require("./orderTotalService.js")
 const mongoose = require("mongoose")
+const {messageError} = require("../utils/messageErrors.js")
 
-const addOrderItem = async(order_id, menuItem_id, userData) => {
+const addOrderItem = async(order_id, productId, userData) => {
     // check if order exists
     const order = await Order.findOne({_id: order_id, workspaceId: userData.workspaceId, status: "open"})
     .populate("waiterId", "first_name last_name")
@@ -14,12 +15,15 @@ const addOrderItem = async(order_id, menuItem_id, userData) => {
         throw error
     }
 
-    // check if the order item is in the menu
-    const item = await Menu.findOne({_id: menuItem_id, offeredBy: userData.workspaceId})
+    // check if the order item is an available product
+    const item = await Product.findOne({_id: productId, offeredBy: userData.workspaceId})
     if (!item){
-        const error = new Error("Item does not exists in the menu!")
-        error.statusCode = 404
-        throw error
+        throw messageError("Product does not exist!", 404)
+    }
+
+    // make sure the product item is not archived or inavailable
+    if(item.isArchived === true || item.isAvailable === true){
+        throw messageError("This product cannot be added to the order, because is archived / not available!", 409)
     }
 
     // check if the waiter who opened it and the admin, have the rights to add items on order
@@ -37,13 +41,13 @@ const addOrderItem = async(order_id, menuItem_id, userData) => {
         // check if same orderItem has been created for that order
         const orderItem = await OrderItem.findOne({
             orderId: order_id,
-            menuItemId: menuItem_id
+            menuItemId: productId
         }).session(session)
         if (!orderItem){
             const quantity = 1
             const newOrderItem = new OrderItem({
                 orderId: order_id,
-                menuItemId: menuItem_id,
+                menuItemId: productId,
                 quantity,
                 unitPrice: item.price,
                 linePrice: quantity * item.price
@@ -84,7 +88,7 @@ const addOrderItem = async(order_id, menuItem_id, userData) => {
     }
 }
 
-const removeOrderItem = async(order_id, menuItem_id, userData) => {
+const removeOrderItem = async(order_id, productId, userData) => {
 
     // check if the order exists
     const order = await Order.findOne({_id: order_id, workspaceId: userData.workspaceId, status: "open"})
@@ -109,7 +113,7 @@ const removeOrderItem = async(order_id, menuItem_id, userData) => {
         await session.startTransaction()
 
         // check if the order item exists in this order
-        const orderItem = await OrderItem.findOne({orderId: order_id, menuItemId: menuItem_id}).session(session)
+        const orderItem = await OrderItem.findOne({orderId: order_id, menuItemId: productId}).session(session)
         if (!orderItem) {
             const error = new Error("This item does not exists in this order!")
             error.statusCode = 404

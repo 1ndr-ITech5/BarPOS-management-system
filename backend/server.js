@@ -33,7 +33,7 @@ app.use("/api/auth", require("./routes/authRoutes.js"))
 // manage paths for table modification
 app.use("/api/tables", require("./routes/tableRoutes.js"))
 
-// manage the menu items
+// manage the products
 app.use("/api/products", require("./routes/productRoutes.js"))
 
 // manage the order manipulation paths

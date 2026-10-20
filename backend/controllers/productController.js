@@ -24,7 +24,7 @@ const toggleProductActivity = asyncHandler(async(req,res) => {
     const {workspaceId} = req.user
     const {productId} = req.params
     const toggledProduct = await toggleMenuItemActivity(productId, workspaceId)
-    res.status(200).json({response: `${toggledProduct.productName} set to ${toggledProduct.isAvailable}.`})
+    res.status(200).json({response: `${toggledProduct.productName} set to ${toggledProduct.isAvailable === false ? "inactive" : "active"}.`})
 })
 
 const deleteProduct = asyncHandler(async(req,res) => {
@@ -38,7 +38,7 @@ const restoreProduct = asyncHandler(async(req,res) => {
     const {workspaceId} = req.user
     const {productId} = req.params
     const product = await restoreMenuItem(productId, workspaceId)
-    res.status(200).json({response: `${product} is back on your active section of menu page!`})
+    res.status(200).json({response: `${product.productName} is back on your active section of menu page!`})
 })
 
 module.exports = {getProducts, createProduct, editProduct, toggleProductActivity, deleteProduct, restoreProduct}
