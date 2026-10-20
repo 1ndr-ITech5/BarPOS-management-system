@@ -34,7 +34,7 @@ app.use("/api/auth", require("./routes/authRoutes.js"))
 app.use("/api/tables", require("./routes/tableRoutes.js"))
 
 // manage the menu items
-app.use("/api/menu-items", require("./routes/menuRoutes.js"))
+app.use("/api/products", require("./routes/productRoutes.js"))
 
 // manage the order manipulation paths
 app.use("/api/order", require("./routes/orderRoutes.js"))
@@ -45,8 +45,10 @@ app.use("/api/order", require("./routes/orderItemRoutes.js"))
 // manage the payment paths
 app.use("/api", require("./routes/paymentRoutes.js"))
 
+// manage the stats
 app.use("/api/stats", require("./routes/statsRoutes.js"))
 
+// manage the categories path
 app.use("/api/categories", require("./routes/categoryRoutes.js"))
 
 // call middleware to catch the errors

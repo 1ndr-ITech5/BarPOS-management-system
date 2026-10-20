@@ -8,7 +8,7 @@ const getTablesController = asyncHandler(async(req,res) => {
 
 const createTableController = asyncHandler(async(req, res) => {
     const newTable = await createTable(req.body, req.user)
-    res.status(200).json({
+    res.status(201).json({
         newTable,
         response: "New table created successfully!"
     })

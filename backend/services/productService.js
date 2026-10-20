@@ -24,25 +24,19 @@ const createNewMenuItem = async(productData, workspaceId) => {
 
     const clearProductName = productName.trim()
     if (clearProductName === ""){
-        const error = new Error("Please ensure the name to be written in alphabetical symbols!")
-        error.statusCode = 400
-        throw error
+        throw messageError("Please ensure the name to be written in alphabetical symbols!", 400)
     }
 
     // check for its category if its in this workspace and is active
     const activeCategory = await Category.findOne({categoryName: category, isActive: true, workspaceId})
     if (!activeCategory){
-        const error = new Error("Cannot create a new menu item in a non-existing category nor inactive/archived one!")
-        error.statusCode = 404
-        throw error
+        throw messageError("Cannot create a new menu item in a non-existing category nor inactive/archived one!", 409)
     }
 
     // check if the product is unique in its own category and workspace
     const dubProduct = await Product.findOne({productName: clearProductName, offeredBy: workspaceId})
     if (dubProduct){
-        const error = new Error("This product exists already in your workspace!")
-        error.statusCode = 409
-        throw error
+        throw messageError("This product exists already in your workspace!", 409)
     }
 
     // check for the product's price value
@@ -68,9 +62,14 @@ const createNewMenuItem = async(productData, workspaceId) => {
     return newProduct
 }
 
-const editMenuItem = async(productData, choosenProduct, workspaceId) => {
-    if (choosenProduct.isArchived === true){
-        throw messageError("Archived products cannot be edited!", 409)
+const editMenuItem = async(productData, productId, workspaceId) => {
+    // check if the product exists
+    const productToEdit = await Product.findOne({_id: productId, offeredBy: workspaceId})
+    if (!productToEdit){
+        throw messageError("The product that you choose to edit, does not exist on your menu!", 404)
+    }
+    if(productToEdit.isArchived === true){
+        throw messageError("An archived product cannot be edited!", 409)
     }
 
     // after checks, create the object that is going to set the product's new data
@@ -92,7 +91,7 @@ const editMenuItem = async(productData, choosenProduct, workspaceId) => {
         const dubProduct = await Product.findOne({
             productName: productName.trim(),
             offeredBy: workspaceId,
-            _id: { $ne: choosenProduct._id }})
+            _id: { $ne: productToEdit._id }})
         if (dubProduct){
             throw messageError("This product exists already in your menu!", 409)
         }
@@ -120,8 +119,8 @@ const editMenuItem = async(productData, choosenProduct, workspaceId) => {
     }
 
     try{
-        return await Product.findOneAndUpdate(
-            {_id: choosenProduct._id, offeredBy: workspaceId},
+        await Product.findOneAndUpdate(
+            {_id: productToEdit._id, offeredBy: workspaceId},
             {$set: editedAttributes},
             {runValidators: true, returnDocument: "after"}
         )
@@ -137,44 +136,35 @@ const toggleMenuItemActivity = async(productId, workspaceId) => {
     // find the item
     const product = await Product.findOne({_id: productId, offeredBy: workspaceId})
     if (!product){
-        const error = new Error("Product does not exist!")
-        error.statusCode = 404
-        throw error
+        throw messageError("Product does not exist!", 404)
     } 
 
     // check if its category is inactive
     const productsCategory = await Category.findOne(
         {_id: product.categoryId, workspaceId})
     if(productsCategory.isActive === false){
-        const error = new Error("Cannot change product's activity when its category is inactive!")
-        error.statusCode = 409
-        throw error
+        throw messageError("Cannot change product's activity when its category is inactive!", 409)
     }
 
     if(product.isArchived === true){
-        const error = new Error("Cannot change status on archived products!")
-        error.statusCode = 409
-        throw error
+        throw messageError("Cannot change status on archived products!", 409)
     }
 
     product.isAvailable = !product.isAvailable
     await product.save()
+    return product
 }
 
 const deleteMenuItem = async(productId, workspaceId) => {
     // find the item
     const product = await Product.findOne({_id: productId, offeredBy: workspaceId})
     if (!product){
-        const error = new Error("Cannot delete a product that does not exist!")
-        error.statusCode = 404
-        throw error
+        throw messageError("Cannot delete a product that does not exist!", 404)
     }
 
     // edge case for archived products
     if (product.isArchived === true){
-        const error = new Error("Cannot perform this operation on an archived product!")
-        error.statusCode = 409
-        throw error
+        throw messageError("Cannot perform this operation on an archived product!", 409)
     }
 
     // ensure the product does not get deleted when in a open order
@@ -186,9 +176,7 @@ const deleteMenuItem = async(productId, workspaceId) => {
         orderId: {$in: openOrderIds}
     })
     if (productInOpenOrders){
-        const error = new Error("Cannot delete a product that is on an open order!")
-        error.statusCode = 409
-        throw error
+        throw messageError("Cannot delete a product that is on an open order!", 409)
     }
 
     // find if this product has figured out in any historical order
@@ -208,31 +196,23 @@ const deleteMenuItem = async(productId, workspaceId) => {
     }
 }
 
-const restoreProduct = async(productId, workspaceId) => {
+const restoreMenuItem = async(productId, workspaceId) => {
     // find the product on the workspace
     const product = await Product.findOne({_id: productId, offeredBy: workspaceId})
     if (!product){
-        const error = new Error("This product does not exist!")
-        error.statusCode = 404
-        throw error
+        throw messageError("This product does not exist!", 404)
     }
     // make sure the product is archived
     if (product.isArchived !== true){
-        const error = new Error("The product choosen to restore is actually not archived!")
-        error.statusCode = 409
-        throw error
+        throw messageError("The product choosen to restore is actually not archived!", 409)
     }
     // check if the product's category is archived
     const category = await Category.findOne({_id: product.categoryId, workspaceId: workspaceId})
     if(!category){
-        const error = new Error("The product's category was not found!")
-        error.statusCode = 404
-        throw error
+        throw messageError("The product's category was not found!", 404)
     }
     if (category.isArchived === true){
-        const error = new Error("Not possible on restoring a product, when its category is archived!")
-        error.statusCode = 409
-        throw error
+        throw messageError("Not possible on restoring a product, when its category is archived!", 409)
     }
 
     product.isArchived = false
@@ -240,4 +220,4 @@ const restoreProduct = async(productId, workspaceId) => {
     return product
 }
 
-module.exports = {getMenuItems, createNewMenuItem, editMenuItem, toggleMenuItemActivity, deleteMenuItem, restoreProduct}
+module.exports = {getMenuItems, createNewMenuItem, editMenuItem, toggleMenuItemActivity, deleteMenuItem, restoreMenuItem}
