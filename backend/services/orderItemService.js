@@ -1,6 +1,7 @@
 const OrderItem = require("../models/orderItemModel.js")
 const Order = require("../models/orderModel.js")
 const Product = require("../models/productModel.js")
+const Category = require("../models/categoryModel.js")
 const {updateOrderTotal} = require("./orderTotalService.js")
 const mongoose = require("mongoose")
 const {messageError} = require("../utils/messageErrors.js")
@@ -21,8 +22,15 @@ const addOrderItem = async(order_id, productId, userData) => {
         throw messageError("Product does not exist!", 404)
     }
 
-    // make sure the product item is not archived or inavailable
-    if(item.isArchived === true || item.isAvailable === true){
+    // don't allow adding items on inactive / archived categories
+    const itemCategory = await Category.findOne({_id: item.categoryId, workspaceId: userData.workspaceId})
+    if(!itemCategory){
+        throw messageError("The item's category does not exist!", 404)
+    }
+    if(itemCategory.isActive !== true || itemCategory.isArchived !== false){
+        throw messageError("The product's category is inactive / archived! It cannot be added!", 409)
+    }
+    if(item.isArchived === true || item.isAvailable === false){
         throw messageError("This product cannot be added to the order, because is archived / not available!", 409)
     }
 

@@ -140,10 +140,9 @@ const toggleMenuItemActivity = async(productId, workspaceId) => {
     } 
 
     // check if its category is inactive
-    const productsCategory = await Category.findOne(
-        {_id: product.categoryId, workspaceId})
-    if(productsCategory.isActive === false){
-        throw messageError("Cannot change product's activity when its category is inactive!", 409)
+    const productsCategory = await Category.findOne({_id: product.categoryId, workspaceId})
+    if(productsCategory.isActive === false || productsCategory.isArchived === true){
+        throw messageError("Cannot change product's activity when its category is inactive / archived!", 409)
     }
 
     if(product.isArchived === true){

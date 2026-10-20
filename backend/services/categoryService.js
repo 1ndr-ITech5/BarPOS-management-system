@@ -59,15 +59,9 @@ const changeCatActivity = async(adminData, categoryId) => {
 
     try{
         await session.startTransaction()
-
         const newStatus = category.isActive === true ? false : true
-        // find all the category's products
-        await Product.updateMany(
-            {categoryId: category._id, isArchived: false, offeredBy: adminData.workspaceId},
-            {$set: {isAvailable: newStatus}},
-            {runValidators: true, new: true, session})
-
-        await Category.findByIdAndUpdate(categoryId, {$set: {isActive: newStatus} }, {runValidators: true, new: true, session})
+        await Category.findByIdAndUpdate(categoryId, 
+            {$set: {isActive: newStatus} }, {runValidators: true, new: true, session})
         await session.commitTransaction()
     }catch(error){
         await session.abortTransaction()
