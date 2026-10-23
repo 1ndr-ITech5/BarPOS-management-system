@@ -90,9 +90,7 @@ const editCategoryName = async(adminData, categoryId, categoryName) => {
 
     // trim the category name
     const clearCategoryName = categoryName.trim()
-
-    // check if the name field is given
-    if (!clearCategoryName){
+    if (typeof clearCategoryName !== "string" || clearCategoryName === ""){
         const error = new Error("Please enter the category name!")
         error.statusCode = 400
         throw error
