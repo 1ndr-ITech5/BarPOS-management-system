@@ -7,7 +7,7 @@ import DiscardModal from "../components/modals/DiscardModal.jsx";
 import "../comp-style/orderPage-style/OrderPage.css";
 import {useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
-import {useGetItemsQuery} from "../store/apis/itemsApi.js";
+import {useGetProductsQuery} from "../store/apis/productsApi.js";
 import {clearCurrentOrder} from "../store/slices/orderSlice.js";
 import {useAddItemMutation, useRemoveItemMutation} from "../store/apis/orderItemsApi.js";
 import {useGetOrderByIdQuery} from "../store/apis/orderApi.js";
@@ -23,7 +23,7 @@ const OrderPage = () => {
 
     const orderId = useSelector(state => state.order.currentOrderId)
 
-    const {data: items, isLoading} = useGetItemsQuery();
+    const {data: items, isLoading} = useGetProductsQuery();
     const {data: orderData, isLoading: orderLoading} = useGetOrderByIdQuery(orderId, {skip: !orderId})
 
     const [selectedCategory, setCategory] = useState("All")
