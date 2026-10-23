@@ -3,6 +3,7 @@ import Login from "./pages/Login.jsx";
 import ProtectedLayout from "./layout/ProtectedLayout.jsx";
 import {Routes, Route, Navigate} from "react-router-dom";
 import MyOrders from "./pages/MyOrders.jsx";
+import MenuManagment from "./pages/MenuManagment.jsx";
 import AllOrders from "./pages/AllOrders.jsx";
 import Payments from "./pages/Payments.jsx";
 import OrderPage from "./pages/OrderPage.jsx";
@@ -31,6 +32,7 @@ const App = () => {
               </Route>
               <Route element={<ProtectedRoutes allowedRoles={"admin"}/>}>
                 <Route element={<ProtectedLayout/>}>
+                  <Route path="/menu-managment" element={<MenuManagment/>}/>
                   <Route path="/all-orders" element={<AllOrders/>}/>
                   <Route path="/payments" element={<Payments/>}/>
                 </Route>
