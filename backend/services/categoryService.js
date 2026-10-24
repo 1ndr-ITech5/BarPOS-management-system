@@ -156,11 +156,14 @@ const deleteCategory = async(adminData, categoryId) => {
             await Category.findByIdAndUpdate(categoryId, 
                 {isArchived: true, isActive: false}, 
                 {runValidators: true, new: true, session})
+            await session.commitTransaction()
+            return "archived"
         }else{
             await Product.deleteMany({categoryId: category._id, isArchived: false, offeredBy: adminData.workspaceId}, {session})
             await Category.findOneAndDelete({_id: categoryId, workspaceId: adminData.workspaceId}, {session})
+            await session.commitTransaction()
+            return "deleted"
         }
-        await session.commitTransaction()
     }catch(error){
         await session.abortTransaction()
         throw error

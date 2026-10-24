@@ -31,8 +31,12 @@ const editCategory = asyncHandler(async(req, res) => {
 
 const deleteCategoryController = asyncHandler(async(req, res) => {
     const {categoryId} = req.params
-    await deleteCategory(req.user, categoryId)
-    res.status(200).json({response: "Category deleted successfully!"})
+    const action = await deleteCategory(req.user, categoryId)
+    if (action === "deleted"){
+        res.status(200).json({response: "Category deleted successfully!"})
+    }else{
+        res.status(200).json({response: "Category listed as archived!"})
+    }
 })
 
 const restoreCategoryController = asyncHandler(async(req, res) => {
