@@ -42,7 +42,9 @@ const MenuManagment = () => {
                 <button className="tab-products" onClick={() => dispatch(setSubpage("products"))}>Products</button>
                 <button className="tab-categories" onClick={() => dispatch(setSubpage("categories"))}>Categories</button>
             </div>
-            {activeTab === "products" ? <Product/> : <Category allCategories={categories} allProducts={products}/>}
+            {activeTab === "products" ? 
+                <Product allCategories={categories} allProducts={products}/> : 
+                <Category allCategories={categories} allProducts={products}/>}
         </div>
     )
 }
