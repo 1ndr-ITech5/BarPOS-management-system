@@ -99,11 +99,15 @@ const editMenuItem = async(productData, productId, workspaceId) => {
     }
 
     // check the category
-    const activeCategory = await Category.findOne({categoryName: category, isActive: true, workspaceId})
-    if(category !== undefined){
-        if (typeof activeCategory !== "string"){
-            throw messageError("The category name should be given in a string data type format!")
+    if (category !== undefined){
+        if (typeof category !== "string"){
+            throw messageError("The category name must be a text!", 422)
         }
+        const activeCategory = await Category.findOne({
+            categoryName: category.trim(),
+            isActive: true,
+            workspaceId
+        })
         if (!activeCategory){
             throw messageError("Cannot move a product in a non-existing or inactive/archived category!", 404)
         }
