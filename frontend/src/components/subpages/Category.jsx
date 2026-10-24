@@ -9,9 +9,7 @@ const Category = ({allCategories, allProducts}) => {
     const [tab, setTab] = useState("active")
 
     const shownCategories = allCategories.filter(
-        tab === "active" ? category =>
-            category.isActive === true && category.isArchived === false
-            : category => category.isArchived === true
+        tab === "active" ? category => category.isArchived === false : category => category.isArchived === true
     );
 
     const countProducts = (categoryId) =>

@@ -3,11 +3,16 @@ import {toast} from "react-toastify";
 import {FaPencilAlt} from "react-icons/fa";
 import {RiDeleteBin6Line} from "react-icons/ri";
 import {CiCircleRemove} from "react-icons/ci";
-import {useEditCategoryMutation} from "../../store/apis/categoryApi.js";
+import {useEditCategoryMutation, useToggleActivityMutation, 
+    useDeleteCategoryMutation, useRestoreCategoryMutation} from "../../store/apis/categoryApi.js";
 
 const CategoryRow = ({category, index, productCount}) => {
 
     const [editCategory, {isLoading}] = useEditCategoryMutation();
+    const [toggleActivity] = useToggleActivityMutation();
+    const [deleteCategory, {isLoading: deletingCategory}] = useDeleteCategoryMutation();
+    const [restoreCategory, {isLoading: restoringCategory}] = useRestoreCategoryMutation();
+
     const [isEditing, setIsEditing] = useState(false)
     const [categoryName, setCategoryName] = useState(category.categoryName)
 
@@ -21,6 +26,32 @@ const CategoryRow = ({category, index, productCount}) => {
             setIsEditing(false)
         }catch(error){
             toast.error(error?.data?.message || "Could not edit the category!")
+        }
+    }
+
+    const handleSwitchActivity = async() => {
+        try{
+            await toggleActivity(category._id).unwrap()
+        }catch(error){
+            console.log(error.data.message)
+        }
+    }
+
+    const handleDeleteCategory = async() => {
+        try{
+            const response = await deleteCategory(category._id).unwrap()
+            toast.success(response.response)
+        }catch(error){
+            toast.error(error.data.message)
+        }
+    }
+
+    const handleRestoreCategory = async() => {
+        try{
+            const response = await restoreCategory(category._id).unwrap()
+            toast.success(response.response)
+        }catch(error){
+            toast.error(error.data.message)
         }
     }
 
@@ -38,14 +69,20 @@ const CategoryRow = ({category, index, productCount}) => {
             </td>
             <td>{productCount}</td>
             <td>
-                <label className="toggle-switch">
+                <label className="toggle-switch" onClick={handleSwitchActivity}>
                     <input type="checkbox" checked={category.isActive} disabled={category.isArchived} readOnly/>
                     <span className="toggle-slider"></span>
                 </label>
             </td>
             <td>
-                <button onClick={() => setIsEditing(true)} disabled={category.isArchived || isLoading}><FaPencilAlt /></button>
-                <button disabled={category.isArchived || isLoading}><RiDeleteBin6Line /></button>
+                {category.isArchived === true ? 
+                <button onClick={handleRestoreCategory} disabled={restoringCategory}>Restore</button> : 
+                <div>
+                    <button onClick={() => setIsEditing(true)} disabled={isLoading || deletingCategory}>
+                        <FaPencilAlt /></button>
+                    <button onClick={handleDeleteCategory} disabled={isLoading || deletingCategory}>
+                        <RiDeleteBin6Line /></button>
+                </div>}
             </td>
         </tr>
     )
