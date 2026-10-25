@@ -7,12 +7,12 @@ import DiscardModal from "../components/modals/DiscardModal.jsx";
 import "../comp-style/orderPage-style/OrderPage.css";
 import {useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
-import {useGetProductsQuery} from "../store/apis/productsApi.js";
 import {clearCurrentOrder} from "../store/slices/orderSlice.js";
 import {setPreBill} from "../store/slices/orderSlice.js";
 import {useAddItemMutation, useRemoveItemMutation} from "../store/apis/orderItemsApi.js";
 import {useGetOrderByIdQuery} from "../store/apis/orderApi.js";
 import Spinner from "../components/other/Spinner.jsx";
+import {toast} from "react-toastify";
 
 const OrderPage = () => {
 
@@ -25,13 +25,12 @@ const OrderPage = () => {
     const orderId = useSelector(state => state.order.currentOrderId)
     const preBill = useSelector(state => state.order.preBillOrderId)
 
-    const {data: items, isLoading} = useGetProductsQuery();
     const {data: orderData, isLoading: orderLoading} = useGetOrderByIdQuery(orderId, {skip: !orderId})
 
     const [selectedCategory, setCategory] = useState("All")
     const [showDiscard, setShowDiscard] = useState(false)
 
-    if (isLoading || orderLoading) {
+    if (orderLoading) {
         return (
             <div>
                 <h2>Loading order...</h2>
@@ -51,7 +50,7 @@ const OrderPage = () => {
         try{
             await addItem({orderId, menuItemId: productId}).unwrap()
         }catch(error){
-            console.log(error)
+            toast.error(error?.data?.message)
         }
     }
 
@@ -60,9 +59,9 @@ const OrderPage = () => {
         e.preventDefault()
 
         try{
-            await removeItem({orderId, menuItemId: productId})
+            await removeItem({orderId, menuItemId: productId}).unwrap()
         }catch(error){
-            console.log(error)
+            toast.error(error?.data?.message)
         }
     }
 
@@ -74,9 +73,10 @@ const OrderPage = () => {
                 <h1>Order's Page</h1>
             </div>
             <div className="order-page-columns">
-                <Categories menuItems={items} selectedCategory={selectedCategory} setCategory={setCategory}/>
-                <Products menuItems={items} selectedCategory={selectedCategory} addProduct={handleAddItems} orderId={orderData?.order?._id}/>
-                <OrderItems orderItems={orderData ? orderData.orderItems : []} addProduct={handleAddItems} removeProduct={handleRemoveItems}/>
+                <Categories selectedCategory={selectedCategory} setCategory={setCategory}/>
+                <Products selectedCategory={selectedCategory} addProduct={handleAddItems} orderId={orderData?.order?._id}/>
+                <OrderItems orderItems={orderData ? orderData.orderItems : []} 
+                addProduct={handleAddItems} removeProduct={handleRemoveItems}/>
             </div>
             <div className="order-buttons">
                 <button onClick={() => setShowDiscard(true)}>Delete</button>

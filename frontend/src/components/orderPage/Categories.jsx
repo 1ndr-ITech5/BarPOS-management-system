@@ -1,17 +1,30 @@
 import "../../comp-style/orderPage-style/Categories.css";
+import {useGetCategoriesQuery} from "../../store/apis/categoryApi.js";
+import Spinner from "../other/Spinner.jsx";
 
-const Categories = ({menuItems, selectedCategory, setCategory}) => {
+const Categories = ({selectedCategory, setCategory}) => {
+    const {data: categories, isLoading} = useGetCategoriesQuery();
 
-    const categories = ["All", ...new Set(menuItems.map((item) => item.categoryId?.categoryName))]
+    if(isLoading){
+        return (
+            <div>
+                <h3>Loading categories...</h3>
+                <Spinner/>
+            </div>
+        )
+    }
 
     return (
         <div>
             <h1>Categories</h1>
             <div className="categories">
+                <button onClick={() => setCategory("All")}>All</button>
                 {categories.map(category => (
-                    <button key={category} className={selectedCategory === category ? "selectedCategory" : "otherCategory"}
-                    onClick={() => setCategory(category)}>
-                        {category}
+                    category.isArchived ? "" : 
+                    <button key={category._id} 
+                    className={selectedCategory === category.categoryName ? "selectedCategory" : "otherCategory"}
+                    onClick={() => setCategory(category.categoryName)} disabled={!category.isActive}>
+                        {category.categoryName}
                     </button>
                 ))}
             </div>
