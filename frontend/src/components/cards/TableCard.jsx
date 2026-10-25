@@ -1,10 +1,11 @@
 import '../../comp-style/cards-style/TableCard.css';
 import {useCreateOrderMutation, useLazyGetOrderByTableQuery} from "../../store/apis/orderApi.js";
 import {useDeleteTableMutation} from "../../store/apis/tablesApi.js";
-import {setCurrentOrder, setViewOrder} from "../../store/slices/orderSlice.js";
+import {setCurrentOrder} from "../../store/slices/orderSlice.js";
 import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {setTableModal, setTableforUpdate} from "../../store/slices/modalSlice.js";
+import {setPreBill} from "../../store/slices/orderSlice.js";
 import {toast} from "react-toastify";
 import { IoMdAdd } from "react-icons/io";
 import { MdOutlineUpdate } from "react-icons/md";
@@ -45,9 +46,9 @@ const TableCard = ({table, setOrder}) => {
 
     const handleGetOrder = async() => {
         try {
-            const response = await getOrderByTable(table._id).unwrap()
-            setOrder(response)
-            dispatch(setViewOrder(true))
+            const orderData = await getOrderByTable(table._id).unwrap()
+            setOrder(orderData)
+            dispatch(setPreBill(orderData.order._id))
         } catch (error) {
             toast.error(error?.data?.message || "You are not authorized to access this order.")
         }

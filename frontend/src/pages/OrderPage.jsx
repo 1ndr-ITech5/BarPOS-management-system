@@ -9,6 +9,7 @@ import {useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
 import {useGetProductsQuery} from "../store/apis/productsApi.js";
 import {clearCurrentOrder} from "../store/slices/orderSlice.js";
+import {setPreBill} from "../store/slices/orderSlice.js";
 import {useAddItemMutation, useRemoveItemMutation} from "../store/apis/orderItemsApi.js";
 import {useGetOrderByIdQuery} from "../store/apis/orderApi.js";
 import Spinner from "../components/other/Spinner.jsx";
@@ -22,12 +23,12 @@ const OrderPage = () => {
     const [removeItem] = useRemoveItemMutation();
 
     const orderId = useSelector(state => state.order.currentOrderId)
+    const preBill = useSelector(state => state.order.preBillOrderId)
 
     const {data: items, isLoading} = useGetProductsQuery();
     const {data: orderData, isLoading: orderLoading} = useGetOrderByIdQuery(orderId, {skip: !orderId})
 
     const [selectedCategory, setCategory] = useState("All")
-    const [preBill, setPreBill] = useState(false)
     const [showDiscard, setShowDiscard] = useState(false)
 
     if (isLoading || orderLoading) {
@@ -80,10 +81,11 @@ const OrderPage = () => {
             <div className="order-buttons">
                 <button onClick={() => setShowDiscard(true)}>Delete</button>
                 <button onClick={() => nav("/checkout")}>Checkout</button>
-                <button onClick={() => setPreBill(true)}>Get Pre-Bill</button>
+                <button onClick={() => dispatch(setPreBill(orderId))}>Get Pre-Bill</button>
             </div>
-            {preBill && <PreBill changePreBillModal={setPreBill} orderData={orderData}/>}
-            {showDiscard && <DiscardModal changeDiscardModal={handleDiscard} setShowDiscard={setShowDiscard} tableId={orderData.order.tableId._id}/>}
+            {preBill && <PreBill orderData={orderData}/>}
+            {showDiscard && <DiscardModal changeDiscardModal={handleDiscard} 
+                setShowDiscard={setShowDiscard} tableId={orderData.order.tableId._id}/>}
         </div>
     )
 }

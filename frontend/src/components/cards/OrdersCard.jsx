@@ -1,8 +1,10 @@
-import {useDispatch} from "react-redux";
+import {useGetOrderByIdQuery} from "../../store/apis/orderApi.js";
+import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {setCurrentOrder} from "../../store/slices/orderSlice.js";
+import {setPreBill} from "../../store/slices/orderSlice.js";
 import {TimeReform} from "../../utils/DateFormat.js";
-import {useSelector} from "react-redux";
+import PreBill from "../other/PreBill.jsx";
 
 const MyOrdersCard = ({order}) => {
 
@@ -10,6 +12,10 @@ const MyOrdersCard = ({order}) => {
     const nav = useNavigate();
 
     const user = useSelector(state => state.user.user)
+    const preBillOrderId = useSelector(state => state.order.preBillOrderId)
+    const viewPreBill = preBillOrderId === order._id
+
+    const {data: orderData} = useGetOrderByIdQuery(order._id, {skip: !viewPreBill});
 
     const handleUpdateOrder = (e) => {
         e.preventDefault();
@@ -42,6 +48,10 @@ const MyOrdersCard = ({order}) => {
             <div>
                 <button onClick={(e) => handleUpdateOrder(e)}>Update Order</button>
                 <button onClick={(e) => handleCheckout(e)}>Checkout</button>
+                <button onClick={() => dispatch(setPreBill(order._id))}>View</button>
+            </div>
+            <div>
+                {viewPreBill && orderData && <PreBill orderData={orderData}/>}
             </div>
         </div>
     )

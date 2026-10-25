@@ -17,8 +17,8 @@ const Tables = () => {
     const {data: tables, isLoading} = useGetTablesQuery(undefined, {skip: !workspaceId, refetchOnMountOrArgChange: true})
 
     const [orderData, setOrderData] = useState(null)
-    const viewOrder = useSelector(state => state.order.viewOrder)
     const tableModal = useSelector(state => state.modals.tableModal)
+    const preBill = useSelector(state => state.order.preBillOrderId)
     
     if (isLoading) return (
         <div>
@@ -46,7 +46,7 @@ const Tables = () => {
                     ))}
                 </div>
             </div>
-            {viewOrder && <PreBill orderData={orderData}/>}
+            {preBill && <PreBill orderData={orderData}/>}
             {tableModal && <TableModal/>}
         </div>
     )
