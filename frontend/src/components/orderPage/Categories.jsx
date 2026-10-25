@@ -2,7 +2,7 @@ import "../../comp-style/orderPage-style/Categories.css";
 
 const Categories = ({menuItems, selectedCategory, setCategory}) => {
 
-    const categories = ["All", ...new Set(menuItems.map((item) => item.category))]
+    const categories = ["All", ...new Set(menuItems.map((item) => item.categoryId?.categoryName))]
 
     return (
         <div>
