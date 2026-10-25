@@ -2,7 +2,7 @@ import '../../comp-style/cards-style/TableCard.css';
 import {useCreateOrderMutation, useLazyGetOrderByTableQuery} from "../../store/apis/orderApi.js";
 import {useDeleteTableMutation} from "../../store/apis/tablesApi.js";
 import {setCurrentOrder} from "../../store/slices/orderSlice.js";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {setTableModal, setTableforUpdate} from "../../store/slices/modalSlice.js";
 import {setPreBill} from "../../store/slices/orderSlice.js";
@@ -19,6 +19,8 @@ const TableCard = ({table, setOrder}) => {
 
     const dispatch = useDispatch()
     const nav = useNavigate()
+
+    const user = useSelector(state => state.user.user) 
 
     const [createOrder, {isLoading: processLoading}] = useCreateOrderMutation();
     const [getOrderByTable, {isLoading: orderLoading}] = useLazyGetOrderByTableQuery();
@@ -87,8 +89,10 @@ const TableCard = ({table, setOrder}) => {
         <div className={`table-card ${table.status}`}>
             <div className="table-card-header">
                 <h3>Table: <span>{table.tableName}</span></h3>
-                {table.status === "available" ? <button onClick={() => handleDeleteTable()} disabled={deletingTable}>
-                    <RiDeleteBinLine /></button> : ""}
+                {user.role === "admin" ? table.status === "available" ? 
+                    <button onClick={() => handleDeleteTable()} disabled={deletingTable}>
+                    <RiDeleteBinLine /></button> : "" : ""}
+                    
                 {table.status === "occupied" ? <button onClick={() => handleCheckout()} disabled={loading()}>
                     <MdOutlineShoppingCartCheckout /></button> : ""}
             </div>
@@ -107,8 +111,11 @@ const TableCard = ({table, setOrder}) => {
                 <button onClick={() => {table.status === "available" ? handleOpenOrder() : handleUpdateOrder()}} disabled={loading()}>
                 {table.status === "available" ? <IoMdAdd /> : <MdOutlineUpdate />}
                 {table.status === "available" ? "Open Order" : "Update Order"}</button>
-                {table.status === "available" ? <button onClick={() => {dispatch(setTableforUpdate(table._id)), dispatch(setTableModal())}}>
-                    <TfiWrite /> Update Table</button> : ""}
+
+                {user.role === "admin" ? table.status === "available" ? 
+                    <button onClick={() => {dispatch(setTableforUpdate(table._id)), dispatch(setTableModal())}}>
+                    <TfiWrite /> Update Table</button> : "" : ""}
+
                 {table.status === "occupied" ? <button onClick={() => handleGetOrder()} disabled={loading()}><GrView /> View Order</button> : ""}
             </div>
         </div>

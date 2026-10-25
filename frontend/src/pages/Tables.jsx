@@ -13,6 +13,7 @@ import '../pages-style/Tables.css';
 const Tables = () => {
     const dispatch = useDispatch()
     const workspaceId = useSelector((state) => state.modals.currentWorkspace)
+    const user = useSelector(state => state.user.user)
 
     const {data: tables, isLoading} = useGetTablesQuery(undefined, {skip: !workspaceId, refetchOnMountOrArgChange: true})
 
@@ -34,7 +35,7 @@ const Tables = () => {
                     <h1>Tables</h1>
                     <h2>Live floor view</h2>
                 </div>
-                <button onClick={() => dispatch(setTableModal())}><IoMdAdd /> Add table</button>
+                {user.role === "admin" ? <button onClick={() => dispatch(setTableModal())}><IoMdAdd /> Add table</button> : ""}
                 <div className="table-stats">
                     <StatusCard tables={tables} filter="all"/>
                     <StatusCard tables={tables} filter="available"/>
