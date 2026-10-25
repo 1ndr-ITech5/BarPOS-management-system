@@ -1,7 +1,7 @@
 import logo from "../assets/logo.png";
 import {FiSun} from "react-icons/fi";
 import { IoMoonOutline } from "react-icons/io5";
-import {changeToggle, resetToggle} from "../store/slices/modalSlice.js";
+import {changeToggle, resetToggle} from "../store/slices/pagesSlice.js";
 import UserPanel from "../components/user/UserPanel.jsx";
 import {clearCurrentOrder} from "../store/slices/orderSlice.js";
 import {formatDate} from "../utils/DateFormat.js";
@@ -17,7 +17,7 @@ const Navbar = () => {
     const today = new Date()
 
     const user = useSelector((state) => state.user.user)
-    const toggle = useSelector((state) => state.modals.toggle)
+    const toggle = useSelector((state) => state.pages.toggle)
 
     useEffect(() => {
         localStorage.setItem("toggle", toggle);

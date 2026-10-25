@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {clearCurrentOrder} from "../slices/orderSlice.js";
-import {resetToggle} from "../slices/modalSlice.js";
+import {resetToggle} from "../slices/pagesSlice.js";
 import {logout} from "../slices/authSlice.js";
 import {toast} from "react-toastify";
 
