@@ -40,10 +40,10 @@ const ProductModal = ({categories, goBack}) => {
                     onChange={(e) => handleSetData(e)} placeholder="Type product's name..."/>
 
                 <label>Category</label>
-                <select name="category" value={productData.category} onChange={(e) => handleSetData(e)}>
-                    {categories.map(category => 
-                        category.isArchived === false ? <option>{category.categoryName}</option> : ""
-                    )}
+                <select name="category" value={productData.category} onChange={handleSetData}>
+                    <option value="">Select Category</option>
+                    {categories.filter(category => category.isArchived === false).map(category => (
+                    <option key={category._id} value={category.categoryName}>{category.categoryName}</option>))}
                 </select>
 
                 <label>Price</label>

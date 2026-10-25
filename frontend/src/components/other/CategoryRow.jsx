@@ -30,11 +30,11 @@ const CategoryRow = ({category, index, productCount}) => {
     }
 
     const handleSwitchActivity = async() => {
+        if(category.isArchived) return;
+        
         try{
             await toggleActivity(category._id).unwrap()
-        }catch(error){
-            console.log(error.data.message)
-        }
+        }catch{}
     }
 
     const handleDeleteCategory = async() => {
