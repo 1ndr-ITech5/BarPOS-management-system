@@ -55,20 +55,10 @@ const changeCatActivity = async(adminData, categoryId) => {
         throw error
     }
 
-    const session = await mongoose.startSession()
-
-    try{
-        await session.startTransaction()
-        const newStatus = category.isActive === true ? false : true
-        await Category.findByIdAndUpdate(categoryId, 
-            {$set: {isActive: newStatus} }, {runValidators: true, new: true, session})
-        await session.commitTransaction()
-    }catch(error){
-        await session.abortTransaction()
-        throw error
-    }finally{
-        await session.endSession()
-    }
+    const newStatus = category.isActive === true ? false : true
+    await Category.findByIdAndUpdate(categoryId, 
+        {$set: {isActive: newStatus} }, 
+        { runValidators: true, returnDocument: "after" })
 } 
 
 // edit the category
@@ -105,7 +95,7 @@ const editCategoryName = async(adminData, categoryId, categoryName) => {
             throw error
         }
 
-    await Category.findByIdAndUpdate(categoryId, {categoryName: clearCategoryName}, {runValidators: true, new: true})
+    await Category.findByIdAndUpdate(categoryId, {categoryName: clearCategoryName}, {runValidators: true, returnDocument: "after"})
 }
 
 // delete the category 
