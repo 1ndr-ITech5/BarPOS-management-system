@@ -6,7 +6,7 @@ const {messageError} = require("../utils/messageErrors.js")
 
 const getMenuItems = async(workspaceId) => {
     const products = await Product.find({offeredBy: workspaceId})
-    .populate("offeredBy", "name").populate("categoryId", "categoryName")
+    .populate("offeredBy", "name").populate("categoryId", "categoryName isActive isArchived")
     return products
 }
 

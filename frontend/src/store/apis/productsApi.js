@@ -7,7 +7,7 @@ export const productsApi = api.injectEndpoints({
                 url: "/api/products",
                 method: "GET"
             }),
-            providesTags: ["Products"]
+            providesTags: ["Products", "Category"]
         }),
         createProduct: builder.mutation({
             query: (productData) => ({
