@@ -9,6 +9,7 @@ const modalSlice = createSlice({
         tableModal: false,
         updatingTableId: null,
         currentWorkspace: workspaceId || null,
+        discardModal: false
     },
     reducers: {
         setCurrentWorkspace(state, action){
@@ -32,10 +33,13 @@ const modalSlice = createSlice({
         },
         removeTableforUpdate(state){
             state.updatingTableId = null
+        },
+        setDiscardModal(state, action){
+            state.discardModal = action.payload
         }
     }
 })
 
 export const {setCurrentWorkspace, setViewReceipt, setTableModal, setTableforUpdate, 
-    removeTableforUpdate} = modalSlice.actions;
+    removeTableforUpdate, setDiscardModal} = modalSlice.actions;
 export default modalSlice.reducer;

@@ -7,15 +7,14 @@ import DiscardModal from "../components/modals/DiscardModal.jsx";
 import "../comp-style/orderPage-style/OrderPage.css";
 import {useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
-import {clearCurrentOrder} from "../store/slices/orderSlice.js";
-import {setPreBill} from "../store/slices/orderSlice.js";
+import {clearCurrentOrder, setPreBill} from "../store/slices/orderSlice.js";
+import {setDiscardModal} from "../store/slices/modalSlice.js";
 import {useAddItemMutation, useRemoveItemMutation} from "../store/apis/orderItemsApi.js";
 import {useGetOrderByIdQuery} from "../store/apis/orderApi.js";
 import Spinner from "../components/other/Spinner.jsx";
 import {toast} from "react-toastify";
 
 const OrderPage = () => {
-
     const nav = useNavigate();
     const dispatch = useDispatch();
 
@@ -24,11 +23,11 @@ const OrderPage = () => {
 
     const orderId = useSelector(state => state.order.currentOrderId)
     const preBill = useSelector(state => state.order.preBillOrderId)
+    const discardModal = useSelector(state => state.modals.discardModal)
 
     const {data: orderData, isLoading: orderLoading} = useGetOrderByIdQuery(orderId, {skip: !orderId})
 
     const [selectedCategory, setCategory] = useState("All")
-    const [showDiscard, setShowDiscard] = useState(false)
 
     if (orderLoading) {
         return (
@@ -37,12 +36,6 @@ const OrderPage = () => {
                 <Spinner/>
             </div>      
         )
-    }
-
-    const handleDiscard = () => {
-        setShowDiscard(false)
-        dispatch(clearCurrentOrder())
-        nav("/tables")
     }
 
     const handleAddItems = async(e, orderId, productId) => {
@@ -79,13 +72,12 @@ const OrderPage = () => {
                 addProduct={handleAddItems} removeProduct={handleRemoveItems}/>
             </div>
             <div className="order-buttons">
-                <button onClick={() => setShowDiscard(true)}>Delete</button>
+                <button onClick={() => dispatch(setDiscardModal(true))}>Delete</button>
                 <button onClick={() => nav("/checkout")}>Checkout</button>
                 <button onClick={() => dispatch(setPreBill(orderId))}>Get Pre-Bill</button>
             </div>
             {preBill && <PreBill orderData={orderData}/>}
-            {showDiscard && <DiscardModal changeDiscardModal={handleDiscard} 
-                setShowDiscard={setShowDiscard} tableId={orderData.order.tableId._id}/>}
+            {discardModal && <DiscardModal tableId={orderData.order.tableId._id}/>}
         </div>
     )
 }

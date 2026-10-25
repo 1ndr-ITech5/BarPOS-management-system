@@ -4,7 +4,6 @@ import Spinner from "../other/Spinner.jsx";
 
 const Products = ({selectedCategory, addProduct, orderId}) => {
     const {data: menuItems, isLoading} = useGetProductsQuery();
-    console.log(menuItems)
 
     if (isLoading){
         return (
