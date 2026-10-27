@@ -14,7 +14,7 @@ export const statsApi = api.injectEndpoints({
                 url: "/api/stats/performances",
                 method: "GET"
             }),
-            providesTags: ["Orders", "Payments"]
+            providesTags: ["Orders", "Payments", "Users"]
         })
     })
 })

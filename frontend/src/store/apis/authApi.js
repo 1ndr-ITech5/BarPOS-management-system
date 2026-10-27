@@ -2,25 +2,9 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const authApi = createApi({
     reducerPath: "authApi",
-    baseQuery: fetchBaseQuery({baseUrl: import.meta.env.VITE_API_URL,
-        prepareHeaders: (headers) => {
-        const user = JSON.parse(localStorage.getItem("user"));
-
-        if (user?.token) {
-            headers.set("Authorization", `Bearer ${user.token}`);
-        }
-
-        return headers;
-        },
-    }),
+    baseQuery: fetchBaseQuery({baseUrl: import.meta.env.VITE_API_URL}),
     endpoints: (builder) => {
         return {
-            getMe: builder.query({
-                query: () => ({
-                    url: "/api/auth/me",
-                    method: "GET"
-                }),
-            }),
             login: builder.mutation({
                 query: (credentials) => ({
                     url: "/api/auth/login",
@@ -33,16 +17,9 @@ export const authApi = createApi({
                     url: "/api/auth/login-demo",
                     method: "POST"
                 }),
-            }),
-            register: builder.mutation({
-                query: (newUser) => ({
-                    url: "/api/auth/register",
-                    method: "POST",
-                    body: newUser
-                }),
-            }),
+            })
         }
     }
 })
 
-export const {useGetMeQuery, useLoginMutation, useRegisterMutation, useLoginDemoMutation} = authApi;
+export const {useLoginMutation, useLoginDemoMutation} = authApi;

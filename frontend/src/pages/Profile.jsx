@@ -1,4 +1,4 @@
-import {useGetMeQuery} from "../store/apis/authApi.js";
+import {useGetMeQuery} from "../store/apis/usersApi.js";
 import {useGetWaiterStatsQuery, useGetReportQuery} from "../store/apis/statsApi.js";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import Spinner from "../components/other/Spinner.jsx";

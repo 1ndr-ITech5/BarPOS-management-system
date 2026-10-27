@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {useRegisterMutation} from '../../store/apis/authApi.js';
+import {useRegisterMutation} from '../../store/apis/usersApi.js';
 import { toast } from "react-toastify";
 
 const Register = ({changeModal}) => {

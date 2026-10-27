@@ -35,12 +35,9 @@ const userSchema = new mongoose.Schema({
 
 // use mongoose middleware to hash the user's password
 userSchema.pre("save", async function() {
-    // hash password
+    if (!this.isModified("password")) return
     const salt = await bcrypt.genSalt(10)
-    const hashPassword = await bcrypt.hash(this.password, salt)
-
-    // save the hashed password as the new password
-    this.password = hashPassword
+    this.password = await bcrypt.hash(this.password, salt)
 })
 
 // use compound index to have only an unique combination of username and workspace
