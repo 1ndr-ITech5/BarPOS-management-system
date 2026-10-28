@@ -1,14 +1,23 @@
 const mongoose = require("mongoose")
+const bcrypt = require("bcryptjs")
 
 const workspaceSchema = new mongoose.Schema({
-    name: {
+    barName: {
+        type: String, 
+        required: true
+    },
+    workspaceName: {
         type: String, 
         required: true,
         unique: true
     },
+    password: {
+        type: String,
+        required: true
+    },
     type: {
         type: String,
-        enum: ["demo", "main"],
+        enum: ["demo", "real"],
         required: true
     },
     lastDemoReset: {
@@ -20,5 +29,11 @@ const workspaceSchema = new mongoose.Schema({
         timestamps: true
     }
 )
+
+workspaceSchema.pre("save", async function () {
+    if (!this.isModified("password")) return;
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+});
 
 module.exports = mongoose.model("Workspace", workspaceSchema)
