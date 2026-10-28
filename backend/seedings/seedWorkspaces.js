@@ -10,16 +10,20 @@ const createWorkspaces = async() => {
 
         const workspaces = [
             {
-                "name": "Bar Restaurant Kusho",
-                "type": "main"
+                "barName": "Bar Restaurant Kusho",
+                "workspaceName": "kushoteam",
+                "password": process.env.REAL_WORKSPACE_PASSWORD,
+                "type": "real"
             },
             {
-                "name": "Demo Workspace",
+                "barName": "Demo Workspace",
+                "workspaceName": "demoaccount",
+                "password": process.env.DEMO_PASSWORD,
                 "type": "demo"
-            }
+            },
         ]
 
-        await Workspace.insertMany(workspaces)
+        await Workspace.create(workspaces)
 
         process.exit(0)
     }catch(error){
