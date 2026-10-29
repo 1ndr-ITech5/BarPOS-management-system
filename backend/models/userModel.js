@@ -4,19 +4,19 @@ const bcrypt = require("bcryptjs")
 const userSchema = new mongoose.Schema({
     first_name: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
     last_name: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
-    username: {
+    code: {
         type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
+        required: true,
+        trim: true,
+        match: /^\d{4,6}$/
     },
     role: {
         type: String,
@@ -37,12 +37,12 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", async function() {
     if (!this.isModified("password")) return
     const salt = await bcrypt.genSalt(10)
-    this.password = await bcrypt.hash(this.password, salt)
+    this.code = await bcrypt.hash(this.code, salt)
 })
 
 // use compound index to have only an unique combination of username and workspace
 userSchema.index(
-    {username: 1, workspaceId: 1},
+    {code: 1, workspaceId: 1},
     {unique: true}
 )
 

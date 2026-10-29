@@ -1,87 +1,86 @@
 const User = require("../models/userModel.js")
-const Workspace = require("../models/workspaceModel.js")
 const {verifyPassword} = require("./checkPasswordService.js")
+const {messageError} = require("../utils/messageErrors.js")
 
 // bussiness logic for register
-const registerNewUser = async(user_info, workspaceId) => {
-    const { first_name, last_name, username, password, role } = user_info
+const registerNewUser = async(userFields, adminData) => {
+    const { first_name, last_name, code, role } = userFields
 
-    // check if the user has provided all the needed datas
-    if ( !first_name || !last_name || !username || !password){
-        const error = new Error("Please fill all the required fields!")
-        error.statusCode = 400
-        throw error;
+    // check that this operation cannot be called from demo workspace admins
+    if(adminData.workspaceId.workspaceName === "demo"){
+        throw messageError("A demo admin cannot register users!", 403)
     }
 
-    // check if the username given, exists already in database, in its own workspace
-    const user = await User.findOne({username, workspaceId})
-    if (user){
-        const error = new Error("This user already exists!")
-        error.statusCode = 409
-        throw error;
+    // check if admin has provided all fields
+    if(!first_name.trim() || !last_name.trim() || typeof first_name !== "string" || typeof last_name !== "string"){
+        throw messageError("First and last names must be provided!", 400)
     }
 
-    // try-catch block to handle the same time user registration
+    // check if the user given, exists already in database, in its own workspace
+    const users = await User.find({workspaceId: adminData.workspaceId})
+    for (const user of users){
+        const matchingUser = await verifyPassword(code, user.code)
+
+        if(matchingUser){
+            throw messageError("This user already exists in your workspace!", 409)
+        }
+    }
+
+    // try-catch block to handle race condition in user registration
     try {
         await User.create({
-            first_name, last_name, username, 
-            password, role, workspaceId
+            first_name, last_name, code, role, 
+            workspaceId: adminData.workspaceId
         })
     } catch (error) {
         if (error.code === 11000) {
-            const err = new Error("This user already exists!")
-            err.statusCode = 409
-            throw err
+            throw messageError("This user already exists!", 409)
         }
         throw error
     }
 }
 
-
-const loginExistingUser = async(user_info) => {
-    const { username, password } = user_info
+// log user in his workspace
+const loginExistingUser = async(userCode, workspaceId) => {
+    const { code } = userCode
 
     // check if the fields are filled
-    if (!username || !password){
-        const error = new Error("Please fill all the required fields!")
-        error.statusCode = 400
-        throw error;
+    if (!code){
+        throw messageError("Please input the code field!", 400)
     }
 
-    // check if this username exists
-    const user = await User.findOne({username}).populate("workspaceId", "name")
-    if (!user){
-        const error = new Error("This user does not exist!")
-        error.statusCode = 404
-        throw error;
+    // check if code is given in desired format
+    if (typeof code !== "string" || !/^\d{4,6}$/.test(code)){
+        throw messageError("The code must contain between 4 and 6 digits!", 400)
     }
 
-    // check if the passwords match
-    await verifyPassword(password, user.password)
-    return user;
+    // get all the users from the workspace where logged in
+    const users = await User.find({workspaceId})
+
+    // loop through them and find the matching code
+    let matchingUser;
+
+    for (const user of users){
+        const match = await verifyPassword(code, user.code)
+
+        if(match){
+            matchingUser = user;
+            break;
+        }
+    }
+
+    return matchingUser;
 }
 
-const loginOnDemo = async() => {
-    // find the demo workspace
-    const demoWorkspace = await Workspace.findOne({type: "demo"})
-    if (!demoWorkspace)
-    {
-        const error = new Error("This workspace does not exist!")
-        error.statusCode = 404
-        throw error;
+const loginOnDemo = async(selectedRole, workspaceId) => {
+    // find the selected user role on that workspace
+    const demoUser = await User.findOne({workspaceId, role: selectedRole}).populate("workspaceId", "name")
+    if (!demoUser){
+        throw messageError("This demo user was not found!", 404)
     }
 
-    // find the admin on that workspace
-    const demoUser = await User.findOne({workspaceId: demoWorkspace._id, role: "admin"}).populate("workspaceId", "name")
-    if (!demoUser)
-    {
-        const error = new Error("This demo user was not found!")
-        error.statusCode = 404
-        throw error;
-    }
-
-    // call the helper function that checks for password match
-    await verifyPassword(process.env.DEMO_PASSWORD, demoUser.password)
+    // check the user's code
+    await verifyPassword(process.env.DEMO_PASSWORD, demoUser.code)
     return demoUser;
 }
 
@@ -89,11 +88,8 @@ const getUser = async(userData) => {
     // check if this user exists in database in his own workspace
     const user = await User.findOne({_id: userData._id, workspaceId: userData.workspaceId}).select("-password")
     if (!user){
-        const error = new Error("This user could not be found!")
-        error.statusCode = 404
-        throw error;
+        throw messageError("This user could not be found!", 404)
     }
-
     return user
 }
 
