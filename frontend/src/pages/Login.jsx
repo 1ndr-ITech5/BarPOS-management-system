@@ -1,9 +1,8 @@
 import {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from "react-router-dom";
-import {useLoginMutation, useLoginDemoMutation} from '../store/apis/authApi.js';
-import {setCurrentWorkspace} from "../store/slices/modalSlice.js";
-import {loginSuccess} from '../store/slices/authSlice.js';
+import {useLogRealWorkspaceMutation, useLogDemoWorkspaceMutation} from '../store/apis/workspaceApi.js';
+import {setWorkspace} from "../store/slices/workspaceSlice.js";
 import { toast } from "react-toastify";
 import logHero from "../assets/logHero.jpg";
 import logo from "../assets/logo.png";
@@ -14,48 +13,50 @@ import { FaRegEyeSlash } from "react-icons/fa6";
 import '../pages-style/Login.css';
 
 const Login = () => {
-    // call our api hook for authentication
-    const [login, {isLoading}] = useLoginMutation()
-    const [loginDemo, {isLoading: loading}] = useLoginDemoMutation()
+    // call our api hook for workspace auth
+    const [logRealWorkspace, {isLoading: workspaceLoading}] = useLogRealWorkspaceMutation();
+    const [logDemoWorkspace, {isLoading: demoLoading}] = useLogDemoWorkspaceMutation();
 
     const nav = useNavigate()
     const dispatch = useDispatch()
 
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
     const [showPassword, setShowPassword] = useState(false)
+    const [credentials, setCredentials] = useState({
+        workspaceName: "",
+        password: ""
+    })
+
+    // handle login credentials inserting
+    const handleSignInCredentials = (e) => {
+        const {name, value} = e.target
+
+        setCredentials((prevCreds) => ({
+            ...prevCreds,
+            [name]: value
+        }))
+    }
 
     // what happens after button login gets clicked
-    const handleSubmit = async(e) => {
-        e.preventDefault();
-
-        const response = await login({username, password})
-        if (response.error){
-            toast.error(response.error?.data?.message || "Login Failed!")
-        }else{
-            // set the user info in localstorage
-            localStorage.setItem("user", JSON.stringify(response.data))
-            dispatch(loginSuccess(response.data))
-            dispatch(setCurrentWorkspace(response.data.workspaceId))
-            nav("/tables")
+    const handleSubmit = async() => {
+        try{
+            const response = await logRealWorkspace(credentials)
+            dispatch(setWorkspace(response.data.workspace))
+            nav("/user-login")
             toast.success(response.data.response);
+        }catch(error){
+            toast.error(error?.data?.message || "Login Failed!")
         }
     }
 
     // the demo case
-    const handleSubmitDemo = async(e) => {
-        e.preventDefault();
-
-        const response = await loginDemo()
-        if (response.error){
-            toast.error(response.error?.data?.message || "Login Failed!")
-        }else{
-            // set the user info in localstorage
-            localStorage.setItem("user", JSON.stringify(response.data))
-            dispatch(loginSuccess(response.data))
-            dispatch(setCurrentWorkspace(response.data.workspaceId))
-            nav("/tables")
+    const handleSubmitDemo = async() => {
+        try{
+            const response = await logDemoWorkspace()
+            dispatch(setWorkspace(response.data))
+            nav("/user-login")
             toast.success(response.data.response);
+        }catch(error){
+            toast.error(error?.data?.message || "Login Failed!")
         }
     }
 
@@ -96,17 +97,22 @@ const Login = () => {
                 <h1>Welcome Back</h1>
                 <h2>Sign in with your POS account to start the till.</h2>
                 <div className="log-fields">
-                    <label>Username</label>
+                    <label>Workspace Name</label>
                     <GoPerson className="input-icon"/>
-                    <input type="text" value={username} placeholder="Type your username..." onChange={(e) => setUsername(e.target.value)}/>
+                    <input type="text" name="workspaceName" value={credentials.workspaceName} placeholder="Type your workspace name..." 
+                    onChange={(e) => handleSignInCredentials(e)}/>
+
                     <label>Password</label>
                     <LuLockKeyhole className="input-icon"/>
-                    <input type={showPassword ? "text" : "password"} value={password} placeholder="Type password..." onChange={(e) => setPassword(e.target.value)}/>
+                    <input type={showPassword ? "text" : "password"} name="password" value={credentials.password} 
+                    placeholder="Type password..." onChange={(e) => handleSignInCredentials(e)}/>
                     <button onClick={() => handlePasswordVisibility()}>{!showPassword ? <FaRegEye/> : <FaRegEyeSlash/>}</button>
                 </div>
                 <div className="log-actions">
-                    <button onClick={(e) => handleSubmit(e)} disabled={isLoading || loading}>{isLoading ? "Logging in..." : "Sign In"}</button>
-                    <button onClick={(e) => handleSubmitDemo(e)} disabled={loading || isLoading}>Try Live Demo</button>
+                    <button onClick={() => handleSubmit()} disabled={workspaceLoading || demoLoading}>
+                        {(workspaceLoading || demoLoading) ? "Signing in..." : "Sign In"}</button>
+                    <button onClick={() => handleSubmitDemo()} disabled={workspaceLoading || demoLoading}>
+                        Try Live Demo</button>
                 </div>
                 <h3>Built by NDR - Crafted Solutions</h3>
             </div>
