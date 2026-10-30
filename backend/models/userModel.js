@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
 
 // use mongoose middleware to hash the user's password
 userSchema.pre("save", async function() {
-    if (!this.isModified("password")) return
+    if (!this.isModified("code")) return
     const salt = await bcrypt.genSalt(10)
     this.code = await bcrypt.hash(this.code, salt)
 })
