@@ -41,7 +41,7 @@ const registerNewUser = async(userFields, adminData) => {
 }
 
 // log user in his workspace
-const loginExistingUser = async(userCode, workspaceId) => {
+const loginExistingUser = async(userCode, workspaceData) => {
     const { code } = userCode
 
     // check if the fields are filled
@@ -55,7 +55,7 @@ const loginExistingUser = async(userCode, workspaceId) => {
     }
 
     // get all the users from the workspace where logged in
-    const users = await User.find({workspaceId})
+    const users = await User.find({workspaceId: workspaceData._id})
 
     // loop through them and find the matching code
     let matchingUser;
@@ -86,7 +86,7 @@ const loginOnDemo = async(selectedRole, workspaceId) => {
 
 const getUser = async(userData) => {
     // check if this user exists in database in his own workspace
-    const user = await User.findOne({_id: userData._id, workspaceId: userData.workspaceId}).select("-password")
+    const user = await User.findOne({_id: userData._id, workspaceId: userData.workspaceId}).select("-code")
     if (!user){
         throw messageError("This user could not be found!", 404)
     }
