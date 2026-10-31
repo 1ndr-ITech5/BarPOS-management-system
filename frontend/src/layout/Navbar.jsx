@@ -24,7 +24,6 @@ const Navbar = () => {
     }, [toggle]);
 
     const handleLogout = () => {
-        localStorage.removeItem("user")
         dispatch(resetToggle())
         dispatch(clearCurrentOrder())
         dispatch(authApi.util.resetApiState())

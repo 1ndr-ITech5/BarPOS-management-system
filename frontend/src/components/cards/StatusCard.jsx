@@ -4,7 +4,7 @@ import { FaRegCircleCheck } from "react-icons/fa6";
 import "../../comp-style/cards-style/StatusCard.css";
 
 const StatusCard = ({tables, filter}) => {
-
+    
     const numberOfTables = filter !== "all" ? tables.filter(table => table.status === filter).length : tables.length
 
     return (
