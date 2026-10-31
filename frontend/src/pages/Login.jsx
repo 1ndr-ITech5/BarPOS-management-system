@@ -39,10 +39,10 @@ const Login = () => {
     // what happens after button login gets clicked
     const handleSubmit = async() => {
         try{
-            const response = await logRealWorkspace(credentials)
-            dispatch(setWorkspace(response.data.workspace))
+            const response = await logRealWorkspace(credentials).unwrap()
+            dispatch(setWorkspace(response.workspace))
             nav("/user-login")
-            toast.success(response.data.response);
+            toast.success(response.response);
         }catch(error){
             toast.error(error?.data?.message || "Login Failed!")
         }
@@ -51,10 +51,10 @@ const Login = () => {
     // the demo case
     const handleSubmitDemo = async() => {
         try{
-            const response = await logDemoWorkspace()
-            dispatch(setWorkspace(response.data))
+            const response = await logDemoWorkspace().unwrap()
+            dispatch(setWorkspace(response.workspace))
             nav("/user-login")
-            toast.success(response.data.response);
+            toast.success(response.response);
         }catch(error){
             toast.error(error?.data?.message || "Login Failed!")
         }
