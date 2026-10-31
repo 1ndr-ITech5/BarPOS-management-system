@@ -10,10 +10,12 @@ const authSlice = createSlice({
     },
     reducers: {
         loginSuccess(state, action){
+            localStorage.setItem("user", JSON.stringify(action.payload))
             state.user = action.payload
         },
         logout(state){
             localStorage.removeItem("currentWorkspaceId")
+            localStorage.removeItem("user")
             state.user = null
         }
     }
