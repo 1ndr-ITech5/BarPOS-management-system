@@ -8,7 +8,7 @@ const signInRealWorkspace = asyncHandler(async(req, res) => {
 
 const signInDemoWorkspace = asyncHandler(async(req, res) => {
     const demo = await loginOnDemoWorkspace()
-    res.status(200).json({demo, response: `Signed in the ${demo.barName} workspace!`})
+    res.status(200).json({workspace: demo, response: `Signed in the ${demo.barName} workspace!`})
 })
 
 module.exports = {signInRealWorkspace, signInDemoWorkspace}

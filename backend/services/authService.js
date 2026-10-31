@@ -1,6 +1,7 @@
 const User = require("../models/userModel.js")
 const {verifyPassword} = require("./checkPasswordService.js")
 const {messageError} = require("../utils/messageErrors.js")
+const generateToken = require("../utils/generateToken.js")
 
 // bussiness logic for register
 const registerNewUser = async(userFields, adminData) => {
@@ -69,7 +70,15 @@ const loginExistingUser = async(userCode, workspaceData) => {
         }
     }
 
-    return matchingUser;
+    return {
+        first_name: matchingUser.first_name, 
+        last_name: matchingUser.last_name,  
+        role: matchingUser.role,
+        workspaceId: matchingUser.workspaceId._id,
+        workspace: matchingUser.workspaceId.barName,
+        token: generateToken({userId: matchingUser._id.toString(), 
+            workspaceId: matchingUser.workspaceId.toString(), type: "user"})
+    }
 }
 
 const loginOnDemo = async(selectedRole, workspaceId) => {
@@ -81,7 +90,15 @@ const loginOnDemo = async(selectedRole, workspaceId) => {
 
     // check the user's code
     await verifyPassword(process.env.DEMO_PASSWORD, demoUser.code)
-    return demoUser;
+    return {
+        first_name: demoUser.first_name, 
+        last_name: demoUser.last_name, 
+        role: demoUser.role,
+        workspaceId: demoUser.workspaceId._id,
+        workspace: demoUser.workspaceId.barName,
+        token: generateToken({userId: demoUser._id.toString(), 
+            workspaceId: demoUser.workspaceId.toString(), type: "user"})
+    }
 }
 
 const getUser = async(userData) => {
