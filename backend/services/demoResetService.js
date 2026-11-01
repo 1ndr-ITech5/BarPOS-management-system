@@ -1,9 +1,10 @@
 const Workspace = require("../models/workspaceModel.js")
-const User = require("../models/userModel.js")
 const Table = require("../models/tableModel.js")
 const Order = require("../models/orderModel.js")
 const OrderItem = require("../models/orderItemModel.js")
 const Payment = require("../models/paymentModel.js")
+const Product = require("../models/productModel.js")
+const Category = require("../models/categoryModel.js")
 const {isSameDay} = require("../utils/checkDay.js")
 const mongoose = require("mongoose")
 
@@ -15,23 +16,11 @@ const demoReset = async() => {
         throw new Error("Demo workspace not found!")
     }
 
-    // find the main admin of that workspace
-    const demoAdmin = await User.findOne({workspaceId: demoWorkspace._id, username: process.env.DEMO_ACCOUNT, role: "admin"})
-    if (!demoAdmin)
-    {
-        throw new Error("Demo admin not found!")
-    }
-
     // create a session
     const session = await mongoose.startSession()
 
     try{
         session.startTransaction()
-
-        // delete all users in demo workspace except the main one
-        await User.deleteMany({
-            workspaceId: demoWorkspace._id,
-            _id: {$ne: demoAdmin._id}}).session(session)
 
         // find all orders in this workspace
         const allDemoOrders = await Order.find({workspaceId: demoWorkspace._id}).session(session)
@@ -42,6 +31,8 @@ const demoReset = async() => {
         await OrderItem.deleteMany({orderId: {$in: orderIds}}).session(session)
         await Payment.deleteMany({workspaceId: demoWorkspace._id}).session(session)
         await Order.deleteMany({workspaceId: demoWorkspace._id}).session(session)
+        await Product.deleteMany({offeredBy: demoWorkspace._id}).session(session)
+        await Category.deleteMany({workspaceId: demoWorkspace._id}).session(session)
 
         // delete all tables on demo
         await Table.deleteMany({ownedBy: demoWorkspace._id}).session(session)

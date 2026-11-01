@@ -6,7 +6,8 @@ validEnv();
 
 const connectDB = require('./config/db.js')
 const {errorHandler} = require("./middlewares/errorMiddleware.js")
-//const {checkDemoReset} = require("./services/demoResetService.js") require("./jobs/demoResetJob.js")
+const {checkDemoReset} = require("./services/demoResetService.js");
+require("./jobs/demoResetJob.js");
 const helmet = require("helmet")
 const cors = require("cors")
 const port = process.env.PORT || 5000
@@ -58,7 +59,7 @@ app.use(errorHandler)
 
 const startServer = async () => {
     await connectDB()
-    // await checkDemoReset()
+    await checkDemoReset()
 
     app.listen(port, () => {console.log(`Server running on port ${port}`)})
 }
