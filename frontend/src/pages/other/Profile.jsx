@@ -1,14 +1,14 @@
-import {useGetMeQuery} from "../store/apis/usersApi.js";
-import {useGetWaiterStatsQuery, useGetReportQuery} from "../store/apis/statsApi.js";
+import {useGetMeQuery} from "../../store/apis/usersApi.js";
+import {useGetWaiterStatsQuery, useGetReportQuery} from "../../store/apis/statsApi.js";
 import { IoMdArrowRoundBack } from "react-icons/io";
-import Spinner from "../components/other/Spinner.jsx";
-import {formatDate} from "../utils/DateFormat.js";
+import Spinner from "../../components/other/Spinner.jsx";
+import {formatDate} from "../../utils/DateFormat.js";
 import {useState} from "react";
-import admin from "../assets/admin.jpg";
-import waiter from "../assets/waiter.jpg";
-import Register from "../components/user/Register.jsx";
+import admin from "../../assets/admin.jpg";
+import waiter from "../../assets/waiter.jpg";
+import Register from "../../components/user/Register.jsx";
 import {useNavigate} from "react-router-dom";
-import "../pages-style/Profile.css";
+import "../../pages-style/Profile.css";
 
 const Profile = () => {
 

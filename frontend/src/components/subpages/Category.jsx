@@ -1,7 +1,7 @@
 import {useState} from "react";
 import "../../comp-style/subpages-style/Category.css";
 import CategoryModal from "../modals/CategoryModal.jsx";
-import CategoryRow from "../other/CategoryRow.jsx";
+import CategoryRow from "../rows/CategoryRow.jsx";
 
 const Category = ({allCategories, allProducts}) => {
 

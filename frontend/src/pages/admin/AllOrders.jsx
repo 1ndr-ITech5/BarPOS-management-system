@@ -1,7 +1,7 @@
-import {useGetAllOrdersQuery} from "../store/apis/orderApi.js";
-import MyOrdersCard from "../components/cards/OrdersCard.jsx";
-import {clearCurrentOrder} from "../store/slices/orderSlice.js";
-import Spinner from "../components/other/Spinner.jsx";
+import {useGetAllOrdersQuery} from "../../store/apis/orderApi.js";
+import MyOrdersCard from "../../components/cards/OrdersCard.jsx";
+import {clearCurrentOrder} from "../../store/slices/orderSlice.js";
+import Spinner from "../../components/other/Spinner.jsx";
 import {useDispatch} from "react-redux";
 import {useEffect} from "react";
 

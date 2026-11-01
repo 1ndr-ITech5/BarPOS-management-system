@@ -1,10 +1,10 @@
-import {useGetCategoriesQuery} from "../store/apis/categoryApi.js";
-import {useGetProductsQuery} from "../store/apis/productsApi.js";
-import Category from "../components/subpages/Category.jsx";
-import Product from "../components/subpages/Product.jsx";
-import Spinner from "../components/other/Spinner.jsx";
+import {useGetCategoriesQuery} from "../../store/apis/categoryApi.js";
+import {useGetProductsQuery} from "../../store/apis/productsApi.js";
+import Category from "../../components/subpages/Category.jsx";
+import Product from "../../components/subpages/Product.jsx";
+import Spinner from "../../components/other/Spinner.jsx";
 import {useSelector, useDispatch} from "react-redux";
-import {setSubpage} from "../store/slices/pagesSlice.js";
+import {setSubpage} from "../../store/slices/pagesSlice.js";
 import {useEffect} from "react";
 
 const MenuManagment = () => {

@@ -1,4 +1,4 @@
-import ProductRow from "../other/ProductRow.jsx";
+import ProductRow from "../rows/ProductRow.jsx";
 import "../../comp-style/subpages-style/Product.css";
 import ProductModal from "../modals/ProductModal.jsx";
 import {useState} from "react";

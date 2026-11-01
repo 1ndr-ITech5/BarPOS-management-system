@@ -1,14 +1,14 @@
-import TableCard from "../components/cards/TableCard.jsx";
-import {useGetTablesQuery} from "../store/apis/tablesApi.js";
-import StatusCard from "../components/cards/StatusCard.jsx";
+import TableCard from "../../components/cards/TableCard.jsx";
+import {useGetTablesQuery} from "../../store/apis/tablesApi.js";
+import StatusCard from "../../components/cards/StatusCard.jsx";
 import {useSelector, useDispatch} from "react-redux";
-import Spinner from "../components/other/Spinner.jsx";
-import PreBill from "../components/other/PreBill.jsx";
-import TableModal from "../components/modals/TableModal.jsx";
-import {setTableModal} from "../store/slices/modalSlice.js";
+import Spinner from "../../components/other/Spinner.jsx";
+import PreBill from "../../components/other/PreBill.jsx";
+import TableModal from "../../components/modals/TableModal.jsx";
+import {setTableModal} from "../../store/slices/modalSlice.js";
 import {useState} from "react";
 import { IoMdAdd } from "react-icons/io";
-import '../pages-style/Tables.css';
+import '../../pages-style/Tables.css';
 
 const Tables = () => {
     const dispatch = useDispatch()

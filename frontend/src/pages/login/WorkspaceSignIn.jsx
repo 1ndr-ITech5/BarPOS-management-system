@@ -1,16 +1,16 @@
 import {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useNavigate} from "react-router-dom";
-import {useLogRealWorkspaceMutation, useLogDemoWorkspaceMutation} from '../store/apis/workspaceApi.js';
-import {setWorkspace} from "../store/slices/workspaceSlice.js";
+import {useLogRealWorkspaceMutation, useLogDemoWorkspaceMutation} from '../../store/apis/workspaceApi.js';
+import {setWorkspace} from "../../store/slices/workspaceSlice.js";
 import { toast } from "react-toastify";
-import logHero from "../assets/logHero.jpg";
-import logo from "../assets/logo.png";
+import logHero from "../../assets/logHero.jpg";
+import logo from "../../assets/logo.png";
 import { GoPerson } from "react-icons/go";
 import { LuLockKeyhole } from "react-icons/lu";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
-import '../pages-style/Login.css';
+import '../../pages-style/Login.css';
 
 const Login = () => {
     // call our api hook for workspace auth

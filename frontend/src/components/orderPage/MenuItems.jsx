@@ -2,7 +2,7 @@ import "../../comp-style/orderPage-style/Products.css";
 import {useGetProductsQuery} from "../../store/apis/productsApi.js";
 import Spinner from "../other/Spinner.jsx";
 
-const Products = ({selectedCategory, addProduct, orderId}) => {
+const MenuItems = ({selectedCategory, addProduct, orderId}) => {
     const {data: menuItems, isLoading} = useGetProductsQuery();
 
     if (isLoading){
@@ -29,4 +29,4 @@ const Products = ({selectedCategory, addProduct, orderId}) => {
     )
 }
 
-export default Products;
+export default MenuItems;

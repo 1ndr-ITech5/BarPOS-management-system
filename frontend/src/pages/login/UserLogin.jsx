@@ -1,8 +1,8 @@
-import {useLoginMutation, useLoginDemoMutation} from "../store/apis/authApi.js";
-import {workspaceApi} from "../store/apis/workspaceApi.js";
-import {loginSuccess} from "../store/slices/authSlice.js";
-import {setCurrentWorkspace} from "../store/slices/modalSlice.js";
-import {signOutWorkspace} from "../store/slices/workspaceSlice.js";
+import {useLoginMutation, useLoginDemoMutation} from "../../store/apis/authApi.js";
+import {workspaceApi} from "../../store/apis/workspaceApi.js";
+import {loginSuccess} from "../../store/slices/authSlice.js";
+import {setCurrentWorkspace} from "../../store/slices/modalSlice.js";
+import {signOutWorkspace} from "../../store/slices/workspaceSlice.js";
 import { FaDeleteLeft } from "react-icons/fa6";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";

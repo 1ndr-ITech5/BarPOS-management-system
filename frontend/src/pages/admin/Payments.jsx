@@ -1,13 +1,13 @@
-import {useGetAllPaymentsQuery} from "../store/apis/paymentApi.js";
-import {setTimeFilter, setPayMethodFilter} from "../store/slices/filterSlice.js";
-import {filterPaymentsByDate, filterPaymentsByMethod, filterPaymentsByLastMonth} from "../utils/FilterUtils.js";
+import {useGetAllPaymentsQuery} from "../../store/apis/paymentApi.js";
+import {setTimeFilter, setPayMethodFilter} from "../../store/slices/filterSlice.js";
+import {filterPaymentsByDate, filterPaymentsByMethod, filterPaymentsByLastMonth} from "../../utils/FilterUtils.js";
 import {useSelector, useDispatch} from "react-redux";
 import {useState, useEffect} from "react";
-import PaymentCard from "../components/cards/PaymentCard.jsx";
-import ViewReceipt from "../components/other/ViewReceipt.jsx";
-import Spinner from "../components/other/Spinner.jsx";
-import Revenue from "../components/other/Revenue.jsx";
-import "../pages-style/Payments.css";
+import PaymentCard from "../../components/cards/PaymentCard.jsx";
+import ViewReceipt from "../../components/other/ViewReceipt.jsx";
+import Spinner from "../../components/other/Spinner.jsx";
+import Revenue from "../../components/other/Revenue.jsx";
+import "../../pages-style/Payments.css";
 
 const Payments = () => {
 

@@ -1,8 +1,8 @@
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {clearCurrentOrder} from "../store/slices/orderSlice.js";
-import {setViewReceipt} from "../store/slices/modalSlice.js";
-import ViewReceipt from "../components/other/ViewReceipt.jsx";
+import {clearCurrentOrder} from "../../store/slices/orderSlice.js";
+import {setViewReceipt} from "../../store/slices/modalSlice.js";
+import ViewReceipt from "../../components/other/ViewReceipt.jsx";
 
 const PayCompleted = () => {
 
