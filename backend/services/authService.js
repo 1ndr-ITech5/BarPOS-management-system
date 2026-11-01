@@ -109,7 +109,8 @@ const loginOnDemo = async(selectedRole, workspaceId) => {
 
 const getUser = async(userData) => {
     // check if this user exists in database in his own workspace
-    const user = await User.findOne({_id: userData._id, workspaceId: userData.workspaceId}).select("-code")
+    const user = await User.findOne({_id: userData._id, workspaceId: userData.workspaceId})
+    .populate("workspaceId" , "type").select("-code")
     if (!user){
         throw messageError("This user could not be found!", 404)
     }

@@ -67,7 +67,8 @@ const Profile = () => {
                     </div>
                     <div className="profile-buttons">
                         <button onClick={() => nav("/tables")}><IoMdArrowRoundBack/> Back to tables</button>
-                        <button onClick={() => setRegisterModal(true)}>Register new users</button>
+                        {user.workspaceId.type !== "demo" && 
+                            <button onClick={() => setRegisterModal(true)}>Register new users</button> }
                     </div>
                     {registerModal && <Register changeModal={setRegisterModal}/>}
                 </div>)}
