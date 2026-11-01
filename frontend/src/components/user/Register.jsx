@@ -9,8 +9,7 @@ const Register = ({changeModal}) => {
     const [registerData, setRegisterData] = useState({
         first_name: "",
         last_name: "",
-        username: "",
-        password: "",
+        code: "",
         role: "waiter"
     })
 
@@ -25,15 +24,14 @@ const Register = ({changeModal}) => {
     };
 
     // function that inits the checks of fields in backend
-    const handleSubmit = async(e) => {
-        e.preventDefault();
-
-        const response = await register(registerData)
-        if (response.error){
-            toast.error(response.error?.data?.message || "Register Failed!")
-        }else{
-            toast.success(response.data.response)
+    const handleSubmit = async() => {
+        try{
+            const response = await register(registerData).unwrap()
+            console.log(response)
+            toast.success(response.response)
             changeModal(false)
+        }catch(error){
+            toast.error(error?.data?.message || "Register Failed!")
         }
     }
 
@@ -45,10 +43,8 @@ const Register = ({changeModal}) => {
                 <input type="text" name="first_name" value={registerData.first_name} onChange={handleChange} required/>
                 <label>Last Name</label>
                 <input type="text" name="last_name" value={registerData.last_name} onChange={handleChange} required/>
-                <label>Username</label>
-                <input type="text" name="username" value={registerData.username} onChange={handleChange} required/>
-                <label>Password</label>
-                <input type="password" name="password" value={registerData.password} onChange={handleChange} required/>
+                <label>Code</label>
+                <input type="password" name="code" value={registerData.code} onChange={handleChange} required/>
                 <label>Role</label>
                 <select name="role" value={registerData.role} onChange={handleChange}>
                     <option value="waiter">Waiter</option>
@@ -56,7 +52,7 @@ const Register = ({changeModal}) => {
                 </select>
             </div>
             <div className="register-buttons">
-                <button onClick={(e) => handleSubmit(e)} disabled={isloading}>Register</button>
+                <button onClick={() => handleSubmit()} disabled={isloading}>Register</button>
                 <button onClick={() => changeModal(false)} disabled={isloading}>Back</button>
             </div>
         </section>

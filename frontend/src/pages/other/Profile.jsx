@@ -43,7 +43,6 @@ const Profile = () => {
             <div className="personal">
                 <h1>Personal Information</h1>
                 <h2>Full Name: {user.first_name} {user.last_name}</h2>
-                <h2>Username: {user.username}</h2>
                 <h2>Role: {user.role}</h2>
                 <h2>Date Joined: {formatDate(user.createdAt)}</h2>
             </div>
