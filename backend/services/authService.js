@@ -1,7 +1,7 @@
 const User = require("../models/userModel.js")
-const {verifyPassword} = require("./checkPasswordService.js")
 const {messageError} = require("../utils/messageErrors.js")
 const generateToken = require("../utils/generateToken.js")
+const bcrypt = require("bcryptjs")
 
 // bussiness logic for register
 const registerNewUser = async(userFields, adminData) => {
@@ -17,13 +17,16 @@ const registerNewUser = async(userFields, adminData) => {
         throw messageError("First and last names must be provided!", 400)
     }
 
+    // check the code
+    if (typeof code !== "string" || !/^\d{4,6}$/.test(code)){
+        throw messageError("The code must contain between 4 and 6 digits!", 400)
+    }
+
     // check if the user given, exists already in database, in its own workspace
     const users = await User.find({workspaceId: adminData.workspaceId})
     for (const user of users){
-        const matchingUser = await verifyPassword(code, user.code)
-
-        if(matchingUser){
-            throw messageError("This user already exists in your workspace!", 409)
+        if (await bcrypt.compare(code, user.code)){
+            throw messageError("This code is already in use in your workspace!", 409)
         }
     }
 
@@ -62,12 +65,14 @@ const loginExistingUser = async(userCode, workspaceData) => {
     let matchingUser;
 
     for (const user of users){
-        const match = await verifyPassword(code, user.code)
-
-        if(match){
-            matchingUser = user;
-            break;
+        if (await bcrypt.compare(code, user.code)){
+            matchingUser = user
+            break
         }
+    }
+
+    if (!matchingUser){
+        throw messageError("Wrong user code provided!", 401)
     }
 
     return {
@@ -89,7 +94,7 @@ const loginOnDemo = async(selectedRole, workspaceId) => {
     }
 
     // check the user's code
-    await verifyPassword(selectedRole === "admin" ? 
+    await bcrypt.compare(selectedRole === "admin" ? 
         process.env.DEMO_ADMIN_CODE : process.env.DEMO_WAITER_CODE, demoUser.code)
     return {
         first_name: demoUser.first_name, 
