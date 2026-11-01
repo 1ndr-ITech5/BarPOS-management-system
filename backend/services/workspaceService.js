@@ -27,6 +27,7 @@ const loginOnRealWorkspace = async(loginData) => {
 
     // return the workspace data
     return {
+        workspaceId: existingWorkspace._id,
         barName: existingWorkspace.barName, 
         workspaceName: existingWorkspace.workspaceName, 
         type: existingWorkspace.type,
@@ -49,6 +50,7 @@ const loginOnDemoWorkspace = async() => {
 
     // return the demo workspace data
     return {
+        workspaceId: demoWorkspace._id,
         barName: demoWorkspace.barName, 
         workspaceName: demoWorkspace.workspaceName, 
         type: demoWorkspace.type,
