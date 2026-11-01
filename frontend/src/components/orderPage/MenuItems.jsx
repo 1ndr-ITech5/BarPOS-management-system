@@ -20,10 +20,10 @@ const MenuItems = ({selectedCategory, addProduct, orderId}) => {
             <div className="products">
             {selectedCategory === "All" ? menuItems.map((product) => 
                 <button key={product._id} onClick={(e) => addProduct(e, orderId, product._id)}
-                disabled={!product.isAvailable}>{product.productName}</button>)
+                disabled={!product.categoryId.isActive}>{product.productName}</button>)
             : menuItems.filter((product) => product.categoryId?.categoryName === selectedCategory).map((product) => 
                 <button key={product._id} onClick={(e) => addProduct(e, orderId, product._id)}
-                disabled={!product.isAvailable}>{product.productName}</button>)}
+                disabled={!product.categoryId.isActive}>{product.productName}</button>)}
              </div>
         </div>
     )

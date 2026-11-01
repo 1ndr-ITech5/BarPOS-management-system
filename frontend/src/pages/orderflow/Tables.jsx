@@ -12,7 +12,7 @@ import '../../pages-style/Tables.css';
 
 const Tables = () => {
     const dispatch = useDispatch()
-    const workspaceId = useSelector((state) => state.modals.currentWorkspace)
+    const workspaceId = useSelector((state) => state.workspace.currentWorkspace.workspaceId)
     const user = useSelector(state => state.user.user)
 
     const {data: tables, isLoading} = useGetTablesQuery(undefined, {skip: !workspaceId, refetchOnMountOrArgChange: true})
