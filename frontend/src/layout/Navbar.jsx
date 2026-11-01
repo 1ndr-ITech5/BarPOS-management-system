@@ -16,7 +16,7 @@ const Navbar = () => {
     const dispatch = useDispatch();
     const today = new Date()
 
-    const user = useSelector((state) => state.user.user)
+    const workspace = useSelector((state) => state.workspace.currentWorkspace)
     const toggle = useSelector((state) => state.pages.toggle)
 
     useEffect(() => {
@@ -36,7 +36,7 @@ const Navbar = () => {
             <div className="brand">
                 <img src={logo}/>
                 <div className="brand-text">
-                    <h1>{user.workspace}</h1>
+                    <h1>{workspace.barName}</h1>
                     <h2>Point of Sale Web App</h2>
                 </div>
             </div>

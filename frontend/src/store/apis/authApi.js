@@ -23,9 +23,10 @@ export const authApi = createApi({
                 }),
             }),
             loginDemo: builder.mutation({
-                query: () => ({
+                query: (userRole) => ({
                     url: "/api/auth/login-demo",
-                    method: "POST"
+                    method: "POST",
+                    body: userRole
                 }),
             })
         }

@@ -17,7 +17,7 @@ const UserLogin = () => {
     const workspace = useSelector(state => state.workspace.currentWorkspace)
 
     const [login, {isLoading: logging}] = useLoginMutation();
-    // const [loginDemo, {isLoading: demoLogging}] = useLoginDemoMutation();
+    const [loginDemo, {isLoading: demoLogging}] = useLoginDemoMutation();
 
     const [code, setCode] = useState("")
     const [showCode, setShowCode] = useState(false)
@@ -45,6 +45,18 @@ const UserLogin = () => {
         }
     }
 
+    const handleDemoLogin = async(userRole) => {
+        try{
+            const response = await loginDemo(userRole).unwrap()
+            dispatch(loginSuccess(response.user))
+            dispatch(setCurrentWorkspace(response.user.workspaceId))
+            nav("/tables")
+            toast.success(response.response)
+        }catch(error){
+            toast.error(error?.data?.message || "User login failed!")
+        }
+    }
+
     const handleSignOut = () => {
         dispatch(signOutWorkspace())
         dispatch(workspaceApi.util.resetApiState())
@@ -56,8 +68,8 @@ const UserLogin = () => {
             <button>{workspace.barName}</button>
             {workspace.type === "demo" ? 
             <div>
-                <button>Log As Admin</button>
-                <button>Log as Waiter</button>
+                <button onClick={() => handleDemoLogin({selectedRole: "admin"})} disabled={demoLogging}>Log As Admin</button>
+                <button onClick={() => handleDemoLogin({selectedRole: "waiter"})} disabled={demoLogging}>Log as Waiter</button>
             </div> 
             : 
             <div>
@@ -78,9 +90,10 @@ const UserLogin = () => {
                 </div>
             </div>}
             <div className="action-buttons">
-                <button onClick={() => {workspace.type !== "demo" ? handleLogin() : ""}} disabled={logging}>
-                    {workspace.type === "demo" ? "" : "Log In"}</button>
-                <button onClick={() => handleSignOut()}>Sign out</button>
+                {workspace.type !== "demo" && (
+                    <button onClick={() => handleLogin()} disabled={logging}>Log In</button>
+                )}
+                <button onClick={() => handleSignOut()} disabled={demoLogging || logging}>Sign out</button>
             </div>
         </div>
     )
