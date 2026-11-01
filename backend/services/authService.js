@@ -89,7 +89,8 @@ const loginOnDemo = async(selectedRole, workspaceId) => {
     }
 
     // check the user's code
-    await verifyPassword(process.env.DEMO_PASSWORD, demoUser.code)
+    await verifyPassword(selectedRole === "admin" ? 
+        process.env.DEMO_ADMIN_CODE : process.env.DEMO_WAITER_CODE, demoUser.code)
     return {
         first_name: demoUser.first_name, 
         last_name: demoUser.last_name, 

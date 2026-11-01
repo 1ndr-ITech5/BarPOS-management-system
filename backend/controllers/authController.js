@@ -18,9 +18,7 @@ const logUser = asyncHandler(async(req, res) => {
 
 const logDemoUser = asyncHandler(async(req, res) => {
     const {selectedRole} = req.body
-    const {workspaceId} = req.workspace
-
-    const demoUser = await loginOnDemo(selectedRole, workspaceId)
+    const demoUser = await loginOnDemo(selectedRole, req.workspace._id)
     res.status(200).json({user: demoUser, response: "Demo User logged in successfully!"})
 })
 

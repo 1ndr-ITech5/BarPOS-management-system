@@ -42,7 +42,7 @@ const loginOnDemoWorkspace = async() => {
         throw messageError("An error occured on demo workspace login! Please try later!", 404)
     }
 
-    const matchPasswords = await bcrypt.compare(demoWorkspace.password, process.env.DEMO_PASSWORD)
+    const matchPasswords = await bcrypt.compare(process.env.DEMO_PASSWORD, demoWorkspace.password)
     if(!matchPasswords){
         throw messageError("An error occured on demo workspace login! Please try later!", 401)
     }
