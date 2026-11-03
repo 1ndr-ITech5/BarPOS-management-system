@@ -2,13 +2,15 @@ import {useLoginMutation, useLoginDemoMutation} from "../../store/apis/authApi.j
 import {workspaceApi} from "../../store/apis/workspaceApi.js";
 import {loginSuccess} from "../../store/slices/authSlice.js";
 import {signOutWorkspace} from "../../store/slices/workspaceSlice.js";
-import { FaDeleteLeft } from "react-icons/fa6";
+import { IoArrowBack } from "react-icons/io5";
+import { MdClear } from "react-icons/md";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import {useSelector, useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {useState} from "react";
 import {toast} from "react-toastify";
+import "../../pages-style/login/UserLogin.css";
 
 const UserLogin = () => {
     const nav = useNavigate()
@@ -61,37 +63,54 @@ const UserLogin = () => {
     }
 
     return (
-        <div>
-            <button>{workspace.barName}</button>
+        <div className="user-login-page">
+
+            <div className="user-login-header">
+                <div className="user-login-header-content">
+                    <div className="user-login-brand">
+                        <h2>BarPOS System</h2>
+                        <h3>Point of sale Web App</h3>
+                    </div>
+                    <h2>{workspace.barName}</h2>
+                </div>
+            </div>
+
             {workspace.type === "demo" ? 
-            <div>
-                <button onClick={() => handleDemoLogin({selectedRole: "admin"})} disabled={demoLogging}>Log As Admin</button>
-                <button onClick={() => handleDemoLogin({selectedRole: "waiter"})} disabled={demoLogging}>Log as Waiter</button>
+            <div className="demo-login-buttons">
+                <button onClick={() => handleDemoLogin({selectedRole: "admin"})} 
+                disabled={demoLogging}>Log As Admin</button>
+                <button onClick={() => handleDemoLogin({selectedRole: "waiter"})} 
+                disabled={demoLogging}>Log as Waiter</button>
             </div> 
             : 
-            <div>
-                <div>
-                    <label>Code</label>
-                    <button onClick={() => handleCodeVisibility()}>{!showCode ? <FaRegEye/> : <FaRegEyeSlash/>}</button>
-                    <input type={showCode ? "text" : "password"} value={code} readOnly/>
-                    <button type="button" onClick={() => setCode((prevCode) => prevCode.slice(0, -1))}>
-                        <FaDeleteLeft />
+            <div className="user-login-form">
+                <div className="code-display">
+                    <button onClick={() => handleCodeVisibility()}>
+                        {!showCode ? <FaRegEye/> : <FaRegEyeSlash/>}
                     </button>
+                    <input type={showCode ? "text" : "password"} value={code} readOnly/>
                 </div>
+
                 <div className="keypad">
                     {Array.from({ length: 10 }, (_, index) => (
                         <button key={index} type="button" onClick={() => handleInputCode(index)}>
                             {index}
                         </button>
                     ))}
+                    <button type="button" onClick={() => setCode((prevCode) => prevCode.slice(0, -1))}>
+                        <IoArrowBack />
+                    </button>
+                    <button onClick={() => setCode("")}><MdClear /></button>
                 </div>
             </div>}
+
             <div className="action-buttons">
                 {workspace.type !== "demo" && (
                     <button onClick={() => handleLogin()} disabled={logging}>Log In</button>
                 )}
                 <button onClick={() => handleSignOut()} disabled={demoLogging || logging}>Sign out</button>
             </div>
+
         </div>
     )
 }
