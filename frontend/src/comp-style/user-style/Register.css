@@ -1,0 +1,149 @@
+/* ========== OVERLAY ========== */
+
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+/* ========== MODAL ========== */
+
+.register {
+    --accent: #CC5500;
+    --accent-dark: #A84300;
+    --border: #d9dce2;
+
+    width: 100%;
+    max-width: 420px;
+    max-height: 100%;
+    overflow-y: auto;
+    padding: 28px;
+    box-sizing: border-box;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    font-family: 'Inter', sans-serif;
+}
+
+.register h2 {
+    margin: 0 0 24px;
+    color: #252525;
+    font-size: 22px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* ========== FIELDS ========== */
+
+.register-fields {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 38px;
+    gap: 8px 10px;
+}
+
+.register-fields label {
+    grid-column: 1 / -1;
+    margin-top: 5px;
+    color: #444;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* input, select dhe butoni i syrit ndajnë të njëjtin stil bazë */
+.register-fields input,
+.register-fields select,
+.register-fields button {
+    height: 40px;
+    box-sizing: border-box;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: #fff;
+    font-family: inherit;
+    font-size: 13px;
+}
+
+.register-fields input,
+.register-fields select {
+    grid-column: 1 / -1;
+    width: 100%;
+    padding: 0 12px;
+    color: #333;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.register-fields input:focus,
+.register-fields select:focus {
+    border-color: #f5a623;
+    box-shadow: 0 0 0 2px rgba(245, 166, 35, 0.12);
+}
+
+/* kodi zë kolonën e parë, syri të dytën */
+.register-fields input[name="code"] {
+    grid-column: 1;
+}
+
+.register-fields button {
+    grid-column: 2;
+    color: #777;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.register-fields button:hover {
+    background: #f5f5f5;
+    color: #333;
+}
+
+/* ========== ACTIONS ========== */
+
+.register-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 26px;
+}
+
+.register-buttons button {
+    flex: 1;
+    height: 40px;
+    border: none;
+    border-radius: 6px;
+    background: #f0f1f3;
+    color: #555;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.register-buttons button:hover {
+    background: #e3e5e8;
+}
+
+.register-buttons button:first-child {
+    background: var(--accent);
+    color: #fff;
+}
+
+.register-buttons button:first-child:hover {
+    background: var(--accent-dark);
+}
+
+.register-buttons button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+    .register {
+        padding: 22px 18px;
+    }
+}
