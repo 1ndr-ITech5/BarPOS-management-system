@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {setTableModal, removeTableforUpdate} from "../../store/slices/modalSlice.js";
 import {useState} from "react";
 import {toast} from "react-toastify";
+import "../../comp-style/modals-style/TableModal.css";
 
 const TableModal = () => {
     const dispatch = useDispatch()
@@ -52,25 +53,31 @@ const TableModal = () => {
 
     return (
         <div className="table-modal">
-            <CiCircleRemove
-                onClick={() => {
-                    if (tableId) dispatch(removeTableforUpdate());
-                    dispatch(setTableModal());}}/>
-            <h1>{tableId ? "Update Table" : "Create new table"}</h1>
-            <h2>{tableId ? "Modify this table's data" : "Add more tables for your workspace"}</h2>
-            <div className="modal-lables">
-                <label>Table Name</label>
-                <input type="text" name="name" value={tableData.name} onChange={handleChangeFields}
-                placeholder="Enter the table's name"/>
-                <label>Capacity</label>
-                <input type="number" name="capacity" min={1} max={20} step={1} value={tableData.capacity}
-                onChange={handleChangeFields}/>
+            <div className="table-modal-content">
+                <div className="modal-header">
+                    <h1>{tableId ? "Update Table" : "New Table"}</h1>
+                    <CiCircleRemove onClick={() => {
+                        if (tableId) dispatch(removeTableforUpdate());
+                        dispatch(setTableModal());
+                    }}/>
+                </div>
+                <div className="modal-lables">
+                    <label>Table Name</label>
+                    <input type="text" name="name" value={tableData.name}
+                        onChange={handleChangeFields} placeholder="Enter the table's name" />
+
+                    <label>Capacity</label>
+                    <input type="number" name="capacity" min={1} max={20} step={1}
+                        value={tableData.capacity} onChange={handleChangeFields} />
+                </div>
+                <div className="modal-footer">
+                    <button
+                        onClick={tableId ? handleUpdateTable : handleCreateTable}
+                        disabled={tableId ? updateProcess : createProcess}>
+                        {tableId ? "Update Table" : "Create Table"}
+                    </button>
+                </div>
             </div>
-            <button
-                onClick={tableId ? handleUpdateTable : handleCreateTable}
-                disabled={tableId ? updateProcess : createProcess}>
-            {tableId ? "Update Table" : "Create Table"}
-            </button>
         </div>
     )
 }
