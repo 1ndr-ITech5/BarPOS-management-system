@@ -8,7 +8,7 @@ import admin from "../../assets/admin.jpg";
 import waiter from "../../assets/waiter.jpg";
 import Register from "../../components/user/Register.jsx";
 import {useNavigate} from "react-router-dom";
-import "../../pages-style/Profile.css";
+import "../../pages-style/other/Profile.css";
 
 const Profile = () => {
 
@@ -39,39 +39,42 @@ const Profile = () => {
 
     return (
         <div className="profile">
-            <img src={user.role === "admin" ? admin : waiter}/>
-            <div className="personal">
-                <h1>Personal Information</h1>
-                <h2>Full Name: {user.first_name} {user.last_name}</h2>
-                <h2>Role: {user.role}</h2>
-                <h2>Date Joined: {formatDate(user.createdAt)}</h2>
+            <div className="left-side">
+                <img src={user.role === "admin" ? admin : waiter}/>
+                <div className="personal">
+                    <h1>Personal Information</h1>
+                    <h2>Full Name: {user.first_name} {user.last_name}</h2>
+                    <h2>Role: {user.role}</h2>
+                    <h2>Date Joined: {formatDate(user.createdAt)}</h2>
+                </div>
+                <div className="profile-buttons">
+                    <button onClick={() => nav("/tables")}><IoMdArrowRoundBack/> Back to tables</button>
+                    {(user.workspaceId.type === "real" && user.role === "admin") && 
+                        <button onClick={() => setRegisterModal(true)}>Register new users</button>}
+                </div>
             </div>
             {user.role === "waiter" ? (
-                <div>
+                <div className="right-side-waiter">
                     <h1>Work Stats</h1>
                     <h2>Orders completed today: {waiterStats.todayCompletedOrders}</h2>
                     <h2>All time completed orders: {waiterStats.allCompletedOrders}</h2>
                 </div>)
                  : (
-                <div>
-                    <h1>Today's Waiter Performance</h1>
-                    <div>
-                        <h2>Waiter</h2>
-                        <h2>Completed Orders</h2>
-                    </div>
-                    <div>
-                        {waiterPerformances.map(item => <div key={item._id}>
-                            <h3>{item.first_name} {item.last_name}</h3>
-                            <h3>{item.completedOrders}</h3>
-                        </div>)}
-                    </div>
-                    <div className="profile-buttons">
-                        <button onClick={() => nav("/tables")}><IoMdArrowRoundBack/> Back to tables</button>
-                        {user.workspaceId.type !== "demo" && 
-                            <button onClick={() => setRegisterModal(true)}>Register new users</button> }
-                    </div>
-                    {registerModal && <Register changeModal={setRegisterModal}/>}
+                <div className="right-side-admin">
+                    <h1>Today's Waiter Performances</h1>
+                    <table>
+                        <tr>
+                            <th>Full Name</th>
+                            <th>Completed Orders</th>
+                        </tr>
+                        {waiterPerformances.map(item => 
+                        <tr key={item._id}>
+                            <td>{item.first_name} {item.last_name}</td>
+                            <td>{item.completedOrders}</td>
+                        </tr>)}
+                    </table>
                 </div>)}
+                {registerModal && <Register changeModal={setRegisterModal}/>}
         </div>
     )
 }
