@@ -1,6 +1,7 @@
 import {useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {useGetOrderByIdQuery} from "../../store/apis/orderApi.js";
+import {useGetItemsQuery} from "../../store/apis/orderItemsApi.js";
 import {useCreatePaymentMutation} from "../../store/apis/paymentApi.js";
 import Spinner from "../../components/other/Spinner.jsx";
 import {useState} from "react";
@@ -11,7 +12,8 @@ const Checkout = () => {
     const nav = useNavigate();
     const orderId = useSelector(state => state.order.currentOrderId)
 
-    const {data: orderData, isLoading: orderLoading, isError, error} = useGetOrderByIdQuery(orderId, {skip: !orderId})
+    const {data: order, isLoading: orderLoading, isError, error} = useGetOrderByIdQuery(orderId, {skip: !orderId})
+    const {data: orderItems, isLoading: orderItemsLoading} = useGetItemsQuery(orderId, {skip: !orderId})
     const [createPayment, {isLoading}] = useCreatePaymentMutation();
 
     const [paymentData, setPaymentData] = useState({
@@ -19,10 +21,10 @@ const Checkout = () => {
         method: ""
     })
 
-    if (orderLoading) {
+    if (orderLoading || orderItemsLoading) {
         return (
             <div>
-                <h2>Fetching current order state...</h2>
+                <h2>Fetching order data...</h2>
                 <Spinner/>
             </div>      
         )
@@ -61,7 +63,7 @@ const Checkout = () => {
         )
     }
 
-    if (!orderData) {
+    if (!order) {
         return (
             <div>
                 <p>This order was not found!</p>
@@ -79,60 +81,62 @@ const Checkout = () => {
         }))
     }
 
-    const handlePayment = async(e) => {
-        e.preventDefault();
-
+    const handlePayment = async() => {
         try{
             await createPayment({orderId, paymentData}).unwrap()
             nav("/payment-completed")
         }catch(error){
-            toast.error(error.data.message)
+            toast.error(error?.data?.message || "Payment failed!")
         }
     }
 
     return(
         <div className="checkout">
             <h1>Checkout</h1>
-            <h3>Table: {orderData.order.tableId.tableNumber}</h3>
-            <h3>Waiter: {orderData.order.waiterId.first_name} {orderData.order.waiterId.last_name}</h3>
+            <h3>Table: {order?.tableId?.tableName}</h3>
+            <h3>Waiter: {order?.waiterId?.first_name} {order?.waiterId?.last_name}</h3>
             <div className="order-summary">
                 <h2>Order Summary</h2>
                 <div className="order-list">
                     <div>
                         <h3>Item</h3>
-                        {orderData.orderItems.map(item => <p key={item._id}>{item.menuItemId.productName}</p>)}
+                        {orderItems.map(item => <p key={item._id}>{item.menuItemId.productName}</p>)}
                     </div>
                     <div>
                         <h3>Quantity</h3>
-                        {orderData.orderItems.map(item => <p key={item._id}>{item.quantity}</p>)}
+                        {orderItems.map(item => <p key={item._id}>{item.quantity}</p>)}
                     </div>
                     <div>
                         <h3>Price</h3>
-                        {orderData.orderItems.map(item => <p key={item._id}>{item.unitPrice * item.quantity}</p>)}
+                        {orderItems.map(item => <p key={item._id}>{item.unitPrice * item.quantity}</p>)}
                     </div>
                     <p>-----------------------------------------------------</p>
                     <div>
                         <h2>Total in ALL - </h2>
-                        <h2>{orderData.order.total}</h2>
+                        <h2>{order.total}</h2>
                     </div>
                 </div>
             </div>
             <div className="payment">
                 <div>
                     <label>Amount Received</label>
-                    <input type="number" name="amountPaid" value={paymentData.amountPaid} placeholder="put the number here..." onChange={handleChange} required/>
+                    <input type="number" name="amountPaid" value={paymentData.amountPaid} 
+                    placeholder="put the number here..." onChange={handleChange} required/>
                 </div>
                 <div>
                     <p>Payment Method</p>
-                    <input type="radio" name="method" value="cash" checked={paymentData.method === "cash"} onChange={handleChange}/>
+                    <input type="radio" name="method" value="cash" 
+                    checked={paymentData.method === "cash"} onChange={handleChange}/>
                     <label>Cash</label>
 
-                    <input type="radio" name="method" value="card" checked={paymentData.method === "card"} onChange={handleChange}/>
+                    <input type="radio" name="method" value="card" 
+                    checked={paymentData.method === "card"} onChange={handleChange}/>
                     <label>Card</label>
                 </div>
             </div>
             <div>
-                <button disabled={isLoading} onClick={(e) => handlePayment(e)}>{isLoading ? "Processing payment" : "Confirm Payment"}</button>
+                <button disabled={isLoading} onClick={() => handlePayment()}>
+                    {isLoading ? "Processing payment" : "Confirm Payment"}</button>
                 <button onClick={() => nav(-1)}>Back</button>
             </div>
         </div>
