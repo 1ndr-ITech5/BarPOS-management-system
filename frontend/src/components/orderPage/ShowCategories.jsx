@@ -1,6 +1,6 @@
-import "../../comp-style/orderPage-style/Categories.css";
 import {useGetCategoriesQuery} from "../../store/apis/categoryApi.js";
 import Spinner from "../other/Spinner.jsx";
+import "../../comp-style/orderPage-style/Categories.css";
 
 const Categories = ({selectedCategory, setCategory}) => {
     const {data: categories, isLoading} = useGetCategoriesQuery();
