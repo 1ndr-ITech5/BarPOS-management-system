@@ -1,39 +1,30 @@
 const Order = require("../models/orderModel.js")
 const Table = require("../models/tableModel.js")
 const OrderItem = require("../models/orderItemModel.js")
-const {deleteOrderItems} = require("./orderItemService.js")
+const {messageError} = require("../utils/messageErrors.js")
 const mongoose = require("mongoose")
 
 // get order based on the table id
 const getOrderByTable = async(table_id, userData) => {
     // check if this table exists in db
     const table = await Table.findOne({_id: table_id, ownedBy: userData.workspaceId})
-    if (!table){
-        const error = new Error("This table does not exist!")
-        error.statusCode = 404
-        throw error;
-    }
+    if (!table){throw messageError("This table does not exist!", 404)}
     
     const order = await Order.findOne({
         workspaceId: userData.workspaceId,
         tableId: table_id,
         status: "open"
-    }).populate("waiterId", "first_name last_name")
-    .populate("tableId", "tableNumber")
-    .populate("workspaceId", "name")
+    }).populate("waiterId", "first_name last_name").populate("tableId", "tableName")
 
     // when order is not found
     if (!order) {
-        const error = new Error(`No active order was found for table number ${table.tableNumber}!`)
-        error.statusCode = 404
-        throw error;
+        throw messageError(`No active order was found for table number ${table.tableName}!`, 404)
     }
 
     // check that only the waiter who opened it or the admin has permission to get it
     if(order.waiterId._id.toString() !== userData._id.toString() && userData.role !== "admin"){
-        const error = new Error(`Only ${order.waiterId.first_name} ${order.waiterId.last_name} and the admin have access on this order!`)
-        error.statusCode = 403
-        throw error;
+        throw messageError(`Only ${order.waiterId.first_name} ${order.waiterId.last_name} 
+            and the admin have access on this order!`, 403)
     }
 
     // query over order items
@@ -49,27 +40,20 @@ const getOrderById = async(orderId, userData) => {
         _id: orderId,
         workspaceId: userData.workspaceId,
         status: "open"
-    }).populate("waiterId", "first_name last_name").populate("workspaceId", "name").populate("tableId", "tableNumber")
+    }).populate("waiterId", "first_name last_name").populate("tableId", "tableName timeOpened")
 
     // when order is not found
     if (!order) {
-        const error = new Error(`No active order was found for this table!`)
-        error.statusCode = 404
-        throw error;
+        throw messageError(`No active order was found for this table!`, 404)
     }
 
     // check that only the waiter who opened it or the admin has permission to get it
     if(order.waiterId._id.toString() !== userData._id.toString() && userData.role !== "admin"){
-        const error = new Error(`Only ${order.waiterId.first_name} ${order.waiterId.last_name} and the admin have access on this order!`)
-        error.statusCode = 403
-        throw error;
+        throw messageError(`Only ${order.waiterId.first_name} ${order.waiterId.last_name} 
+            and the admin have access on this order!`, 403)
     }
 
-    // query over order items
-    const orderItems = await OrderItem.find({orderId: order._id})
-    .populate("menuItemId", "productName")
-
-    return {order, orderItems}
+    return order
 }
 
 // get all the active orders
@@ -115,33 +99,23 @@ const getWaiterOrders = async(user_id, workspaceId) => {
 }
 
 // create the order
-const openOrder = async(table_id, userData) => {
+const openOrder = async(tableId, userData) => {
     // check if the table exists in db
-    const table = await Table.findOne({_id: table_id, ownedBy: userData.workspaceId})
-    if (!table) {
-        const error = new Error("This table does not exist!")
-        error.statusCode = 404
-        throw error;
-    }
+    const table = await Table.findOne({_id: tableId, ownedBy: userData.workspaceId})
+    if (!table) {throw messageError("This table does not exist!", 404)}
 
     // check table status to be available during the order opening
     if (table.status === "occupied"){
-        const error = new Error("Cannot open an order on an occupied table!")
-        error.statusCode = 409
-        throw error
+        throw messageError("Cannot open an order on an occupied table!", 409)
     }
 
     // check if any order is opened for that table
     const order = await Order.findOne({
-        tableId: table_id,
+        tableId: table._id,
         workspaceId: userData.workspaceId,
         status: "open"
     })
-    if (order) {
-        const error = new Error("This table has an order already!")
-        error.statusCode = 409
-        throw error;
-    }
+    if (order) {throw messageError("This table has an order already!", 409)}
 
     const session = await mongoose.startSession();
 
@@ -151,7 +125,7 @@ const openOrder = async(table_id, userData) => {
         // create the order for that table
         const [newOrder] = await Order.create([{
             waiterId: userData._id,
-            tableId: table_id,
+            tableId: table._id,
             workspaceId: userData.workspaceId
         }], {session})
 
@@ -169,9 +143,7 @@ const openOrder = async(table_id, userData) => {
     }catch(error){
         await session.abortTransaction();
         if(error.code === 11000){
-            const err = new Error("The order for this table has already been set!")
-            err.statusCode = 409
-            throw err;
+            throw messageError("The order for this table has already been set!", 409)
         }
         throw error;
     }finally{
@@ -179,10 +151,10 @@ const openOrder = async(table_id, userData) => {
     }
 }
 
-const closeOrder = async(order_id, table_id, session) => {
+const closeOrder = async(orderId, tableId, session) => {
     // update the order status
     await Order.findByIdAndUpdate(
-        order_id,
+        orderId,
         {   status: "closed",
             closedAt: new Date()
         },
@@ -191,7 +163,7 @@ const closeOrder = async(order_id, table_id, session) => {
 
     // update table occupation
     await Table.findByIdAndUpdate(
-        table_id,
+        tableId,
         {   status: "available",
             openedBy: null,
             timeOpened: null
@@ -200,40 +172,31 @@ const closeOrder = async(order_id, table_id, session) => {
     )
 }
 
-const deleteOrder = async(table_id, userData) => {
+const deleteOrder = async(tableId, userData) => {
     // check if the order exists
     const order = await Order.findOne({
-        tableId: table_id,
+        tableId: tableId,
         workspaceId: userData.workspaceId,
         status: "open"
     }).populate("waiterId", "first_name last_name")
 
-    if(!order){
-        const error = new Error("Order does not exists for this table!")
-        error.statusCode = 404
-        throw error;
-    }
+    if(!order){throw messageError("Order does not exists for this table!", 404)}
 
     // make sure that the waiter who opened it, has the right to close it aswell, admin can do it too
     if (order.waiterId._id.toString() !== userData._id.toString() && userData.role !== "admin"){
-        const error = new Error(`Only ${order.waiterId.first_name} ${order.waiterId.last_name} and the admin, have the rights to delete this order!`)
-        error.statusCode = 403
-        throw error;
-    }
+        throw messageError(`Only ${order.waiterId.first_name} ${order.waiterId.last_name} and the admin, 
+            have the rights to delete this order!`, 403)}
 
     const session = await mongoose.startSession();
 
     try{
         await session.startTransaction();
-        // delete the found order
-        const deletedOrder = await Order.findByIdAndDelete(order._id, {session})
-
-        // delete its items
-        await deleteOrderItems(order._id, session)
+        await OrderItem.deleteMany({orderId: order._id}, {session})
+        await Order.findByIdAndDelete(order._id, {session})
 
         // update table occupation
         await Table.findByIdAndUpdate(
-            table_id,
+            order.tableId,
             {   status: "available",
                 openedBy: null,
                 timeOpened: null
@@ -242,7 +205,6 @@ const deleteOrder = async(table_id, userData) => {
         )
 
         await session.commitTransaction();
-        return deletedOrder
     }catch(error){
         await session.abortTransaction();
         throw error
