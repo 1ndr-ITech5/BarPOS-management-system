@@ -1,44 +1,48 @@
 const OrderItem = require("../models/orderItemModel.js")
 const Order = require("../models/orderModel.js")
 const Product = require("../models/productModel.js")
-const Category = require("../models/categoryModel.js")
 const {updateOrderTotal} = require("./orderTotalService.js")
 const mongoose = require("mongoose")
 const {messageError} = require("../utils/messageErrors.js")
 
-const addOrderItem = async(order_id, productId, userData) => {
+// create a service to get all order items from a specific order
+const getOrderItems = async(orderId, workspaceId) => {
+    // find the order within the workspace
+    const order = await Order.findOne({_id: orderId, workspaceId: workspaceId, status: "open"})
+    if (!order){
+        throw messageError("The order was not found!", 404)
+    }
+
+    // when find the order, get all his order items
+    const orderItems = await OrderItem.find({orderId: order._id}).populate("menuItemId", "productName")
+    return orderItems
+}
+
+
+const addOrderItem = async(orderId, productId, userData) => {
     // check if order exists
-    const order = await Order.findOne({_id: order_id, workspaceId: userData.workspaceId, status: "open"})
-    .populate("waiterId", "first_name last_name")
+    const order = await Order.findOne({_id: orderId, workspaceId: userData.workspaceId, status: "open"})
     if (!order) {
-        const error = new Error("Order does not exists!")
-        error.statusCode = 404
-        throw error
-    }
-
-    // check if the order item is an available product
-    const item = await Product.findOne({_id: productId, offeredBy: userData.workspaceId})
-    if (!item){
-        throw messageError("Product does not exist!", 404)
-    }
-
-    // don't allow adding items on inactive / archived categories
-    const itemCategory = await Category.findOne({_id: item.categoryId, workspaceId: userData.workspaceId})
-    if(!itemCategory){
-        throw messageError("The item's category does not exist!", 404)
-    }
-    if(itemCategory.isActive !== true || itemCategory.isArchived !== false){
-        throw messageError("The product's category is inactive / archived! It cannot be added!", 409)
-    }
-    if(item.isArchived === true || item.isAvailable === false){
-        throw messageError("This product cannot be added to the order, because is archived / not available!", 409)
+        throw messageError("Order does not exists!", 404)
     }
 
     // check if the waiter who opened it and the admin, have the rights to add items on order
     if (order.waiterId._id.toString() !== userData._id.toString() && userData.role !== "admin"){
-        const error = new Error(`Only ${order.waiterId.first_name} ${order.waiterId.last_name} and the admin, have the rights to add items on this order!`)
-        error.statusCode = 403
-        throw error
+        throw messageError(`Only ${order.waiterId.first_name} ${order.waiterId.last_name} and the admin, 
+            have the rights to add items on this order!`, 403)
+    }
+
+    // check if the order item is an available product
+    const item = await Product.findOne({_id: productId, offeredBy: userData.workspaceId})
+    .populate("categoryId", "categoryName isActive isArchived")
+    if (!item){
+        throw messageError("Product does not exist!", 404)
+    }
+
+    // check for product's availability
+    if(item.isAvailable === false || item.categoryId.isActive === false 
+        || item.isArchived === true || item.categoryId.isArchived === true){
+        throw messageError("A non-active product cannot be added on an order!", 409)
     }
 
     //start the session of the items increment 
@@ -47,22 +51,19 @@ const addOrderItem = async(order_id, productId, userData) => {
         session.startTransaction()
 
         // check if same orderItem has been created for that order
-        const orderItem = await OrderItem.findOne({
-            orderId: order_id,
-            menuItemId: productId
-        }).session(session)
+        const orderItem = await OrderItem.findOne({orderId: order._id, menuItemId: item._id}).session(session)
         if (!orderItem){
             const quantity = 1
             const newOrderItem = new OrderItem({
-                orderId: order_id,
-                menuItemId: productId,
+                orderId: order._id,
+                menuItemId: item._id,
                 quantity,
                 unitPrice: item.price,
                 linePrice: quantity * item.price
             })
             await newOrderItem.save({session})
             // update the order's total
-            await updateOrderTotal(order_id, session)
+            await updateOrderTotal(order._id, session)
             await session.commitTransaction()
             // return the newly created / updated order item
             return newOrderItem
@@ -79,16 +80,14 @@ const addOrderItem = async(order_id, productId, userData) => {
                     session, returnDocument: "after", runValidators: true
                 })
             // update the order's total
-            await updateOrderTotal(order_id, session)
+            await updateOrderTotal(order._id, session)
             await session.commitTransaction()
             return updatedOrderItem
         }
     }catch(error){
         await session.abortTransaction()
         if(error.code === 11000){
-            const err = new Error("Error occured during items adding on order!")
-            err.statusCode = 409
-            throw err;
+            throw messageError("Error occured during items adding on order!", 409)
         }
         throw error
     }finally {
@@ -96,37 +95,27 @@ const addOrderItem = async(order_id, productId, userData) => {
     }
 }
 
-const removeOrderItem = async(order_id, productId, userData) => {
-
+const removeOrderItem = async(orderId, orderItemId, userData) => {
     // check if the order exists
-    const order = await Order.findOne({_id: order_id, workspaceId: userData.workspaceId, status: "open"})
+    const order = await Order.findOne({_id: orderId, workspaceId: userData.workspaceId, status: "open"})
     .populate("waiterId", "first_name last_name")
-    if (!order) {
-        const error = new Error("Order does not exists!")
-        error.statusCode = 404
-        throw error
-    }
+    if (!order) {throw messageError("Order does not exists!", 404)}
 
     // check if the waiter who opened it and the admin have the right to remove items on order
     if (order.waiterId._id.toString() !== userData._id.toString() && userData.role !== "admin"){
-        const error = new Error(`Only ${order.waiterId.first_name} ${order.waiterId.last_name} and the admin, have the rights to remove items on this order!`)
-        error.statusCode = 403
-        throw error
+        throw messageError(`Only ${order.waiterId.first_name} ${order.waiterId.last_name} and the admin, 
+            have the rights to remove items on this order!`, 403)
     }
+
+    // find the order item
+    const orderItem = await OrderItem.findOne({_id: orderItemId, orderId: order._id})
+    if (!orderItem) {throw messageError("This item does not exist in this order!", 404)}
 
     // start session
     const session = await mongoose.startSession()
 
     try{
         await session.startTransaction()
-
-        // check if the order item exists in this order
-        const orderItem = await OrderItem.findOne({orderId: order_id, menuItemId: productId}).session(session)
-        if (!orderItem) {
-            const error = new Error("This item does not exists in this order!")
-            error.statusCode = 404
-            throw error
-        }
 
         // make sure when quantity goes below 1, then we delete it
         if (orderItem.quantity > 1){
@@ -142,14 +131,12 @@ const removeOrderItem = async(order_id, productId, userData) => {
                     session, returnDocument: "after", runValidators: true
                 })
             // update the order's total
-            await updateOrderTotal(order_id, session)
+            await updateOrderTotal(order._id, session)
             await session.commitTransaction()
             return updateOrderItem
         }else{
             const deleteOrderItem = await OrderItem.findByIdAndDelete(orderItem._id, {session})
-        
-            // update the order's total
-            await updateOrderTotal(order_id, session)
+            await updateOrderTotal(order._id, session)
             await session.commitTransaction()
             return deleteOrderItem
         }
@@ -161,9 +148,35 @@ const removeOrderItem = async(order_id, productId, userData) => {
     }
 }
 
-const deleteOrderItems = async(orderId, session) => {
-    // delete the order items
-    await OrderItem.deleteMany({orderId}, {session})
+const deleteOrderItem = async(orderId, orderItemId, userData) => {
+    // find the order
+    const order = await Order.findOne({_id: orderId, workspaceId: userData.workspaceId})
+    if(!order){
+        throw messageError("Order was not found!", 404)
+    }
+
+    // check if the waiter who opened the order or admin is performing this operation
+    if(order.waiterId !== userData._id.toString() && userData.role !== "admin"){
+        throw messageError("Only the waiter who opened the order or admin can perform this operation!", 409)
+    }
+
+    const session = await mongoose.startSession()
+    try{
+        await session.startTransaction()
+
+        const deletedItem = await OrderItem.findOneAndDelete({_id: orderItemId, orderId: order._id}, {session})
+        if(!deletedItem){
+            throw messageError("Cannot delete an order item that does not even exist!", 404)
+        
+        }
+        await updateOrderTotal(order._id, session)
+        await session.commitTransaction()
+    }catch(error){
+        await session.abortTransaction()
+        throw error
+    }finally{
+        await session.endSession()
+    }
 }
 
-module.exports = {addOrderItem, removeOrderItem, deleteOrderItems}
+module.exports = {getOrderItems, addOrderItem, removeOrderItem, deleteOrderItem}
