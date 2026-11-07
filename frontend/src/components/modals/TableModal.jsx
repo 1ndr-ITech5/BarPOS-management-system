@@ -27,27 +27,24 @@ const TableModal = () => {
         }))
     }
 
-    const handleCreateTable = async(e) => {
-        e.preventDefault()
-
+    const handleCreateTable = async() => {
         try{
             const response = await createTable(tableData).unwrap()
             toast.success(response.response)
             dispatch(setTableModal())
         }catch(error){
-            toast.error(error.data.message)
+            toast.error(error?.data?.message)
         }
     }
 
-    const handleUpdateTable = async(e) => {
-        e.preventDefault()
-
+    const handleUpdateTable = async() => {
         try{
             const response = await updateTable({tableId, tableData}).unwrap()
             toast.success(response.response)
+            dispatch(removeTableforUpdate())
             dispatch(setTableModal())
         }catch(error){
-            toast.error(error.data.message)
+            toast.error(error?.data?.message)
         }
     }
 

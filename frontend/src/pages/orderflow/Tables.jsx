@@ -3,23 +3,19 @@ import {useGetTablesQuery} from "../../store/apis/tablesApi.js";
 import StatusCard from "../../components/cards/StatusCard.jsx";
 import {useSelector, useDispatch} from "react-redux";
 import Spinner from "../../components/other/Spinner.jsx";
-import PreBill from "../../components/other/PreBill.jsx";
 import TableModal from "../../components/modals/TableModal.jsx";
 import {setTableModal} from "../../store/slices/modalSlice.js";
-import {useState} from "react";
 import { IoMdAdd } from "react-icons/io";
 import '../../pages-style/Tables.css';
 
 const Tables = () => {
     const dispatch = useDispatch()
+    
     const workspaceId = useSelector((state) => state.workspace.currentWorkspace.workspaceId)
     const user = useSelector(state => state.user.user)
+    const tableModal = useSelector(state => state.modals.tableModal)
 
     const {data: tables, isLoading} = useGetTablesQuery(undefined, {skip: !workspaceId, refetchOnMountOrArgChange: true})
-
-    const [orderData, setOrderData] = useState(null)
-    const tableModal = useSelector(state => state.modals.tableModal)
-    const preBill = useSelector(state => state.order.preBillOrderId)
     
     if (isLoading) return (
         <div>
@@ -43,11 +39,10 @@ const Tables = () => {
                 </div>
                 <div className="tables-grid">
                     {tables?.map(table => (
-                        <TableCard key={table._id} table={table} setOrder={setOrderData}/>
+                        <TableCard key={table._id} table={table}/>
                     ))}
                 </div>
             </div>
-            {preBill && <PreBill orderData={orderData}/>}
             {tableModal && <TableModal/>}
         </div>
     )

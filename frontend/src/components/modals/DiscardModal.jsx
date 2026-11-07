@@ -26,7 +26,6 @@ const DiscardModal = () => {
     const handleDeleteOrder = async(tableId) => {
         try{
             const response = await deleteOrder(tableId).unwrap()
-            console.log(response)
             toast.success(response.response)
             dispatch(setDiscardModal(false))
             dispatch(clearCurrentOrder())
