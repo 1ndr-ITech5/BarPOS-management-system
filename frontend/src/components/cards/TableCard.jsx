@@ -5,17 +5,15 @@ import {setCurrentOrder} from "../../store/slices/orderSlice.js";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {setTableModal, setTableforUpdate} from "../../store/slices/modalSlice.js";
-import {setPreBill} from "../../store/slices/orderSlice.js";
 import {toast} from "react-toastify";
 import { IoMdAdd } from "react-icons/io";
 import { MdOutlineUpdate } from "react-icons/md";
-import { GrView } from "react-icons/gr";
 import { MdOutlineShoppingCartCheckout } from "react-icons/md";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { TfiWrite } from "react-icons/tfi";
 
 
-const TableCard = ({table, setOrder}) => {
+const TableCard = ({table}) => {
 
     const dispatch = useDispatch()
     const nav = useNavigate()
@@ -43,16 +41,6 @@ const TableCard = ({table, setOrder}) => {
             nav("/order-page")
         }catch(error){
             toast.error(error)
-        }
-    }
-
-    const handleGetOrder = async() => {
-        try {
-            const orderData = await getOrderByTable(table._id).unwrap()
-            setOrder(orderData)
-            dispatch(setPreBill(orderData.order._id))
-        } catch (error) {
-            toast.error(error?.data?.message || "You are not authorized to access this order.")
         }
     }
 
@@ -85,16 +73,32 @@ const TableCard = ({table, setOrder}) => {
         }
     }
 
+    const handleUpdateTable = () => {
+        dispatch(setTableforUpdate(table._id))
+        dispatch(setTableModal(true))
+    }
+
     return(
         <div className={`table-card ${table.status}`}>
             <div className="table-card-header">
                 <h3>Table: <span>{table.tableName}</span></h3>
-                {user.role === "admin" ? table.status === "available" ? 
-                    <button onClick={() => handleDeleteTable()} disabled={deletingTable}>
-                    <RiDeleteBinLine /></button> : "" : ""}
-                    
-                {table.status === "occupied" ? <button onClick={() => handleCheckout()} disabled={loading()}>
-                    <MdOutlineShoppingCartCheckout /></button> : ""}
+
+                {user.role === "admin" && table.status === "available" && (
+                    <>
+                        <button onClick={handleDeleteTable} disabled={deletingTable}>
+                            <RiDeleteBinLine />
+                        </button>
+                        <button onClick={handleUpdateTable}>
+                            <TfiWrite />
+                        </button>
+                    </>
+                )}
+
+                {table.status === "occupied" && (
+                    <button onClick={handleCheckout} disabled={loading()}>
+                        <MdOutlineShoppingCartCheckout />
+                    </button>
+                )}
             </div>
             <button className="table-status">{table.status}</button>
             <div className="table-card-stats">
@@ -111,12 +115,6 @@ const TableCard = ({table, setOrder}) => {
                 <button onClick={() => {table.status === "available" ? handleOpenOrder() : handleUpdateOrder()}} disabled={loading()}>
                 {table.status === "available" ? <IoMdAdd /> : <MdOutlineUpdate />}
                 {table.status === "available" ? "Open Order" : "Update Order"}</button>
-
-                {user.role === "admin" ? table.status === "available" ? 
-                    <button onClick={() => {dispatch(setTableforUpdate(table._id)), dispatch(setTableModal())}}>
-                    <TfiWrite /> Update Table</button> : "" : ""}
-
-                {table.status === "occupied" ? <button onClick={() => handleGetOrder()} disabled={loading()}><GrView /> View Order</button> : ""}
             </div>
         </div>
     )
