@@ -6,7 +6,7 @@ const orderSlice = createSlice({
     name: "order",
     initialState: {
         currentOrderId: currentOrderId || null,
-        preBillOrderId: null
+        preBill: false
     },
     reducers: {
         setCurrentOrder: (state, action) => {
@@ -19,7 +19,7 @@ const orderSlice = createSlice({
             localStorage.removeItem("currentTableId")
         },
         setPreBill(state, action){
-            state.preBillOrderId = action.payload
+            state.preBill = action.payload
         }
     }
 })

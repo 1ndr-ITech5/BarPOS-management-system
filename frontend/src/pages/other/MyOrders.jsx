@@ -1,12 +1,12 @@
 import {useGetMyOrdersQuery} from "../../store/apis/orderApi.js";
-import MyOrdersCard from "../../components/cards/OrdersCard.jsx";
+import OrdersCard from "../../components/cards/OrdersCard.jsx";
 import {clearCurrentOrder} from "../../store/slices/orderSlice.js";
 import Spinner from "../../components/other/Spinner.jsx";
-import {useDispatch} from "react-redux";
-import {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect, useState} from "react";
+import PreBill from "../../components/other/PreBill.jsx";
 
 const MyOrders = () => {
-
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -14,7 +14,8 @@ const MyOrders = () => {
     }, [dispatch])
 
     const {data: myOrders, isLoading, isError, error} = useGetMyOrdersQuery(undefined, {refetchOnMountOrArgChange: true});
-    console.log(myOrders)
+    const viewPreBill = useSelector(state => state.order.preBill)
+    const [selectedOrder, setOrder] = useState(null)
 
     if(isLoading){
         return (
@@ -43,11 +44,12 @@ const MyOrders = () => {
             {myOrders.length > 0 ? (
                 <div className="cards-container">
                 {myOrders.map(order => (
-                    <MyOrdersCard key={order._id} order={order}/>
+                    <OrdersCard key={order._id} order={order} setOrder={setOrder}/>
                 ))}
                 </div>
             ) : 
             ( <p>No active orders found right now!</p> )}
+            {viewPreBill && <PreBill order={selectedOrder}/>}
         </div>
     )
 }

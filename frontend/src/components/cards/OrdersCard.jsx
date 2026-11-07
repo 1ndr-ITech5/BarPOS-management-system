@@ -1,42 +1,38 @@
-import {useGetOrderByIdQuery} from "../../store/apis/orderApi.js";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {setCurrentOrder} from "../../store/slices/orderSlice.js";
 import {setPreBill} from "../../store/slices/orderSlice.js";
 import {TimeReform} from "../../utils/DateFormat.js";
-import PreBill from "../other/PreBill.jsx";
+import {toast} from "react-toastify";
 
-const MyOrdersCard = ({order}) => {
+const OrdersCard = ({order, setOrder}) => {
 
     const dispatch = useDispatch();
     const nav = useNavigate();
 
     const user = useSelector(state => state.user.user)
-    const preBillOrderId = useSelector(state => state.order.preBillOrderId)
-    const viewPreBill = preBillOrderId === order._id
 
-    const {data: orderData} = useGetOrderByIdQuery(order._id, {skip: !viewPreBill});
-
-    const handleUpdateOrder = (e) => {
-        e.preventDefault();
-    
+    const handleUpdateOrder = () => {
         try{
             dispatch(setCurrentOrder(order._id))
             nav("/order-page")
         }catch(error){
-            console.log(error)
+            toast.error(error)
         }
     }
 
-    const handleCheckout = (e) => {
-        e.preventDefault();
-
+    const handleCheckout = () => {
         try{
             dispatch(setCurrentOrder(order._id))
             nav("/checkout")
         }catch(error){
-            console.log(error)
+            toast.error(error)
         }
+    }
+
+    const handleSetOrderPreBill = (selectedOrder) => {
+        setOrder(selectedOrder)
+        dispatch(setPreBill(true))
     }
 
     return(
@@ -46,15 +42,12 @@ const MyOrdersCard = ({order}) => {
             <h3>Opened: {TimeReform(order.createdAt)}</h3>
             <h3>Total: {order.total} ALL</h3>
             <div>
-                <button onClick={(e) => handleUpdateOrder(e)}>Update Order</button>
-                <button onClick={(e) => handleCheckout(e)}>Checkout</button>
-                <button onClick={() => dispatch(setPreBill(order._id))}>View</button>
-            </div>
-            <div>
-                {viewPreBill && orderData && <PreBill orderData={orderData}/>}
+                <button onClick={handleUpdateOrder}>Update Order</button>
+                <button onClick={handleCheckout}>Checkout</button>
+                <button onClick={() => handleSetOrderPreBill(order)}>View</button>
             </div>
         </div>
     )
 }
 
-export default MyOrdersCard;
+export default OrdersCard;

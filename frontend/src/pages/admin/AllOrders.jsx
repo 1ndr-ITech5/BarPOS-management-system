@@ -1,9 +1,10 @@
 import {useGetAllOrdersQuery} from "../../store/apis/orderApi.js";
-import MyOrdersCard from "../../components/cards/OrdersCard.jsx";
+import OrdersCard from "../../components/cards/OrdersCard.jsx";
 import {clearCurrentOrder} from "../../store/slices/orderSlice.js";
 import Spinner from "../../components/other/Spinner.jsx";
-import {useDispatch} from "react-redux";
-import {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect, useState} from "react";
+import PreBill from "../../components/other/PreBill.jsx";
 
 const AllOrders = () => {
 
@@ -14,6 +15,8 @@ const AllOrders = () => {
     }, [dispatch])
 
     const {data: allOrders, isLoading, isError, error} = useGetAllOrdersQuery();
+    const [selectedOrder, setOrder] = useState(null)
+    const viewPreBill = useSelector(state => state.order.preBill)
 
     if (isLoading){
         return (
@@ -41,9 +44,10 @@ const AllOrders = () => {
             <h1>All-Orders</h1>
             {allOrders.length > 0 ? (<div className="all-orders">
                 {allOrders.map(order => (
-                    <MyOrdersCard key={order._id} order={order}/>
+                    <OrdersCard key={order._id} order={order} setOrder={setOrder}/>
                 ))}
             </div>) : (<p>No active order was found!</p>)}
+            {viewPreBill && <PreBill order={selectedOrder}/>}
         </div>
     )
 }
