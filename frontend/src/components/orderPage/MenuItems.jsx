@@ -3,13 +3,13 @@ import {useGetProductsQuery} from "../../store/apis/productsApi.js";
 import Spinner from "../other/Spinner.jsx";
 import {useSelector} from "react-redux";
 import {toast} from "react-toastify";
-import "../../comp-style/orderPage-style/Products.css";
+import "../../comp-style/orderPage-style/OrderPanel.css";
 
 const MenuItems = ({selectedCategory}) => {
 
     const orderId = useSelector(state => state.order.currentOrderId)
 
-    const {data: menuItems, isLoading} = useGetProductsQuery();
+    const {data: menuItems = [], isLoading} = useGetProductsQuery();
     const [addItem, {isLoading: addingItem}] = useAddItemMutation();
 
     if (isLoading){
@@ -21,7 +21,11 @@ const MenuItems = ({selectedCategory}) => {
         )
     }
 
-    const handleAddItem = async(orderId, menuItemId) => {
+    const shownProducts = selectedCategory === "All"
+        ? menuItems
+        : menuItems.filter(product => product.categoryId?.categoryName === selectedCategory)
+
+    const handleAddItem = async(menuItemId) => {
         try{
             await addItem({orderId, menuItemId}).unwrap()
         }catch(error){
@@ -30,16 +34,18 @@ const MenuItems = ({selectedCategory}) => {
     }
 
     return (
-        <div>
+        <div className="order-panel products-panel">
             <h1>Products</h1>
-            <div className="products">
-            {selectedCategory === "All" ? menuItems.map((product) => 
-                <button key={product._id} onClick={() => handleAddItem(orderId, product._id)}
-                disabled={!product.categoryId.isActive || addingItem}>{product.productName}</button>)
-            : menuItems.filter((product) => product.categoryId?.categoryName === selectedCategory).map((product) => 
-                <button key={product._id} onClick={() => handleAddItem(orderId, product._id)}
-                disabled={!product.categoryId.isActive || addingItem}>{product.productName}</button>)}
-             </div>
+            <div className="panel-list">
+                {shownProducts.map(product => (
+                    <button
+                        key={product._id}
+                        onClick={() => handleAddItem(product._id)}
+                        disabled={!product.categoryId?.isActive || addingItem}>
+                        {product.productName}
+                    </button>
+                ))}
+            </div>
         </div>
     )
 }

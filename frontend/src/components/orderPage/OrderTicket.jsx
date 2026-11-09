@@ -2,12 +2,14 @@ import {useGetItemsQuery, useAddItemMutation,
     useRemoveItemMutation, useDeleteItemMutation} from "../../store/apis/orderItemsApi.js";
 import {useGetOrderByIdQuery} from "../../store/apis/orderApi.js";
 import {setDiscardModal} from "../../store/slices/modalSlice.js";
+import {clearCurrentOrder} from "../../store/slices/orderSlice.js";
 import {formatDate, formatTime} from "../../utils/DateFormat.js";
 import { RiDeleteBinLine } from "react-icons/ri";
 import Spinner from "../other/Spinner.jsx";
 import {useNavigate} from "react-router-dom";
 import {useSelector, useDispatch} from "react-redux";
 import {toast} from "react-toastify";
+import "../../comp-style/orderPage-style/OrderTicket.css";
 
 const OrderTicket = () => {
     const nav = useNavigate();
@@ -60,56 +62,60 @@ const OrderTicket = () => {
 
 
     return (
-        <div>
+        <div className="order-panel ticket-panel">
             <h2>Order Ticket</h2>
-            <h3>Date: {formatDate(order.tableId.timeOpened)}</h3>
-            <div>
+            <h3>{formatDate(order.tableId.timeOpened)}</h3>
+            <div className="ticket-meta">
                 <h3>Table: {order.tableId.tableName}</h3>
                 <h3>Time: {formatTime(order.tableId.timeOpened)}</h3>
             </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th>Qty</th>
-                        <th>Price</th>
-                        <th>Del</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {orderItems.length > 0 ? ( orderItems.map(item => (
-                        <tr key={item._id}>
-                            <td>{item.menuItemId.productName}</td>
-                            <td>
-                                <button onClick={() => handleRemoveItem(orderId, item._id)} 
-                                disabled={addingItem || removingItem || deletingItem}>-</button>
-                                <span>{item.quantity}</span>
-                                <button onClick={() => handleAddItem(orderId, item.menuItemId._id)}
-                                disabled={addingItem || removingItem || deletingItem}>+</button>
-                            </td>
-                            <td>{item.linePrice} ALL</td>
-                            <td>
-                                <button onClick={() => handleDeleteItem(orderId, item._id)}
-                                disabled={addingItem || removingItem || deletingItem}><RiDeleteBinLine /></button>
-                            </td>
-                        </tr>
-                    ))
-                    ) : (
+
+            <div className="ticket-items">
+                <table>
+                    <thead>
                         <tr>
-                            <td colSpan={4}>Add the first item on this order</td>
+                            <th>Item</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th></th>
                         </tr>
-                    )}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colSpan={2}>Total</td>
-                        <td colSpan={2}><span>{order.total} ALL</span></td>
-                    </tr>
-                </tfoot>
-            </table>
+                    </thead>
+                    <tbody>
+                        {orderItems.length > 0 ? ( orderItems.map(item => (
+                            <tr key={item._id}>
+                                <td>{item.menuItemId.productName}</td>
+                                <td>
+                                    <button onClick={() => handleRemoveItem(orderId, item._id)} 
+                                    disabled={addingItem || removingItem || deletingItem}>-</button>
+                                    <span>{item.quantity}</span>
+                                    <button onClick={() => handleAddItem(orderId, item.menuItemId._id)}
+                                    disabled={addingItem || removingItem || deletingItem}>+</button>
+                                </td>
+                                <td>{item.linePrice} ALL</td>
+                                <td>
+                                    <button onClick={() => handleDeleteItem(orderId, item._id)}
+                                    disabled={addingItem || removingItem || deletingItem}><RiDeleteBinLine /></button>
+                                </td>
+                            </tr>
+                        ))
+                        ) : (
+                            <tr>
+                                <td colSpan={4} className="empty">Add the first item on this order</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+
+            <div className="ticket-total">
+                <h3>Total</h3>
+                <h3><span>{order.total} ALL</span></h3>
+            </div>
+            
             <div className="order-actions">
-                <button onClick={() => nav("/checkout")}>Checkout</button>
-                <button onClick={() => dispatch(setDiscardModal(true))}>Delete Order</button>
+                <button className="btn-checkout" onClick={() => nav("/checkout")}>Checkout</button>
+                <button className="btn-delete" onClick={() => dispatch(setDiscardModal(true))}>Delete Order</button>
+                <button className="btn-back" onClick={() => {dispatch(clearCurrentOrder()), nav(-1)}}>Back To Tables</button>
             </div>
         </div>
     )
