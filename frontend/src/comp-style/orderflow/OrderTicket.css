@@ -1,0 +1,264 @@
+/* ========== OrderTicket ========== */
+
+.ticket-panel {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 340px;
+    width: 340px;
+    max-width: 350px;
+    min-width: 290px;
+    height: auto;
+    max-height: 100%;
+    align-self: flex-start;
+    padding: 16px 16px;
+    gap: 8px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.ticket-panel > h2 {
+    margin: 0;
+    color: #111827;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.ticket-panel > h3 {
+    margin: -6px 0 0;
+    color: #6b7280;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.ticket-meta {
+    display: flex;
+    justify-content: space-between;
+    padding: 7px 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+}
+
+.ticket-meta h3 {
+    margin: 0;
+    color: #374151;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+/* ========== SCROLL ========== */
+
+.ticket-items {
+    flex: 0 1 auto;
+    min-height: 0;
+    min-width: 0;
+    width: 100%;
+    max-height: calc(100vh - 280px);
+    overflow-y: auto;
+    padding-right: 4px;
+    box-sizing: border-box;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.ticket-items table {
+    width: 100%;
+    max-width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.ticket-items :is(th, td) {
+    padding: 8px 3px;
+    border: 0;
+    font-size: 0.84rem;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.ticket-items tbody tr {
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.ticket-items tbody td {
+    border-bottom: none;
+}
+
+.ticket-items :is(th, td):nth-child(n+2) {
+    white-space: nowrap;
+}
+
+.ticket-items th:nth-child(2) {
+    width: 72px;
+}
+
+.ticket-items th:nth-child(3) {
+    width: 68px;
+}
+
+.ticket-items th:nth-child(4) {
+    width: 34px;
+}
+
+.ticket-items :is(th, td):first-child {
+    text-align: left;
+}
+
+.ticket-items :is(th, td):nth-child(3) {
+    text-align: right;
+}
+
+.ticket-items th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    color: #6b7280;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* ========== ROWS ========== */
+
+.ticket-items tbody td:first-child {
+    color: #1f2937;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.ticket-items tbody td:nth-child(3) {
+    color: #111827;
+    font-weight: 700;
+}
+
+.ticket-items tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.ticket-items tbody td.empty {
+    padding: 24px 0;
+    color: #9ca3af;
+    font-style: italic;
+    font-weight: 400;
+    text-align: center;
+}
+
+.ticket-items td button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    background: #fff;
+    color: #374151;
+    font-weight: 700;
+    font-size: 0.78rem;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.ticket-items td button:hover:not(:disabled) {
+    background: #f3f4f6;
+}
+
+.ticket-items td button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.ticket-items td span {
+    display: inline-block;
+    min-width: 18px;
+    font-weight: 600;
+    font-size: 0.82rem;
+}
+
+.ticket-items td:last-child button {
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 50%;
+    background: #fee2e2;
+    color: #ef4444;
+    font-size: 0.82rem;
+}
+
+.ticket-items td:last-child button:hover:not(:disabled) {
+    background: #ef4444;
+    color: #fff;
+}
+
+.ticket-items tfoot td {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    padding: 10px 8px;
+    background: #fff7ed;
+    border: none;
+    color: #cc5500;
+    font-size: 0.95rem;
+    font-weight: 800;
+}
+
+.ticket-items tfoot td:last-child {
+    text-align: right;
+}
+
+/* ========== ACTIONS ========== */
+
+.order-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    margin-top: 6px;
+    width: 100%;
+}
+
+.order-actions button {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 10px 4px;
+    border: none;
+    border-radius: 8px;
+    background: var(--c);
+    color: #fff;
+    font: 600 0.76rem 'Inter', sans-serif;
+    white-space: nowrap;
+    text-align: center;
+    cursor: pointer;
+    transition: filter 0.15s, transform 0.15s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.order-actions button:hover:not(:disabled) {
+    filter: brightness(0.92);
+    transform: translateY(-1px);
+}
+
+.order-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-checkout {
+    --c: #cc5500;
+}
+
+.btn-delete {
+    --c: #f87171;
+}
+
+.btn-back {
+    --c: #f59e0b;
+}

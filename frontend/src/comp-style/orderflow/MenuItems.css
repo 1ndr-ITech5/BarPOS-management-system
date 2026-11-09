@@ -1,0 +1,99 @@
+@import "./OrderTicket.css";
+
+/* ==========================================================================
+   2. MenuItems Component
+   ========================================================================== */
+
+.order-page-columns > div:nth-child(2),
+div:has(> .products) {
+    background: #ffffff;
+    border-radius: 18px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    flex: 1 1 340px;
+    min-width: 280px;
+    height: 100%;
+    max-height: 100%;
+    position: relative;
+    transform: translate(0);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+/* Fixed title at the top */
+.order-page-columns > div:nth-child(2) > h1,
+div:has(> .products) > h1 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    margin: 0;
+    padding: 16px 20px;
+    background: #ffffff;
+    border-bottom: 1px solid #f1f5f9;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #111827;
+    box-sizing: border-box;
+}
+
+/* Menu items scrollable list underneath fixed title */
+.products {
+    margin-top: 55px;
+    height: calc(100% - 55px);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    gap: 0;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.products::-webkit-scrollbar {
+    width: 6px;
+}
+
+.products::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+/* Product buttons with subtle horizontal divider */
+.products button {
+    width: 100%;
+    padding: 14px 20px;
+    border: none;
+    border-bottom: 1px solid #f1f5f9;
+    background-color: #ffffff;
+    color: #374151;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.products button:hover:not(:disabled) {
+    background-color: #fff7ed;
+    color: #cc5500;
+}
+
+.products button:active:not(:disabled) {
+    background-color: #ffedd5;
+}
+
+.products button:disabled {
+    background-color: #f9fafb;
+    color: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.7;
+}

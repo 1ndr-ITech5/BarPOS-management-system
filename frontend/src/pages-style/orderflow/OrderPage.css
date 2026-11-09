@@ -1,0 +1,18 @@
+.main-content:has(.order-page) {
+    overflow: hidden;
+}
+
+.order-page {
+    height: calc(100dvh - 105px);
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.order-page-columns {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    height: 100%;
+    min-height: 0;
+}
+ 
