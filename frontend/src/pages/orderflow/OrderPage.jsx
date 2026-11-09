@@ -17,7 +17,11 @@ const OrderPage = () => {
                 <MenuItems selectedCategory={selectedCategory}/>
                 <OrderTicket/>
             </div>
-            {discardModal && <DiscardModal />}
+            {discardModal && (
+                <div className="modal-backdrop">
+                    <DiscardModal />
+                </div>)
+            }
         </div>
     )
 }
