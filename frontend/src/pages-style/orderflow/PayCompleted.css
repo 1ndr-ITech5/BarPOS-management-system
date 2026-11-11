@@ -1,0 +1,82 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
+ 
+/* ---------- Page container ---------- */
+.pay-completed {
+    font-family: "Inter", sans-serif;
+    max-width: 450px;
+    width: 100%;
+    margin: auto;
+    padding: 60px;
+    border: 1px solid #e5e5e5;
+    border-radius: 16px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 15px;
+    transition: margin-left 0.25s ease;
+}
+
+/* When receipt appears, set margin-left to 30px */
+.pay-completed:has(~ .receipt-panel),
+.main-content:has(.receipt-panel) .pay-completed {
+    margin: auto auto auto 140px;
+}
+ 
+/* ---------- Check icon ---------- */
+.pay-completed > svg {
+    font-size: 3.5rem;
+    color: #00bd16;
+    padding: 20px;
+    border-radius: 50%;
+    background-color: #dfffdf;
+}
+
+/* ---------- Title ---------- */
+.pay-completed h1 {
+    padding-bottom: 15px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+}
+ 
+/* ---------- Buttons ---------- */
+.pay-buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+ 
+.pay-buttons button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background-color: #CC5500;
+    color: white;
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+ 
+/* ---------- Side Panel ---------- */
+.receipt-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 30%;
+    height: 100%;
+    background-color: #f3f3f3;
+    border-left: 14px solid #d1d5db;
+    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
+    overflow-y: auto;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 10px;
+    z-index: 100;
+}

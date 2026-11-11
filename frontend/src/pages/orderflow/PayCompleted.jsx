@@ -1,8 +1,10 @@
+import { FaCheckCircle } from "react-icons/fa";
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {clearCurrentOrder} from "../../store/slices/orderSlice.js";
 import {setViewReceipt} from "../../store/slices/modalSlice.js";
 import ViewReceipt from "../../components/other/ViewReceipt.jsx";
+import "../../pages-style/orderflow/PayCompleted.css";
 
 const PayCompleted = () => {
 
@@ -16,15 +18,22 @@ const PayCompleted = () => {
         nav("/tables")
     }
 
-    return(
-        <div>
-            <h1>Payment Completed Successfully✅</h1>
-            <div>
-                <button onClick={() => dispatch(setViewReceipt(true))}>View Receipt</button>
-                <button onClick={() => backToTables()}>Back to Main Page</button>
+    return (
+        <>
+            <div className="pay-completed">
+                <FaCheckCircle />
+                <h1>Payment Received!</h1>
+                <div className="pay-buttons">
+                    <button onClick={() => dispatch(setViewReceipt(true))}>View Receipt</button>
+                    <button onClick={() => backToTables()}>Back to Main Page</button>
+                </div>
             </div>
-            {receiptModal && <ViewReceipt/>}
-        </div>
+            {receiptModal && (
+                <div className="receipt-panel">
+                    <ViewReceipt/>
+                </div>
+            )}
+        </>
     )
 }
 
