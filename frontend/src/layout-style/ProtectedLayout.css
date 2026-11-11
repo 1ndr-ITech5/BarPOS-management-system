@@ -19,4 +19,5 @@
     background-color: rgba(235, 238, 242, 0.85);
     padding: 6vh 40px 10vh 40px;
     box-sizing: border-box;
+    position: relative;
 }
