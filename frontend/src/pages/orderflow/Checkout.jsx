@@ -8,6 +8,7 @@ import { IoCashSharp } from "react-icons/io5";
 import Spinner from "../../components/other/Spinner.jsx";
 import {useState} from "react";
 import { toast } from "react-toastify";
+import "../../pages-style/orderflow/Checkout.css";
 
 const Checkout = () => {
     const nav = useNavigate();
@@ -58,11 +59,11 @@ const Checkout = () => {
         <div className="checkout">
             <h1>Order Summary</h1>
             <div className="order-details">
-                <h3>Waiter: {order?.waiterId?.first_name} {order?.waiterId?.last_name}</h3>
-                <h3>Table: {order?.tableId?.tableName}</h3>
+                <h3><span>Waiter:</span> {order?.waiterId?.first_name} {order?.waiterId?.last_name}</h3>
+                <h3><span>Table:</span> {order?.tableId?.tableName}</h3>
             </div>
             <div className="order-list">
-                <h2>List items <span>({countItems})</span></h2>
+                <h2>List item <span>({countItems})</span></h2>
                 <div className="item-list">
                     <table>
                         <tbody>
@@ -89,9 +90,9 @@ const Checkout = () => {
                     <label>Amount Received</label>
                     <input type="number" name="amountPaid" value={paymentData.amountPaid} 
                     placeholder="put the number here..." onChange={handleChange} required/>
+                    <h3>ALL</h3>
                 </div>
                 <div className="pay-method">
-                    <h3>Payment Method</h3>
                     <div className="pay-options">
                         <label className={`pay-option ${paymentData.method === "cash" ? "selected" : ""}`}>
                             <input type="radio" name="method" value="cash" 

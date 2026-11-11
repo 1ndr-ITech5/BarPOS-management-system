@@ -1,0 +1,203 @@
+.checkout{
+    margin: 15px auto;
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
+    width: 100%;
+    gap: 10px;
+}
+
+.checkout h1 {
+    padding: 10px;
+}
+ 
+/* Make every section fill the card width */
+.checkout > div {
+    width: 100%;
+}
+ 
+/* Dashed dividers between sections */
+.order-list,
+.payment-summary {
+    border-top: 1px dashed #858585;
+    padding-top: 15px;
+}
+ 
+.order-details {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding-bottom: 15px;
+}
+
+.order-details h3 span {
+    color: rgb(107, 107, 105)
+}
+ 
+.order-details h3 {
+    border: solid black 1px;
+    padding: 10px;
+    border-radius: 8px;
+    margin: auto;
+}
+ 
+/* ---------- Item list ---------- */
+.order-list h2 {
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin: 0 0 10px;
+    padding-left: 10px;
+}
+ 
+.order-list h2 span {
+    color: #555555;
+}
+ 
+.item-list table {
+    width: 100%;
+    border-collapse: collapse;
+    padding-left: 20px;
+}
+ 
+.item-list td {
+    padding: 15px 5px;
+}
+ 
+.item-list td:first-child {
+    width: 60px;
+    font-size: 1.2rem;
+    color: #000000;
+}
+ 
+.item-list td:last-child {
+    text-align: right;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #000000;
+}
+ 
+/* ---------- Payment summary ---------- */
+.payment-summary {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    gap: 15px;
+}
+
+.payment-summary h3 {
+    margin: 0 0 10px;
+    text-align: center;
+}
+ 
+.payment-total {
+    display: flex;
+    padding-left: 60px;
+    gap: 300px;
+}
+ 
+.payment-total h2 {
+    margin: 0;
+    padding: 10px;
+    font-size: 1.7rem;
+}
+ 
+.payment-total h2:last-child {
+    color: #ff6600;
+}
+ 
+/* ---------- Amount received ---------- */
+.pay-amount {
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.pay-amount label {
+    padding: 20px;
+    font-weight: 600;
+    font-size: 1.3rem;
+}
+ 
+.pay-amount input {
+    padding: 12px 16px;
+    border: 2px solid #000000;
+    border-radius: 12px;
+    font-size: 1rem;
+}
+ 
+.pay-amount input:focus {
+    outline: none;
+}
+ 
+/* ---------- Payment method ---------- */
+.pay-options {
+    display: flex;
+    gap: 6px;
+    padding: 6px;
+    border: 1px solid #e5e5e5;
+    border-radius: 16px;
+}
+ 
+.pay-option {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 12px 0;
+    border-radius: 12px;
+    color: #8a8a8a;
+    cursor: pointer;
+}
+ 
+.pay-option input {
+    display: none;
+}
+ 
+.pay-icon {
+    font-size: 1.4rem;
+}
+ 
+.pay-option.selected {
+    background-color: #CC5500;
+    color: white;
+}
+ 
+/* ---------- Buttons ---------- */
+.checkout-actions {
+    display: flex;
+    padding-top: 20px;
+    gap: 10px;
+}
+ 
+.checkout-actions button {
+    flex: 1;
+    padding: 14px;
+    border-radius: 30px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+}
+ 
+/* Back To Order: light orange */
+.checkout-actions button:first-child {
+    background-color: #ffc132;
+    color: #000000;
+}
+ 
+/* Checkout: burnt orange */
+.checkout-actions button:last-child {
+    background-color: #CC5500;
+    color: white;
+}
+ 
+.checkout-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
