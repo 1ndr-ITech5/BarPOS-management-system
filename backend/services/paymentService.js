@@ -7,7 +7,7 @@ const mongoose = require("mongoose")
 const getCreatedPayment = async({orderId, userData}) => {
     // find the completed payment
     const createdPayment = await Payment.findOne({orderId: orderId, workspaceId: userData.workspaceId})
-    .populate({path: "orderId", populate: {path: "tableId", select: "tableNumber"}})
+    .populate({path: "orderId", populate: {path: "tableId", select: "tableName"}})
     .populate("waiterId", "first_name last_name")
 
     // return if no payment was found
