@@ -1,3 +1,201 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+.main-content:has(.category-subpage) {
+  overflow: hidden;
+}
+
+.category-subpage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0 50px;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ===== Tabs ===== */
+.category-subpage .tabs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 1000px;
+  margin-bottom: 16px;
+}
+
+.category-subpage .tabs button {
+  padding: 8px 4px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: #6b7280;
+  font: 500 1rem 'Inter', sans-serif;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.category-subpage .tabs button.tab-active {
+  color: #cc5500;
+  font-weight: 600;
+  border-bottom-color: #cc5500;
+}
+
+.category-subpage .tabs button.tab:hover {
+  color: #374151;
+  border-bottom-color: #9ca3af;
+}
+
+/* ===== Container ===== */
+.category-table-container {
+  --row-h: 53px;
+  --visible-rows: 5;
+  width: 100%;
+  max-width: 1000px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  background: #f3f4f6;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  color: #374151;
+  font-weight: 600;
+}
+
+.table-header button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #cc5500;
+  color: #fff;
+  font: 600 0.9rem 'Inter', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.table-header button:hover {
+  background: #b84d00;
+}
+
+/* ===== Table ===== */
+.category-table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.category-table-container thead {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.category-table-container th {
+  padding: 12px 16px;
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.category-table-container tbody {
+  display: block;
+  max-height: calc(var(--row-h) * var(--visible-rows));
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #e5e7eb;
+  background: #f3f4f6;
+}
+
+.category-table-container tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  border-bottom: 1px solid #e5e7eb;
+  scroll-snap-align: start;
+}
+
+.category-table-container tbody tr:last-child {
+  border-bottom: none;
+}
+
+.category-table-container td {
+  height: 52px;
+  padding: 0 16px;
+  color: #1f2937;
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+.category-table-container :is(th, td):nth-child(1) { width: 8%; text-align: center; }
+.category-table-container :is(th, td):nth-child(2) { width: 34%; }
+.category-table-container :is(th, td):nth-child(3) { width: 22%; text-align: center; }
+.category-table-container :is(th, td):nth-child(4),
+.category-table-container :is(th, td):nth-child(5) { width: 18%; text-align: center; }
+
+/* ===== Action buttons ===== */
+.category-table-container td:nth-child(5) button {
+  padding: 4px 6px;
+  border: none;
+  background: none;
+  color: #9ca3af;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.category-table-container td:nth-child(5) button:hover {
+  color: #374151;
+}
+
+.category-table-container td:nth-child(5) button:last-child:hover {
+  color: #ef4444;
+}
+
+/* ===== Inline edit ===== */
+.edit-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.edit-name input {
+  padding: 4px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font: 0.85rem 'Inter', sans-serif;
+}
+
+.edit-name button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.edit-name button:last-child {
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: #cc5500;
+  color: #fff;
+  font-size: 0.8rem;
+}
+
+/* ===== Toggle switch ===== */
 .toggle-switch {
   position: relative;
   display: inline-block;
@@ -6,34 +204,34 @@
 }
 
 .toggle-switch input {
-  opacity: 0;
   width: 0;
   height: 0;
+  opacity: 0;
 }
 
 .toggle-slider {
   position: absolute;
   inset: 0;
-  cursor: pointer;
-  background-color: #ccc;
   border-radius: 24px;
+  background: #ccc;
+  cursor: pointer;
   transition: 0.2s;
 }
 
 .toggle-slider::before {
   content: "";
   position: absolute;
-  width: 18px;
-  height: 18px;
   left: 3px;
   bottom: 3px;
-  background-color: white;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
+  background: #fff;
   transition: 0.2s;
 }
 
 .toggle-switch input:checked + .toggle-slider {
-  background-color: #16a34a;
+  background: #16a34a;
 }
 
 .toggle-switch input:checked + .toggle-slider::before {

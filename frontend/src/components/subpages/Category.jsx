@@ -1,3 +1,4 @@
+import { IoMdAdd } from "react-icons/io";
 import {useState} from "react";
 import "../../comp-style/subpages-style/Category.css";
 import CategoryModal from "../modals/CategoryModal.jsx";
@@ -17,16 +18,14 @@ const Category = ({allCategories, allProducts}) => {
 
     return (
         <div className="category-subpage">
-            {modal ? <CategoryModal goBack={setModal}/>
-            : <button onClick={() => setModal(true)}>Create New Category</button>}
             <div className="tabs">
                 <button className={tab === "active" ? "tab-active" : "tab"} onClick={() => setTab("active")}>Active</button>
                 <button className={tab === "archived" ? "tab-active" : "tab"} onClick={() => setTab("archived")}>Archived</button>
             </div>
             <div className="category-table-container">
                 <div className="table-header">
-                    <h3>{tab === "active" ? "Active" : "Archived"} Categories</h3>
                     <span>{shownCategories.length} categories</span>
+                    <button onClick={() => setModal(true)}><IoMdAdd /> Create Category</button>
                 </div>
                 <table>
                     <thead>
@@ -50,6 +49,10 @@ const Category = ({allCategories, allProducts}) => {
                     </tbody>
                 </table>
             </div>
+            {modal && 
+            <div className="modal">
+                <CategoryModal goBack={setModal}/>
+            </div>}
         </div>
     )
 }
