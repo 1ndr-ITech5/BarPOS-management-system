@@ -1,0 +1,88 @@
+.product-modal {
+    width: 100%;
+    max-width: 440px;
+    max-height: 100%;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 24px 50px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-family: "Inter", sans-serif;
+}
+
+.product-modal h1 {
+    margin: 0 0 4px;
+    font-size: 1.4rem;
+}
+
+.product-modal h2 {
+    margin: 0 0 18px;
+    color: #6b7280;
+    font-size: 0.85rem;
+    font-weight: 400;
+}
+
+.product-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.product-fields label {
+    margin-top: 8px;
+    color: #444;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.product-modal :is(input, select) {
+    width: 100%;
+    height: 30px;
+    padding: 0 20px;
+    box-sizing: border-box;
+    background: #fafafa;
+    border: 1px solid #dedede;
+    border-radius: 8px;
+    outline: none;
+    color: #292929;
+    font: 13px 'Inter', sans-serif;
+    transition: 0.2s;
+}
+
+.product-modal input::placeholder {
+    color: #a0a0a0;
+}
+
+.product-modal :is(input, select):focus {
+    background: #fff;
+    border-color: #3569e8;
+    box-shadow: 0 0 0 3px rgba(53, 105, 232, 0.12);
+}
+
+.product-actions {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin-top: 22px;
+}
+
+.product-actions button {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 10px;
+    background: #f0f1f3;
+    color: #555;
+    font: 600 0.8rem 'Inter', sans-serif;
+    cursor: pointer;
+}
+
+.product-actions button:first-child {
+    background: #cc5500;
+    color: #fff;
+}
+
+.product-actions button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

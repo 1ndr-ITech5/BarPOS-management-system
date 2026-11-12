@@ -1,6 +1,7 @@
 import {useCreateProductMutation} from "../../store/apis/productsApi.js";
 import {useState} from "react";
 import {toast} from "react-toastify";
+import "../../comp-style/modals-style/ProductModal.css";
 
 const ProductModal = ({categories, goBack}) => {
     const [createProduct, {isLoading}] = useCreateProductMutation();
@@ -16,7 +17,8 @@ const ProductModal = ({categories, goBack}) => {
 
         setProductData(prevData => ({
             ...prevData,
-            [name] : name === "price" ? Number(value) : value
+            [name]: name === "price" && value !== ""
+                ? Number(value) : value
         }))
     }
 
@@ -31,10 +33,10 @@ const ProductModal = ({categories, goBack}) => {
     }
 
     return (
-        <div>
+        <div className="product-modal">
             <h1>New Product</h1>
             <h2>Add a new product to the menu!</h2>
-            <div>
+            <div className="product-fields">
                 <label>Name</label>
                 <input type="text" name="productName" value={productData.productName} 
                     onChange={(e) => handleSetData(e)} placeholder="Type product's name..."/>
@@ -50,9 +52,9 @@ const ProductModal = ({categories, goBack}) => {
                 <input type="number" name="price" value={productData.price} 
                     onChange={(e) => handleSetData(e)}/>
             </div>
-            <div>
-                <button onClick={() => goBack(false)} disabled={isLoading}>Back</button>
+            <div className="product-actions">
                 <button onClick={handleSubmit} disabled={isLoading}>Create</button>
+                <button onClick={() => goBack(false)} disabled={isLoading}>Back</button>
             </div>
         </div>
     )
