@@ -6,6 +6,7 @@ import Spinner from "../../components/other/Spinner.jsx";
 import {useSelector, useDispatch} from "react-redux";
 import {setSubpage} from "../../store/slices/pagesSlice.js";
 import {useEffect} from "react";
+import "../../pages-style/admin/MenuManagment.css";
 
 const MenuManagment = () => {
     const dispatch = useDispatch();
@@ -37,10 +38,12 @@ const MenuManagment = () => {
     return (
         <div className="menu-managment">
             <h1>Menu</h1>
-            <h2>Manage your menu items!</h2>
-            <div className="tabs">
-                <button className="tab-products" onClick={() => dispatch(setSubpage("products"))}>Products</button>
-                <button className="tab-categories" onClick={() => dispatch(setSubpage("categories"))}>Categories</button>
+            <h3>Manage your menu items!</h3>
+            <div className="menu-tabs">
+                <button className={activeTab === "products" ? "active" : ""}
+                    onClick={() => dispatch(setSubpage("products"))}>Products</button>
+                <button className={activeTab === "categories" ? "active" : ""}
+                    onClick={() => dispatch(setSubpage("categories"))}>Categories</button>
             </div>
             {activeTab === "products" ? 
                 <Product allCategories={categories} allProducts={products}/> : 

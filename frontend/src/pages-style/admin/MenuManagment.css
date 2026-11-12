@@ -1,0 +1,43 @@
+.menu-managment {
+    margin: -10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: "Inter", sans-serif;
+    gap: 10px;
+}
+
+.menu-managment > h1 {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.menu-managment > h3 {
+  margin: 0;
+  color: #6b7280;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.menu-tabs {
+    display: flex;
+    gap: 80px;
+    margin-top: 15px;
+    padding: 10px;
+}
+
+.menu-tabs button {
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    font-family: "Inter", sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.active {
+  background-color: #ffb300;
+  color: #000000;
+}
