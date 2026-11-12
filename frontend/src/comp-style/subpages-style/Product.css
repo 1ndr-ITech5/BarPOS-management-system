@@ -1,3 +1,236 @@
+.main-content:has(.product-subpage) {
+  overflow: hidden;
+}
+
+.product-subpage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0 50px;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ===== Tabs ===== */
+.product-subpage .tabs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 1000px;
+  margin-bottom: 16px;
+}
+
+.product-subpage .tabs button {
+  padding: 8px 4px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: #6b7280;
+  font: 500 1rem 'Inter', sans-serif;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.product-subpage .tabs button.tab-active {
+  color: #cc5500;
+  font-weight: 600;
+  border-bottom-color: #cc5500;
+}
+
+.product-subpage .tabs button:hover:not(.tab-active),
+.product-subpage .tabs button.tab:hover {
+  color: #374151;
+  border-bottom-color: #9ca3af;
+}
+
+/* ===== Category pills ===== */
+.product-subpage .categories-filter {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  max-width: 1000px;
+  margin-bottom: 16px;
+  padding-bottom: 4px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.categories-filter button:first-child { margin-left: auto; }
+.categories-filter button:last-child { margin-right: auto; }
+
+.product-subpage .categories-filter button {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: #4b5563;
+  font: 500 0.9rem 'Inter', sans-serif;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.product-subpage .categories-filter button:hover:not(.selected) {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.product-subpage .categories-filter button.selected {
+  background: #cc5500;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* ===== Container ===== */
+.product-table-container {
+  --row-h: 53px;
+  --visible-rows: 4;
+  width: 100%;
+  max-width: 1000px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  background: #f3f4f6;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.product-table-container .table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  color: #374151;
+  font-weight: 600;
+}
+
+.product-table-container .table-header button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #cc5500;
+  color: #fff;
+  font: 600 0.9rem 'Inter', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.product-table-container .table-header button:hover { background: #b84d00; }
+
+/* ===== Table ===== */
+.product-table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.product-table-container thead {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.product-table-container th {
+  padding: 12px 16px;
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+.product-table-container tbody {
+  display: block;
+  max-height: calc(var(--row-h) * var(--visible-rows));
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #e5e7eb;
+  background: #f3f4f6;
+}
+
+.product-table-container tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  border-bottom: 1px solid #e5e7eb;
+  scroll-snap-align: start;
+}
+
+.product-table-container tbody tr:last-child { border-bottom: none; }
+
+.product-table-container td {
+  height: 52px;
+  padding: 0 16px;
+  color: #1f2937;
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+/* gjerësitë: No. | Name | Category | Price | Available | Actions */
+.product-table-container :is(th, td):nth-child(1) { width: 7%; text-align: center; }
+.product-table-container :is(th, td):nth-child(2) { width: 27%; }
+.product-table-container :is(th, td):nth-child(3) { width: 20%; text-align: center; }
+.product-table-container :is(th, td):nth-child(n+4) { width: 15.33%; text-align: center; }
+
+/* ===== Edit brenda rreshtit ===== */
+.product-table-container td > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.product-table-container td:nth-child(2) > div { justify-content: flex-start; }
+
+.product-table-container td :is(input[type="text"], input[type="number"], select) {
+  width: 100%;
+  max-width: 150px;
+  padding: 4px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  font: 0.85rem 'Inter', sans-serif;
+}
+
+/* ===== Action buttons (pencil / trash) ===== */
+.product-table-container td:nth-child(6) button {
+  padding: 4px 6px;
+  border: none;
+  background: none;
+  color: #9ca3af;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.product-table-container td:nth-child(6) button:hover { color: #374151; }
+.product-table-container td:nth-child(6) > div button:last-child:hover { color: #ef4444; }
+
+.product-table-container td:nth-child(6) > button {
+  padding: 6px 14px;
+  border-radius: 6px;
+  background: #cc5500;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.product-table-container td:nth-child(6) > button:hover {
+  background: #b84d00;
+  color: #fff;
+}
+
+/* ===== Toggle switch ===== */
 .toggle-switch {
   position: relative;
   display: inline-block;
@@ -43,4 +276,16 @@
 .toggle-switch input:disabled + .toggle-slider {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
 }

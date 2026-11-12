@@ -1,6 +1,7 @@
 import ProductRow from "../rows/ProductRow.jsx";
 import "../../comp-style/subpages-style/Product.css";
 import ProductModal from "../modals/ProductModal.jsx";
+import { IoMdAdd } from "react-icons/io";
 import {useState} from "react";
 
 const Product = ({allCategories, allProducts}) => {
@@ -19,23 +20,25 @@ const Product = ({allCategories, allProducts}) => {
     )
 
     return (
-        <div>
-            <div>
-                <button onClick={() => setTab("active")}>Active</button>
-                <button onClick={() => setTab("archived")}>Archived</button>
+        <div className="product-subpage">
+            <div className="tabs">
+                <button className={tab === "active" ? "tab-active" : "tab"} onClick={() => setTab("active")}>Active</button>
+                <button className={tab === "archived" ? "tab-active" : "tab"} onClick={() => setTab("archived")}>Archived</button>
             </div>
             <div className="categories-filter">
-                <button onClick={() => setCategoryFilter("all")}>All</button>
+                <button className={categoryFilter === "all" ? "selected" : ""} onClick={() => setCategoryFilter("all")}>All</button>
                 {allCategories.map(category => 
-                    <button key={category._id} onClick={() => setCategoryFilter(category.categoryName)}>
-                        {category.categoryName}</button>
+                    <button key={category._id} 
+                        className={categoryFilter === category.categoryName ? "selected" : ""}
+                        onClick={() => setCategoryFilter(category.categoryName)}>
+                        {category.categoryName}
+                    </button>
                 )}
             </div>
-            <button onClick={() => setProductModal(true)}>Create New Product</button>
-            <div className="table-container">
+            <div className="product-table-container">
                 <div className="table-header">
-                    <h3>{tab === "active" ? "Active" : "Archived"} products</h3>
                     <span>{filteredProducts.length} products</span>
+                    <button onClick={() => setProductModal(true)}><IoMdAdd/> Create Product</button>
                 </div>
                 <table>
                     <thead>
@@ -55,7 +58,10 @@ const Product = ({allCategories, allProducts}) => {
                     </tbody>
                 </table>
             </div>
-            {productModal ? <ProductModal categories={allCategories} goBack={setProductModal}/> : ""}
+            {productModal && 
+                <div className="modal">
+                    <ProductModal categories={allCategories} goBack={setProductModal}/> : ""
+                </div>}
         </div>
     )
 }
