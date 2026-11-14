@@ -1,28 +1,66 @@
+.payment-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: white;
+}
+
 .fields {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px;
+    gap: 12px;
 }
 
-.payment-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-
-    border: 1px solid #ccc;
-    border-radius: 8px;
-  
-    padding: 16px;
-    margin: 12px;
-  
-    max-width: calc((100% - 40px) / 3);;
-    background-color: white;
-}
-
-.payment-card img{
-    height: 100px;
+.fields svg {
+    height: 50px;
     width: auto;
+    color: #001832;
+}
+
+.waiter-details p {
+    margin-top: -10px;
+    color: rgb(82, 82, 82);
+}
+
+.payment-details {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.payment-details svg {
+    height: 25px;
+    width: auto;
+}
+
+.payment-details h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.payment-details span {
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.payment-card button {
+    padding: 10px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    box-shadow: 0 0 1px;
+    background-color: #CC5500;
+    appearance: none;
 }
