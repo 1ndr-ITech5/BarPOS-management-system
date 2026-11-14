@@ -7,7 +7,11 @@ import PaymentCard from "../../components/cards/PaymentCard.jsx";
 import ViewReceipt from "../../components/other/ViewReceipt.jsx";
 import Spinner from "../../components/other/Spinner.jsx";
 import Revenue from "../../components/other/Revenue.jsx";
-import "../../pages-style/Payments.css";
+import { SiContactlesspayment } from "react-icons/si";
+import { IoTimerOutline } from "react-icons/io5";
+import { GrLinkNext } from "react-icons/gr";
+import { IoArrowBack } from "react-icons/io5";
+import "../../pages-style/admin/Payments.css";
 
 const Payments = () => {
 
@@ -58,21 +62,27 @@ const Payments = () => {
     const renderedCards = filterByPaymentMethod.slice(start, end);
 
     return (
-        <div>
+        <div className="payments-page">
             <h1>Payments</h1>
-            <label>Time</label>
-            <select value={timeFilter} onChange={(e) => dispatch(setTimeFilter(e.target.value))}>
-                <option value="Today">Today</option>
-                <option value="This week">This week</option>
-                <option value="This month">This month</option>
-                <option value="This year">This year</option>
-            </select>
-            <label>Payment Method</label>
-            <select value={methodFilter} onChange={(e) => dispatch(setPayMethodFilter(e.target.value))}>
-                <option value="all">All</option>
-                <option value="cash">Cash</option>
-                <option value="card">Card</option>
-            </select>
+            <div className="filters">
+                <div className="dropdown">
+                    <label><IoTimerOutline /> Time Period</label>
+                    <select value={timeFilter} onChange={(e) => dispatch(setTimeFilter(e.target.value))}>
+                        <option value="Today">Today</option>
+                        <option value="This week">This week</option>
+                        <option value="This month">This month</option>
+                        <option value="This year">This year</option>
+                    </select>
+                </div>
+                <div className="dropdown">
+                    <label><SiContactlesspayment /> Payment Method</label>
+                    <select value={methodFilter} onChange={(e) => dispatch(setPayMethodFilter(e.target.value))}>
+                        <option value="all">All</option>
+                        <option value="cash">Cash</option>
+                        <option value="card">Card</option>
+                    </select>
+                </div>
+            </div>
             <div className="revenue-container">
                 <Revenue title={`${timeFilter}`} payments={filteredPayments} />
                 <Revenue title="Last month" payments={lastMonthPayments}/>
@@ -83,12 +93,18 @@ const Payments = () => {
                     <PaymentCard key={payment._id} payment={payment}/>
                 ))}
             </div>
-            {receiptModal && <ViewReceipt/>}
-            <div className="page">
-                <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage == 1}>Previous</button>
-                <p>Page {currentPage}</p>
-                <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage >= totalPages}>Next</button>
+            <div className="pagination">
+                <button onClick={() => setCurrentPage(currentPage - 1)} 
+                    disabled={currentPage == 1}><IoArrowBack /> Previous</button>
+                <p>Page {currentPage} of {totalPages}</p>
+                <button onClick={() => setCurrentPage(currentPage + 1)} 
+                    disabled={currentPage >= totalPages}><GrLinkNext /> Next</button>
             </div>
+            {receiptModal && (
+                <div className="receipt-modal-backdrop">
+                    <ViewReceipt/>
+                </div>
+            )}
         </div>
     )
 }

@@ -1,0 +1,121 @@
+.payments-page {
+    font-family: "Inter", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+}
+
+.payments-page > h1 {
+    margin: 0;
+    color: #1f2937;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.filters {
+    margin: 30px;
+    display: flex;
+    gap: 100px;
+}
+
+.dropdown {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dropdown label {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.dropdown select { 
+  font-size: 14px;
+  color: #1f2937;
+  background-color: #ffffff;
+  
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 12px;
+  
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dropdown select:hover {
+  border-color: #9ca3af;
+}
+
+.dropdown select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+.dropdown select option {
+    text-align: center;
+}
+
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.pagination button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.pagination button:first-child {
+    background-color: #F3F4F6;
+    color: #374151;
+}
+
+.pagination button:last-child{
+    background-color: #CC5500;
+    color: white;
+}
+
+.payments-container {
+    margin: 30px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    width: 100%;
+    align-items: stretch;
+}
+
+
+.revenue-container {
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    gap: 30px;
+}
+
+.receipt-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.receipt-modal-backdrop .receipt {
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
