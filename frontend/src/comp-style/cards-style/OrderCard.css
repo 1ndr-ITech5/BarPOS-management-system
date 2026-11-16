@@ -1,0 +1,60 @@
+.order-card {
+    margin: 20px;
+    padding: 15px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: linear-gradient(
+        to bottom, 
+        #ffffff 65%, 
+        rgba(204, 85, 0, 0.14) 100%
+    );
+
+    border: 1px solid white;
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.order-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.order-info h3 {
+    font-size: 1rem;
+    font-weight: 450;
+    color: #374151;
+}
+
+.order-info h3 span {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.card-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.card-actions button {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 10px 12px;
+    border-radius: 12px;
+}
+
+.card-actions button:first-child {
+    background-color: rgba(255, 255, 255, 0.65);
+    color: #9a3412;
+    border: 1px solid rgba(204, 85, 0, 0.25);
+}
+
+.card-actions button:last-child {
+    background-color: #CC5500;
+    color: #ffffff;
+    border: none;
+}
