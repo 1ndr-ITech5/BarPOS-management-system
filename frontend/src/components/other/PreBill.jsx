@@ -4,7 +4,7 @@ import {formatDate, formatTime} from "../../utils/DateFormat.js";
 import {setPreBill} from "../../store/slices/orderSlice.js";
 import {useDispatch, useSelector} from "react-redux";
 import Spinner from "./Spinner.jsx";
-import "../../comp-style/other-style/PreBill.css";
+import "../../comp-style/other-style/ViewReceipt.css";
 
 const PreBill = ({order}) => {
     const dispatch = useDispatch()
@@ -13,7 +13,7 @@ const PreBill = ({order}) => {
 
     if (!order){
         return (
-            <div className="pre-bill">
+            <div>
                 <CiCircleRemove onClick={() => dispatch(setPreBill(false))}/>
                 <p>Order data was not fetched. Refresh the page to try again.</p>
             </div>
@@ -22,8 +22,8 @@ const PreBill = ({order}) => {
 
     if (isLoading){
         return (
-            <div className="pre-bill">
-                <h1>Fetching order data...</h1>
+            <div className="loading">
+                <h2>Fetching order data...</h2>
                 <Spinner />
             </div>
         )
@@ -31,7 +31,7 @@ const PreBill = ({order}) => {
 
     if (isError){
         return (
-            <div className="pre-bill">
+            <div>
                 <CiCircleRemove onClick={() => dispatch(setPreBill(false))}/>
                 <p>The order items could not be loaded. Please try again.</p>
             </div>
@@ -39,8 +39,10 @@ const PreBill = ({order}) => {
     }
 
     return(
-        <div className="pre-bill">
-            <CiCircleRemove onClick={() => dispatch(setPreBill(false))}/>
+        <div className="receipt">
+            <div className="container">
+                <CiCircleRemove onClick={() => dispatch(setPreBill(false))}/>
+            </div>
             <h1>{barName}</h1>
             <div className="other-data">
                 <h3>Waiter: {order.waiterId.first_name} {order.waiterId.last_name}</h3>
