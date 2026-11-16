@@ -60,7 +60,7 @@ const getOrderById = async(orderId, userData) => {
 const getAllOrders = async(workspaceId) => {
     // find in db all orders that have status open
     const activeOrders = await Order.find({workspaceId, status: "open"}).populate("waiterId", "first_name last_name")
-    .populate("tableId", "tableNumber")
+    .populate("tableId", "tableName")
 
     const orderIds = activeOrders.map(order => order._id)
     const allItems = await OrderItem.find({orderId: {$in: orderIds}})
@@ -81,7 +81,7 @@ const getAllOrders = async(workspaceId) => {
 const getWaiterOrders = async(user_id, workspaceId) => {
     // find all the active orders that waiter has opened
     const waiterOrders = await Order.find({waiterId: user_id, workspaceId, status: "open"})
-    .populate("tableId", "tableNumber")
+    .populate("tableId", "tableName")
 
     const orderIds = waiterOrders.map(order => order._id)
     const allItems = await OrderItem.find({orderId: {$in: orderIds}})

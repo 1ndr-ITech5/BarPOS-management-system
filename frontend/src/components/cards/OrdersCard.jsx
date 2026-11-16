@@ -4,6 +4,7 @@ import {setCurrentOrder} from "../../store/slices/orderSlice.js";
 import {setPreBill} from "../../store/slices/orderSlice.js";
 import {TimeReform} from "../../utils/DateFormat.js";
 import {toast} from "react-toastify";
+import "../../comp-style/cards-style/OrderCard.css";
 
 const OrdersCard = ({order, setOrder}) => {
 
@@ -36,15 +37,21 @@ const OrdersCard = ({order, setOrder}) => {
     }
 
     return(
-        <div className="myorder-card">
-            <h2>Table No. {order.tableId.tableNumber}</h2>
-            <h3>{user.role === "admin" ? `Opened by: ${order.waiterId.first_name} ${order.waiterId.last_name}` : ``}</h3>
-            <h3>Opened: {TimeReform(order.createdAt)}</h3>
-            <h3>Total: {order.total} ALL</h3>
-            <div>
+        <div className="order-card">
+            <div className="order-info">
+                <h3>Table: <span>{order.tableId.tableName}</span></h3>
+                {user.role === "admin" && (
+                    <h3>
+                        Opened By: <span>{order.waiterId?.first_name} {order.waiterId?.last_name}</span>
+                    </h3>
+                )}
+                <h3>Time Opened: <span>{TimeReform(order.createdAt)}</span></h3>
+                <h3>Order Total: <span>{order.total} ALL</span></h3>
+            </div>
+            <div className="card-actions">
                 <button onClick={handleUpdateOrder}>Update Order</button>
                 <button onClick={handleCheckout}>Checkout</button>
-                <button onClick={() => handleSetOrderPreBill(order)}>View</button>
+                <button onClick={() => handleSetOrderPreBill(order)}>View Order</button>
             </div>
         </div>
     )
