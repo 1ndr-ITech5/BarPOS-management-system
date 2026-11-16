@@ -1,0 +1,129 @@
+.loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+
+    background-color: #fffbf5;
+    border: 1px solid #f3e8d8;
+    border-radius: 16px;
+    
+    padding: 32px 40px;
+    margin: 60px auto;
+    max-width: 400px;
+    width: 100%;
+    box-sizing: border-box;
+
+    text-align: center;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+}
+
+.loading h2 {
+    margin: 0;
+    color: #374151;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.all-orders-page {
+    font-family: "Inter", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 20px;
+}
+
+.all-orders-page h1 {
+    margin: 0;
+    color: #1f2937;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.orders-container {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* Responsive grid */
+@media (max-width: 1024px) {
+    .orders-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .orders-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+.no-orders {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    
+    width: 100%;
+    min-height: 60vh;
+    text-align: center;
+    font-family: "Inter", sans-serif;
+}
+
+.no-orders h2 {
+    margin: 0;
+    color: #374151;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.no-orders button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+    background-color: #cc5500;
+    color: #ffffff;
+    
+    border: none;
+    border-radius: 10px;
+    padding: 12px 20px;
+    
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.no-orders button:hover {
+    background-color: #a64400;
+}
+
+.no-orders button:active {
+    transform: scale(0.98);
+}
+
+.prebill-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.prebill-modal .receipt {
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}

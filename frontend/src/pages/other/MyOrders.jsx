@@ -3,10 +3,14 @@ import OrdersCard from "../../components/cards/OrdersCard.jsx";
 import {clearCurrentOrder} from "../../store/slices/orderSlice.js";
 import Spinner from "../../components/other/Spinner.jsx";
 import {useDispatch, useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
 import PreBill from "../../components/other/PreBill.jsx";
+import { IoArrowBack } from "react-icons/io5";
+import "../../pages-style/admin/AllOrders.css";
 
 const MyOrders = () => {
+    const nav = useNavigate();
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -39,17 +43,22 @@ const MyOrders = () => {
     }
 
     return (
-        <div>
-            <h1>My-Orders</h1>
+        <div className="all-orders-page">
+            <h1>My Active Orders</h1>
             {myOrders.length > 0 ? (
-                <div className="cards-container">
+                <div className="orders-container">
                 {myOrders.map(order => (
                     <OrdersCard key={order._id} order={order} setOrder={setOrder}/>
                 ))}
                 </div>
-            ) : 
-            ( <p>No active orders found right now!</p> )}
-            {viewPreBill && <PreBill order={selectedOrder}/>}
+            ) : (
+            <div className="no-orders">
+                <h2>No active order found right now!</h2>
+                <button onClick={() => nav("/tables")}><IoArrowBack /> Back to Tables</button>
+            </div>)}
+            {viewPreBill && <div className="prebill-modal">
+                <PreBill order={selectedOrder}/>
+            </div>}
         </div>
     )
 }
