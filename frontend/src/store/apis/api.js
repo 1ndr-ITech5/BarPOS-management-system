@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {clearCurrentOrder} from "../slices/orderSlice.js";
-import {resetToggle} from "../slices/pagesSlice.js";
 import {logout} from "../slices/authSlice.js";
 import {toast} from "react-toastify";
 
@@ -24,7 +23,6 @@ const baseQueryWithReAuth = async (args, api, extraOptions) => {
         // centralizuar: token i skaduar/invalid -> pastro gjithcka dhe kthehu te login
         localStorage.removeItem("user")
         api.dispatch(clearCurrentOrder())
-        api.dispatch(resetToggle())
         api.dispatch(logout())
 
         toast.error("Your session has expired. Please log in again!", {
