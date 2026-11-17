@@ -18,8 +18,8 @@ const Tables = () => {
     const {data: tables, isLoading} = useGetTablesQuery(undefined, {skip: !workspaceId, refetchOnMountOrArgChange: true})
     
     if (isLoading) return (
-        <div>
-            <h1>Loading tables...</h1>
+        <div className="loading">
+            <h2>Loading tables...</h2>
             <Spinner/>
         </div>
     );

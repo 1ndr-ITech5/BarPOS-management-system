@@ -30,8 +30,8 @@ const Profile = () => {
 
     if (userLoading || loadingRole()){
         return (
-            <div>
-                <h2>User Info Data loading...</h2>
+            <div className="loading">
+                <h2>User's data loading...</h2>
                 <Spinner/>
             </div>
         )

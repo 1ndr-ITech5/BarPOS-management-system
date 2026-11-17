@@ -31,7 +31,7 @@ const Payments = () => {
 
     if(isLoading){
         return (
-            <div>
+            <div className="loading">
                 <h2>Loading all payments...</h2>
                 <Spinner/>
             </div>      

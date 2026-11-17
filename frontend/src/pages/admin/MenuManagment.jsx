@@ -28,8 +28,8 @@ const MenuManagment = () => {
 
     if(categoriesLoading || productsLoading){
         return (
-            <div>
-                <h2>Fetching the products!</h2>
+            <div className="loading">
+                <h2>Fetching products...</h2>
                 <Spinner/>
             </div>
         )

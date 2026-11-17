@@ -25,7 +25,7 @@ const Checkout = () => {
 
     if (orderLoading || orderItemsLoading) {
         return (
-            <div>
+            <div className="loading">
                 <h2>Fetching order data...</h2>
                 <Spinner/>
             </div>      

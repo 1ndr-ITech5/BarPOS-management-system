@@ -17,7 +17,7 @@ const ViewReceipt = () => {
 
     if(isLoading || !payment){
         return (
-            <div>
+            <div className="loading">
                 <h2>Loading the order's payment info...</h2>
                 <Spinner/>
             </div>      
