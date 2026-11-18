@@ -1,4 +1,5 @@
 .home {
+    font-family: "Inter", sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -64,8 +65,14 @@
     font-weight: 400;
 }
 
-/* Add Table Button */
-.main-page > button {
+.add-table {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.add-table button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
