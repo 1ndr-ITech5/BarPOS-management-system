@@ -91,6 +91,9 @@
     align-items: stretch;
 }
 
+.no-payments {
+    padding: 40px;
+}
 
 .revenue-container {
     display: flex;

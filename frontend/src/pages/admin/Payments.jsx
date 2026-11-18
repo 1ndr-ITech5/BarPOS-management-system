@@ -23,6 +23,7 @@ const Payments = () => {
     const receiptModal = useSelector(state => state.modals.receiptModal)
 
     const {data: allPayments, isLoading, isError, error} = useGetAllPaymentsQuery();
+    const hasPayments = allPayments?.length > 0;
 
     // go to first page again on filter application
     useEffect(() => {
@@ -88,11 +89,17 @@ const Payments = () => {
                 <Revenue title="Last month" payments={lastMonthPayments}/>
                 <Revenue title="All time" payments={allPayments}/>
             </div>
-            <div className="payments-container">
-                {renderedCards.map(payment => (
-                    <PaymentCard key={payment._id} payment={payment}/>
-                ))}
-            </div>
+            {hasPayments ? (
+                <div className="payments-container">
+                    {renderedCards.map(payment => (
+                        <PaymentCard key={payment._id} payment={payment}/>
+                    ))}
+                </div>
+            ) : (
+                <div className="no-payments">
+                    <h2>No payments are registered for this time period!</h2>
+                </div>
+            )}
             <div className="pagination">
                 <button onClick={() => setCurrentPage(currentPage - 1)} 
                     disabled={currentPage == 1}><IoArrowBack /> Previous</button>
