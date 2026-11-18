@@ -17,8 +17,8 @@ const OrderTicket = () => {
 
     const orderId = useSelector(state => state.order.currentOrderId)
 
-    const {data: orderItems, isLoading: orderItemsLoading} = useGetItemsQuery(orderId);
-    const {data: order, isLoading: orderLoading} = useGetOrderByIdQuery(orderId);
+    const {data: orderItems = [], isLoading: orderItemsLoading} = useGetItemsQuery(orderId, {skip: !orderId});
+    const {data: order, isLoading: orderLoading} = useGetOrderByIdQuery(orderId, {skip: !orderId});
 
     const [addItem, {isLoading: addingItem}] = useAddItemMutation();
     const [removeItem, {isLoading: removingItem}] = useRemoveItemMutation();
@@ -31,6 +31,16 @@ const OrderTicket = () => {
                 <Spinner/>
             </div>
     )}
+
+    if (!order){
+        return (
+            <div className="order-panel order-error">
+                <h3>Order not found!</h3>
+                <button className="btn-back" 
+                    onClick={() => {dispatch(clearCurrentOrder()), nav(-1)}}>Back To Tables</button>
+            </div>
+        )
+    }
 
     // handle add item
     const handleAddItem = async(orderId, menuItemId) => {
@@ -64,10 +74,10 @@ const OrderTicket = () => {
     return (
         <div className="order-panel ticket-panel">
             <h2>Order Ticket</h2>
-            <h3>{formatDate(order.tableId.timeOpened)}</h3>
+            <h3>{formatDate(order.tableId?.timeOpened)}</h3>
             <div className="ticket-meta">
-                <h3>Table: {order.tableId.tableName}</h3>
-                <h3>Time: {formatTime(order.tableId.timeOpened)}</h3>
+                <h3>Table: {order.tableId?.tableName}</h3>
+                <h3>Time: {formatTime(order.tableId?.timeOpened)}</h3>
             </div>
 
             <div className="ticket-items">
@@ -83,12 +93,12 @@ const OrderTicket = () => {
                     <tbody>
                         {orderItems.length > 0 ? ( orderItems.map(item => (
                             <tr key={item._id}>
-                                <td>{item.menuItemId.productName}</td>
+                                <td>{item.menuItemId?.productName}</td>
                                 <td>
                                     <button onClick={() => handleRemoveItem(orderId, item._id)} 
                                     disabled={addingItem || removingItem || deletingItem}>-</button>
                                     <span>{item.quantity}</span>
-                                    <button onClick={() => handleAddItem(orderId, item.menuItemId._id)}
+                                    <button onClick={() => handleAddItem(orderId, item.menuItemId?._id)}
                                     disabled={addingItem || removingItem || deletingItem}>+</button>
                                 </td>
                                 <td>{item.linePrice} ALL</td>

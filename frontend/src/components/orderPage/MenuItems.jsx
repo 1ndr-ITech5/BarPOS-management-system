@@ -12,6 +12,8 @@ const MenuItems = ({selectedCategory}) => {
     const {data: menuItems = [], isLoading} = useGetProductsQuery();
     const [addItem, {isLoading: addingItem}] = useAddItemMutation();
 
+    const hasItems = menuItems?.length > 0;
+
     if (isLoading){
         return (
             <div>
@@ -36,16 +38,22 @@ const MenuItems = ({selectedCategory}) => {
     return (
         <div className="order-panel products-panel">
             <h1>Products</h1>
-            <div className="panel-list">
-                {shownProducts.map(product => (
-                    <button
-                        key={product._id}
-                        onClick={() => handleAddItem(product._id)}
-                        disabled={!product.categoryId?.isActive || addingItem}>
-                        {product.productName}
-                    </button>
-                ))}
-            </div>
+            {hasItems ? (
+                <div className="panel-list">
+                    {shownProducts.map(product => (
+                        <button
+                            key={product._id}
+                            onClick={() => handleAddItem(product._id)}
+                            disabled={!product.categoryId?.isActive || addingItem}>
+                            {product.productName}
+                        </button>
+                    ))}
+                </div>
+            ) : (
+                <div className="no-found">
+                    <h3>No products were found!</h3>
+                </div>
+            )}
         </div>
     )
 }

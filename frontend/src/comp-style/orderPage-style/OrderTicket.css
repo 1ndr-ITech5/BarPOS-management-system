@@ -1,34 +1,15 @@
 /* ========== OrderTicket ========== */
-
-.ticket-panel {
-    display: flex;
-    flex-direction: column;
-    flex: 0 0 400px;
-    width: 400px;
-    max-width: 380px;
-    min-width: 300px;
+.order-panel.ticket-panel {
+    flex: 0 0 380px;
     height: 600px;
     max-height: 100%;
     align-self: flex-start;
-    padding: 16px 16px;
+    padding: 16px;
     gap: 15px;
-    overflow: hidden;
-    box-sizing: border-box;
 }
 
-.ticket-panel > h2 {
-    margin: 0;
-    color: #111827;
-    font-size: 1.5rem;
-    font-weight: 700;
-}
-
-.ticket-panel > h3 {
-    margin: -3px 0 0;
-    color: #6b7280;
-    font-size: 0.8rem;
-    font-weight: 500;
-}
+.ticket-panel > h2 { margin: 0; color: #111827; font-size: 1.5rem; font-weight: 700; }
+.ticket-panel > h3 { margin: -3px 0 0; color: #6b7280; font-size: 0.8rem; font-weight: 500; }
 
 .ticket-meta {
     display: flex;
@@ -39,24 +20,15 @@
     border-radius: 10px;
 }
 
-.ticket-meta h3 {
-    margin: 0;
-    color: #374151;
-    font-size: 0.9rem;
-    font-weight: 600;
-}
+.ticket-meta h3 { margin: 0; color: #374151; font-size: 0.9rem; font-weight: 600; }
 
 /* ========== SCROLL ========== */
-
 .ticket-items {
     flex: 1 1 0;
     min-height: 0;
-    min-width: 0;
-    width: 100%;
     max-height: calc(100vh - 280px);
     overflow-y: auto;
     padding-right: 4px;
-    box-sizing: border-box;
     scrollbar-gutter: stable;
     scrollbar-width: thin;
     scrollbar-color: #cbd5e1 transparent;
@@ -64,7 +36,6 @@
 
 .ticket-items table {
     width: 100%;
-    max-width: 100%;
     table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0;
@@ -78,37 +49,13 @@
     vertical-align: middle;
 }
 
-.ticket-items tbody tr {
-    border-bottom: 1px solid #f1f5f9;
-}
+.ticket-items :is(th, td):nth-child(n+2) { white-space: nowrap; }
+.ticket-items :is(th, td):first-child { text-align: left; }
+.ticket-items :is(th, td):nth-child(3) { text-align: right; }
 
-.ticket-items tbody td {
-    border-bottom: none;
-}
-
-.ticket-items :is(th, td):nth-child(n+2) {
-    white-space: nowrap;
-}
-
-.ticket-items th:nth-child(2) {
-    width: 72px;
-}
-
-.ticket-items th:nth-child(3) {
-    width: 68px;
-}
-
-.ticket-items th:nth-child(4) {
-    width: 34px;
-}
-
-.ticket-items :is(th, td):first-child {
-    text-align: left;
-}
-
-.ticket-items :is(th, td):nth-child(3) {
-    text-align: right;
-}
+.ticket-items th:nth-child(2) { width: 72px; }
+.ticket-items th:nth-child(3) { width: 68px; }
+.ticket-items th:nth-child(4) { width: 34px; }
 
 .ticket-items th {
     position: sticky;
@@ -124,21 +71,10 @@
 }
 
 /* ========== ROWS ========== */
+.ticket-items tbody tr { border-bottom: 1px solid #f1f5f9; }
 
-.ticket-items tbody td:first-child {
-    color: #1f2937;
-    font-weight: 600;
-    overflow-wrap: anywhere;
-}
-
-.ticket-items tbody td:nth-child(3) {
-    color: #111827;
-    font-weight: 700;
-}
-
-.ticket-items tbody tr:last-child td {
-    border-bottom: none;
-}
+.ticket-items tbody td:first-child { color: #1f2937; font-weight: 600; overflow-wrap: anywhere; }
+.ticket-items tbody td:nth-child(3) { color: #111827; font-weight: 700; }
 
 .ticket-items tbody td.empty {
     padding: 24px 0;
@@ -159,27 +95,16 @@
     border-radius: 5px;
     background: #fff;
     color: #374151;
-    font-weight: 700;
     font-size: 0.78rem;
+    font-weight: 700;
     vertical-align: middle;
     cursor: pointer;
 }
 
-.ticket-items td button:hover:not(:disabled) {
-    background: #f3f4f6;
-}
+.ticket-items td button:hover:not(:disabled) { background: #f3f4f6; }
+.ticket-items td button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-.ticket-items td button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.ticket-items td span {
-    display: inline-block;
-    min-width: 18px;
-    font-weight: 600;
-    font-size: 0.82rem;
-}
+.ticket-items td span { display: inline-block; min-width: 18px; font-size: 0.82rem; font-weight: 600; }
 
 .ticket-items td:last-child button {
     width: 24px;
@@ -191,17 +116,11 @@
     font-size: 0.82rem;
 }
 
-.ticket-items td:last-child button:hover:not(:disabled) {
-    background: #ef4444;
-    color: #fff;
-}
+.ticket-items td:last-child button:hover:not(:disabled) { background: #ef4444; color: #fff; }
 
-/* ========== TICKET TOTAL ========== */
-
+/* ========== TOTAL ========== */
 .ticket-total {
     display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
     align-items: center;
     gap: 200px;
     padding: 14px 10px;
@@ -209,29 +128,13 @@
     border-radius: 8px;
 }
 
-.ticket-total h3 {
-    margin: 0;
-    color: #000000;
-    font-family: 'Inter', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 500;
-}
+.ticket-total h3 { margin: 0; color: #000; font: 500 1.1rem 'Inter', sans-serif; }
+.ticket-total h3 span { font-weight: 800; }
 
-.ticket-total h3 span {
-    font-weight: 800;
-}
+/* ========== BUTTONS ========== */
+.order-actions { display: flex; gap: 6px; margin-top: auto; }
 
-/* ========== ACTIONS ========== */
-
-.order-actions {
-    display: flex;
-    flex-direction: row;
-    gap: 6px;
-    margin-top: auto;
-    width: 100%;
-}
-
-.order-actions button {
+:is(.order-actions, .order-error) button {
     flex: 1 1 0;
     min-width: 0;
     padding: 10px 4px;
@@ -241,33 +144,27 @@
     color: #fff;
     font: 600 0.76rem 'Inter', sans-serif;
     white-space: nowrap;
-    text-align: center;
     cursor: pointer;
     transition: filter 0.15s, transform 0.15s;
-    display: inline-flex;
+}
+
+:is(.order-actions, .order-error) button:hover:not(:disabled) { filter: brightness(0.92); transform: translateY(-1px); }
+:is(.order-actions, .order-error) button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-checkout { --c: #cc5500; }
+.btn-delete { --c: #f87171; }
+.btn-back { --c: #f59e0b; }
+
+/* ========== ORDER NOT FOUND ========== */
+.order-panel.order-error {
+    flex: 0 0 380px;
+    height: auto;
+    align-self: flex-start;
     align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
+    gap: 20px;
+    padding: 48px 24px;
+    text-align: center;
 }
 
-.order-actions button:hover:not(:disabled) {
-    filter: brightness(0.92);
-    transform: translateY(-1px);
-}
-
-.order-actions button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.btn-checkout {
-    --c: #cc5500;
-}
-
-.btn-delete {
-    --c: #f87171;
-}
-
-.btn-back {
-    --c: #f59e0b;
-}
+.order-error h3 { margin: 0; color: #111827; font-size: 1.3rem; font-weight: 700; }
+.order-error button { padding: 16px 30px; font-size: 1rem; }
