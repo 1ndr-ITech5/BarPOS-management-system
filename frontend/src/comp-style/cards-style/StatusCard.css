@@ -30,9 +30,8 @@
 .table-status-card h1 {
     margin: 0;
     font-size: 44px;
-    color: #111827;
 }
 
-.table-status-card:nth-child(1) .table-status-header { color: #111827; }
-.table-status-card:nth-child(2) .table-status-header { color: #15803d; }
-.table-status-card:nth-child(3) .table-status-header { color: #dc2626; }
+.table-status-card:nth-child(1){ color: #111827; }
+.table-status-card:nth-child(2){ color: #15803d; }
+.table-status-card:nth-child(3){ color: #dc2626; }
