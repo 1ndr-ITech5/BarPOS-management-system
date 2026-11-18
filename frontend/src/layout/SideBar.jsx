@@ -1,19 +1,23 @@
 import { MdOutlineTableRestaurant } from "react-icons/md";
 import { IoReceiptOutline } from "react-icons/io5";
 import { MdOutlinePayments } from "react-icons/md";
+import { IoMdRemove } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 import { BiFoodMenu } from "react-icons/bi";
 import {useSelector} from "react-redux";
 import {NavLink} from "react-router-dom";
 import "../layout-style/SideBar.css";
 
-const SideBar = () => {
+const SideBar = ({sideBar, setSideBar}) => {
 
     const user = useSelector(state => state.user.user)
 
     return (
-        <div className="sidebar">
-            <h2 className="sidebar-title">Operations</h2>
+        <div className={`sidebar ${sideBar ? "open" : ""}`}>
+            <div className="sidebar-header">
+                <h2 className="sidebar-title">Operations</h2>
+                {sideBar && <button onClick={() => setSideBar(false)}><IoMdRemove /></button>}
+            </div>
             <ul className="sidebar-menu">
                 <li className="sidebar-item"><NavLink className="sidebar-link" to="/tables">
                 <MdOutlineTableRestaurant/> Tables</NavLink></li>

@@ -11,6 +11,26 @@
     overflow: hidden;
 }
 
+.sidebar-modal {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .sidebar-modal {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        z-index: 999;
+    }
+
+    .main-content {
+        width: 100%;
+    }
+}
+
 .main-content {
     flex: 1;
     overflow-y: auto;
