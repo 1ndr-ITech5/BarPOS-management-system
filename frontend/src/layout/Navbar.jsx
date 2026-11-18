@@ -6,9 +6,11 @@ import {logout} from '../store/slices/authSlice.js';
 import {api} from "../store/apis/api.js";
 import {authApi} from "../store/apis/authApi.js";
 import {useSelector, useDispatch} from "react-redux";
+import { IoExitOutline } from "react-icons/io5";
+import { IoMenu } from "react-icons/io5";
 import '../layout-style/Navbar.css';
 
-const Navbar = () => {
+const Navbar = ({setSideBar}) => {
     const dispatch = useDispatch();
     
     const today = new Date()
@@ -23,16 +25,32 @@ const Navbar = () => {
 
     return (
         <div className="navbar">
-            <div className="brand">
-                <img src={logo}/>
-                <div className="brand-text">
-                    <h1>{workspace.barName}</h1>
-                    <h2>Point of Sale Web App</h2>
+            <div className="mobile">
+                <div className="brand">
+                    <button className="mobile-button" 
+                        onClick={() => setSideBar(true)}><IoMenu /></button>
+                    <img src={logo}/>
+                    <div className="brand-text">
+                        <h1>{workspace.barName}</h1>
+                    </div>
+                </div>
+                <div className="navbar-actions">
+                    <button className="mobile-button" 
+                        onClick={() => handleLogout()}><IoExitOutline /></button>
                 </div>
             </div>
-            <h3 className="navbar-date">{formatDate(today)}</h3>
-            <div className="navbar-actions">
-                <button className="user-btn" onClick={() => handleLogout()}><UserPanel/></button>
+            <div className="desktop">
+                <div className="brand">
+                    <img src={logo}/>
+                    <div className="brand-text">
+                        <h1>{workspace.barName}</h1>
+                        <h2>Point of Sale Web App</h2>
+                    </div>
+                </div>
+                <h3 className="navbar-date">{formatDate(today)}</h3>
+                <div className="navbar-actions">
+                    <button className="user-btn" onClick={() => handleLogout()}><UserPanel/></button>
+                </div>
             </div>
         </div>
     )

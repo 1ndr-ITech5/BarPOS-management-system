@@ -97,3 +97,44 @@
 .user-btn:hover {
     background: rgba(0, 0, 0, 0.25);
 }
+
+.mobile,
+.desktop {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mobile {
+    display: none;
+}
+
+.mobile-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.15);
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.mobile-button:active {
+    transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+    .mobile {
+        display: flex;
+    }
+
+    .desktop {
+        display: none;
+    }
+}
