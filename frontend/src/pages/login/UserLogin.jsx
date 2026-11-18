@@ -64,53 +64,51 @@ const UserLogin = () => {
 
     return (
         <div className="user-login-page">
-
-            <div className="user-login-header">
-                <div className="user-login-header-content">
+            <div className="user-login">
+                <div className="user-login-content">
                     <div className="user-login-brand">
                         <h2>BarPOS System</h2>
                         <h3>Point of sale Web App</h3>
                     </div>
                     <h2>{workspace.barName}</h2>
                 </div>
-            </div>
+                {workspace.type === "demo" ? 
+                    <div className="demo-login-buttons">
+                        <button onClick={() => handleDemoLogin({selectedRole: "admin"})} 
+                            disabled={demoLogging}>Log As Admin</button>
+                        <button onClick={() => handleDemoLogin({selectedRole: "waiter"})} 
+                            disabled={demoLogging}>Log as Waiter</button>
+                    </div> 
+                : 
+                    <div className="user-login-form">
+                        <div className="code-display">
+                            <button onClick={() => handleCodeVisibility()}>
+                                {!showCode ? <FaRegEye/> : <FaRegEyeSlash/>}
+                            </button>
+                            <input type={showCode ? "text" : "password"} value={code} readOnly/>
+                        </div>
 
-            {workspace.type === "demo" ? 
-            <div className="demo-login-buttons">
-                <button onClick={() => handleDemoLogin({selectedRole: "admin"})} 
-                disabled={demoLogging}>Log As Admin</button>
-                <button onClick={() => handleDemoLogin({selectedRole: "waiter"})} 
-                disabled={demoLogging}>Log as Waiter</button>
-            </div> 
-            : 
-            <div className="user-login-form">
-                <div className="code-display">
-                    <button onClick={() => handleCodeVisibility()}>
-                        {!showCode ? <FaRegEye/> : <FaRegEyeSlash/>}
-                    </button>
-                    <input type={showCode ? "text" : "password"} value={code} readOnly/>
+                        <div className="keypad">
+                            {Array.from({ length: 9 }, (_, index) => (
+                                <button key={index + 1} type="button" onClick={() => handleInputCode(index + 1)}>
+                                    {index + 1}
+                                </button>
+                            ))}
+                            <button type="button" onClick={() => handleInputCode(0)}>0</button>
+                            <button type="button" onClick={() => setCode((prevCode) => prevCode.slice(0, -1))}>
+                                <IoArrowBack />
+                            </button>
+                            <button onClick={() => setCode("")}><MdClear /></button>
+                        </div>
+                    </div>}
+
+                <div className="action-buttons">
+                    {workspace.type !== "demo" && (
+                        <button onClick={() => handleLogin()} disabled={logging}>Log In</button>
+                    )}
+                    <button onClick={() => handleSignOut()} disabled={demoLogging || logging}>Sign out</button>
                 </div>
-
-                <div className="keypad">
-                    {Array.from({ length: 10 }, (_, index) => (
-                        <button key={index} type="button" onClick={() => handleInputCode(index)}>
-                            {index}
-                        </button>
-                    ))}
-                    <button type="button" onClick={() => setCode((prevCode) => prevCode.slice(0, -1))}>
-                        <IoArrowBack />
-                    </button>
-                    <button onClick={() => setCode("")}><MdClear /></button>
-                </div>
-            </div>}
-
-            <div className="action-buttons">
-                {workspace.type !== "demo" && (
-                    <button onClick={() => handleLogin()} disabled={logging}>Log In</button>
-                )}
-                <button onClick={() => handleSignOut()} disabled={demoLogging || logging}>Sign out</button>
             </div>
-
         </div>
     )
 }

@@ -1,145 +1,121 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap");
 
-/* =========================================
-   MAIN PAGE
-========================================= */
-
+/* PAGE */
 .user-login-page {
-    height: 100vh;
+    --accent: #ffc107;
+    --accent-hover: #ffda55;
+
     height: 100dvh;
-    width: 100%;
     box-sizing: border-box;
-    overflow: hidden;
-
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 250px;
-    grid-template-rows: 75px minmax(0, 1fr);
-    gap: 25px;
-
-    padding: 30px 8%;
-    position: relative;
-    isolation: isolate;
+    grid-template-rows: minmax(0, 1fr);
+    place-items: center;
+    padding: 24px;
 
     background: url("../../assets/restaurant.jpg") center/cover no-repeat;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Inter", sans-serif;
 }
 
-.user-login-page::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.48);
-    z-index: -1;
+/* CARD (holds everything) */
+.user-login {
+    --pad: 30px;
+
+    width: 100%;
+    max-width: 900px;
+    max-height: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 240px;
+    grid-template-rows: 80px auto;
+    gap: 28px;
+    padding: 0 var(--pad) var(--pad);
+    overflow: auto;
+
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.95);
 }
 
-
-/* =========================================
-   HEADER
-========================================= */
-
-.user-login-header {
+/* HEADER */
+.user-login-content {
     grid-column: 1 / -1;
+    margin: 0 calc(var(--pad) * -1);
+    padding: 0 25px;
     display: flex;
     align-items: center;
-    padding: 0 25px;
+    justify-content: space-between;
+    gap: 15px;
 
     background: rgba(25, 25, 25, 0.92);
-    border-bottom: 3px solid #ffc107;
+    border-bottom: 3px solid var(--accent);
 }
 
-.user-login-header-content {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 15px;
+.user-login-content :is(h2, h3) { margin: 0; }
+.user-login-brand h2 { color: var(--accent); font-size: 22px; }
+.user-login-brand h3 { color: #bbb; font-size: 12px; font-weight: 400; }
+.user-login-content > h2 { color: #fff; font-size: 21px; text-transform: uppercase; }
+
+/* BUTTONS (shared) */
+:is(.keypad, .demo-login-buttons, .action-buttons) button {
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 3px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
-.user-login-header-content img {
-    width: 55px;
-    height: 55px;
-    object-fit: contain;
+.keypad button,
+.demo-login-buttons button,
+.action-buttons button:first-child {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #222;
 }
 
-.user-login-brand {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+:is(.keypad, .demo-login-buttons, .action-buttons) button:hover:not(:disabled) {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    color: #222;
+    transform: scale(1.03);
 }
 
-.user-login-brand h2,
-.user-login-brand h3,
-.user-login-header-content > h2 {
-    margin: 0;
-}
+.user-login button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-.user-login-brand h2 {
-    color: #ffc107;
-    font-size: 22px;
-}
-
-.user-login-brand h3 {
-    color: #bbb;
-    font-size: 12px;
-    font-weight: 400;
-}
-
-.user-login-header-content > h2 {
-    margin-left: auto;
-    color: white;
-    font-size: 21px;
-    text-transform: uppercase;
-}
-
-
-/* =========================================
-   LOGIN FORM
-========================================= */
-
+/* LOGIN FORM */
 .user-login-form {
     width: 100%;
-    max-width: 480px;
+    max-width: 410px;
     justify-self: center;
     align-self: center;
-
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     gap: 18px;
-
     padding: 25px;
-    box-sizing: border-box;
 
     background: rgba(35, 35, 35, 0.75);
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 5px;
-
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.65);
 }
-
-
-/* =========================================
-   PIN DISPLAY
-========================================= */
 
 .code-display {
     height: 65px;
     display: flex;
-    align-items: center;
-
     background: rgba(255, 255, 255, 0.12);
     border: 1px solid rgba(255, 255, 255, 0.4);
-
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45);
 }
 
 .code-display input {
     flex: 1;
     min-width: 0;
-    height: 100%;
-
-    background: transparent;
-    border: none;
-    outline: none;
-
-    color: #ffc107;
+    background: none;
+    border: 0;
+    outline: 0;
+    color: var(--accent);
+    font: inherit;
     font-size: 25px;
     font-weight: 600;
     letter-spacing: 12px;
@@ -148,299 +124,83 @@
 
 .code-display button {
     width: 45px;
-    height: 100%;
-    background: transparent;
-    border: none;
-    color: white;
+    background: none;
+    border: 0;
+    color: #fff;
     font-size: 20px;
     cursor: pointer;
 }
 
-.code-display button:hover {
-    color: #ffc107;
-}
+.code-display button:hover { color: var(--accent); }
 
-
-/* =========================================
-   NUMERIC KEYPAD
-========================================= */
-
+/* KEYPAD (1-9, then DEL 0 CLEAR) */
 .keypad {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
 }
 
-.keypad button {
-    aspect-ratio: 1.15 / 1;
+.keypad button { aspect-ratio: 1.4; font-size: 27px; }
+.keypad button:nth-child(10) { order: 1; }
+.keypad button:nth-child(12) { order: 2; }
+.keypad button:nth-child(n + 11) { background: #fff; border-color: #fff; }
+.keypad button:nth-child(n + 11):hover { background: #e0e0e0; border-color: #e0e0e0; }
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: #ffc107;
-    border: none;
-    border-radius: 2px;
-
-    color: #252525;
-    font-size: 27px;
-    font-weight: 600;
-
-    cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-    transition: 0.2s;
-}
-
-.keypad button:hover {
-    background: #ffda55;
-    transform: scale(1.03);
-}
-
-/* Keypad layout: 1 2 3 / 4 5 6 / 7 8 9 / DEL 0 CLEAR */
-
-.keypad button:nth-child(10) {
-    grid-row: 4;
-    grid-column: 2;
-}
-
-.keypad button:nth-child(11) {
-    grid-row: 4;
-    grid-column: 1;
-    background: white;
-}
-
-.keypad button:nth-child(12) {
-    grid-row: 4;
-    grid-column: 3;
-    background: white;
-}
-
-.keypad button:nth-child(11):hover,
-.keypad button:nth-child(12):hover {
-    background: #e0e0e0;
-}
-
-
-/* =========================================
-   ACTION BUTTONS
-========================================= */
-
+/* ACTION BUTTONS */
 .action-buttons {
-    grid-column: 2;
-    width: 100%;
     align-self: center;
-
     display: flex;
     flex-direction: column;
     gap: 18px;
 }
 
 .action-buttons button {
-    width: 100%;
     min-height: 68px;
-    padding: 12px;
-
-    background: rgba(25, 25, 25, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.65);
-    border-radius: 3px;
-
-    color: white;
+    background: rgba(25, 25, 25, 0.8);
+    color: #fff;
     font-size: 16px;
-    font-weight: 600;
     text-transform: uppercase;
-
-    cursor: pointer;
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.45);
-    transition: 0.2s;
 }
 
-.action-buttons button:first-child {
-    background: #ffc107;
-    border-color: #ffc107;
-    color: #222;
-}
-
-.action-buttons button:hover:not(:disabled) {
-    background: #ffda55;
-    border-color: #ffda55;
-    color: #222;
-}
-
-.action-buttons button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-
-/* =========================================
-   DEMO LOGIN BUTTONS
-========================================= */
-
+/* DEMO LOGIN */
 .demo-login-buttons {
     grid-column: 1 / -1;
-
     display: flex;
     justify-content: center;
-    align-items: center;
     gap: 30px;
 }
 
-.demo-login-buttons button {
-    min-width: 240px;
-    min-height: 85px;
-    padding: 22px 35px;
+.demo-login-buttons button { min-width: 240px; min-height: 85px; padding: 22px 35px; font-size: 19px; }
 
-    background: #ffc107;
-    border: none;
-    border-radius: 3px;
-
-    color: #222;
-    font-size: 19px;
-    font-weight: 600;
-
-    cursor: pointer;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
-    transition: 0.2s;
-}
-
-.demo-login-buttons button:hover:not(:disabled) {
-    background: #ffda55;
-    transform: translateY(-3px);
-}
-
-
-/* Sign out button when using demo workspace */
-
-.user-login-page:has(.demo-login-buttons) .action-buttons {
+.user-login:has(.demo-login-buttons) .action-buttons {
     grid-column: 1 / -1;
     justify-self: center;
     align-self: start;
-
-    width: 260px;
-    margin: 25px auto 0;
+    width: min(100%, 260px);
 }
 
-.user-login-page:has(.demo-login-buttons) .action-buttons button {
-    min-height: 65px;
-}
-
-
-/* =========================================
-   RESPONSIVE DESIGN
-========================================= */
-
+/* RESPONSIVE */
 @media (max-width: 768px) {
+    .user-login-page { padding: 12px; }
 
-    .user-login-page {
+    .user-login {
+        --pad: 16px;
         grid-template-columns: 1fr;
-        grid-template-rows: 65px minmax(0, 1fr) auto;
+        grid-template-rows: 65px auto auto;
         gap: 15px;
-        padding: 20px;
     }
 
-    .user-login-header {
-        padding: 10px;
-    }
+    .user-login-content { padding: 0 12px; }
+    .user-login-brand h2 { font-size: 16px; }
+    .user-login-content > h2 { font-size: 13px; text-align: right; }
 
-    .user-login-header-content img {
-        width: 45px;
-        height: 45px;
-    }
+    .user-login-form,
+    .action-buttons { width: 100%; max-width: 410px; justify-self: center; }
 
-    .user-login-brand h2 {
-        font-size: 17px;
-    }
+    .action-buttons { flex-direction: row; }
+    .action-buttons button { flex: 1; }
 
-    .user-login-header-content > h2 {
-        font-size: 14px;
-    }
-
-    .user-login-form {
-        max-width: 420px;
-        padding: 18px;
-    }
-
-    .action-buttons {
-        grid-column: 1;
-        max-width: 420px;
-        justify-self: center;
-        flex-direction: row;
-    }
-
-    .action-buttons button {
-        flex: 1;
-        min-height: 60px;
-    }
-
-    .demo-login-buttons {
-        gap: 18px;
-    }
-
-    .demo-login-buttons button {
-        width: 100%;
-        min-height: 75px;
-    }
-
-    .user-login-page:has(.demo-login-buttons) .action-buttons {
-        margin: 15px auto 0;
-        width: 100%;
-        max-width: 420px;
-    }
-}
-
-
-/* =========================================
-   SMALL SCREENS
-========================================= */
-
-@media (max-width: 480px) {
-
-    .user-login-page {
-        padding: 12px;
-        gap: 12px;
-    }
-
-    .user-login-header-content {
-        gap: 8px;
-    }
-
-    .user-login-header-content img {
-        width: 38px;
-        height: 38px;
-    }
-
-    .user-login-brand h2 {
-        font-size: 14px;
-    }
-
-    .user-login-brand h3 {
-        font-size: 10px;
-    }
-
-    .user-login-header-content > h2 {
-        max-width: 100px;
-        font-size: 11px;
-        text-align: right;
-    }
-
-    .user-login-form {
-        padding: 12px;
-        gap: 12px;
-    }
-
-    .keypad {
-        gap: 7px;
-    }
-
-    .keypad button {
-        font-size: 23px;
-    }
-
-    .demo-login-buttons {
-        flex-direction: column;
-    }
-
-    .demo-login-buttons button {
-        width: 100%;
-    }
+    .demo-login-buttons { flex-direction: column; gap: 15px; }
+    .demo-login-buttons button { min-width: 0; }
 }
