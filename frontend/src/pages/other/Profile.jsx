@@ -63,15 +63,20 @@ const Profile = () => {
                 <div className="right-side-admin">
                     <h1>Today's Waiter Performances</h1>
                     <table>
-                        <tr>
-                            <th>Full Name</th>
-                            <th>Completed Orders</th>
-                        </tr>
-                        {waiterPerformances.map(item => 
-                        <tr key={item._id}>
-                            <td>{item.first_name} {item.last_name}</td>
-                            <td>{item.completedOrders}</td>
-                        </tr>)}
+                        <thead>
+                            <tr>
+                                <th>Full Name</th>
+                                <th>Completed Orders</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {waiterPerformances.map(item =>
+                                <tr key={item._id}>
+                                    <td>{item.first_name} {item.last_name}</td>
+                                    <td>{item.completedOrders}</td>
+                                </tr>
+                            )}
+                        </tbody>
                     </table>
                 </div>)}
                 {registerModal && <Register changeModal={setRegisterModal}/>}
