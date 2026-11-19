@@ -16,7 +16,7 @@
     font-family: "Inter", sans-serif;
 }
 
-/* CARD (holds everything) */
+/* CARD */
 .user-login {
     --pad: 30px;
 
@@ -185,18 +185,26 @@
     .user-login-page { padding: 12px; }
 
     .user-login {
-        --pad: 16px;
+        max-width: 330px;
+        height: 600px;
+        overflow: hidden;
         grid-template-columns: 1fr;
         grid-template-rows: 65px auto auto;
         gap: 15px;
     }
 
-    .user-login-content { padding: 0 12px; }
+    .user-login-content { 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 44px; 
+    }
+
     .user-login-brand h2 { font-size: 16px; }
     .user-login-content > h2 { font-size: 13px; text-align: right; }
 
     .user-login-form,
-    .action-buttons { width: 100%; max-width: 410px; justify-self: center; }
+    .action-buttons { width: 100%; max-width: 340px; justify-self: center; }
 
     .action-buttons { flex-direction: row; }
     .action-buttons button { flex: 1; }
