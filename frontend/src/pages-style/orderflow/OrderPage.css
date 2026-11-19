@@ -3,6 +3,7 @@
 }
 
 .order-page {
+    height: calc(100vh - 105px);
     height: calc(100dvh - 105px);
     overflow: hidden;
     box-sizing: border-box;

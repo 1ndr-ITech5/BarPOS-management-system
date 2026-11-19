@@ -8,6 +8,7 @@
     display: flex;
     width: 100%;
     min-height: 100vh;
+    min-height: 100dvh;
     font-family: 'Inter', sans-serif;
 }
 
@@ -24,6 +25,7 @@
     flex: 1 1 50%;
     max-width: 50%;
     min-height: 100vh;
+    min-height: 100dvh;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -67,6 +69,7 @@
 .description {
     margin-top: auto;
     margin-bottom: 10vh;
+    margin-bottom: 10dvh;
 }
 
 .description h1 {
@@ -305,7 +308,9 @@
         flex: 1 1 100%;
         max-width: 100%;
         min-height: 100vh;
+        min-height: 100dvh;
         padding: 32px 24px;
+        padding-top: max(32px, env(safe-area-inset-top, 0px));
     }
 
     .login-form > * {

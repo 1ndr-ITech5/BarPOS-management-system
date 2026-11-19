@@ -70,6 +70,7 @@
     
     width: 100%;
     min-height: 60vh;
+    min-height: 60dvh;
     text-align: center;
     font-family: "Inter", sans-serif;
 }
@@ -123,6 +124,7 @@
 
 .prebill-modal .receipt {
     max-height: 90vh;
+    max-height: 90dvh;
     overflow-y: auto;
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);

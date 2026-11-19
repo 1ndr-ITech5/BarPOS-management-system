@@ -5,11 +5,14 @@
     justify-content: space-between;
     align-items: center;
     height: 12vh;
+    height: 12dvh;
+    height: calc(12dvh + env(safe-area-inset-top, 0px));
     min-height: 80px;
+    min-height: calc(80px + env(safe-area-inset-top, 0px));
     background-color: #cc5500;
     font-family: 'Inter', sans-serif;
     color: white;
-    padding: 0 40px;
+    padding: env(safe-area-inset-top, 0px) 40px 0 40px;
     box-sizing: border-box;
 }
 
@@ -130,6 +133,10 @@
 }
 
 @media (max-width: 768px) {
+    .navbar {
+        padding: env(safe-area-inset-top, 0px) 20px 0 20px;
+    }
+
     .mobile {
         display: flex;
     }

@@ -12,7 +12,9 @@
 
 .order-page {
     height: calc(100vh - 105px);
+    height: calc(100dvh - 105px);
     max-height: calc(100vh - 105px);
+    max-height: calc(100dvh - 105px);
     overflow: hidden;
     display: flex;
     justify-content: center;

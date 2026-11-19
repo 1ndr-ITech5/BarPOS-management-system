@@ -5,12 +5,14 @@
     --accent: #ffc107;
     --accent-hover: #ffda55;
 
+    height: 100vh;
     height: 100dvh;
     box-sizing: border-box;
     display: grid;
     grid-template-rows: minmax(0, 1fr);
     place-items: center;
     padding: 24px;
+    padding-top: max(24px, env(safe-area-inset-top, 0px));
 
     background: url("../../assets/restaurant.jpg") center/cover no-repeat;
     font-family: "Inter", sans-serif;
