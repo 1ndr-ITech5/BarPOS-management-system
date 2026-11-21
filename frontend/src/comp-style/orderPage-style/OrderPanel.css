@@ -9,14 +9,7 @@
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
     font-family: 'Inter', sans-serif;
     box-sizing: border-box;
-}
 
-.categories-panel {
-    flex: 0 0 290px;
-    min-width: 220px;
-}
-
-.products-panel {
     flex: 0 0 350px;
     width: 100%;
 }

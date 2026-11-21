@@ -72,7 +72,7 @@ const OrderTicket = () => {
 
 
     return (
-        <div className="order-panel ticket-panel">
+        <div className="ticket-panel">
             <h2>Order Ticket</h2>
             <h3>{formatDate(order.tableId?.timeOpened)}</h3>
             <div className="ticket-meta">
@@ -131,4 +131,4 @@ const OrderTicket = () => {
     )
 }
 
-export default OrderTicket;
+export default OrderTicket; 

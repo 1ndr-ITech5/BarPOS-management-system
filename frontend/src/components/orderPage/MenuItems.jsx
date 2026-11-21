@@ -36,7 +36,7 @@ const MenuItems = ({selectedCategory}) => {
     }
 
     return (
-        <div className="order-panel products-panel">
+        <div className="order-panel">
             <h1>Products</h1>
             {hasItems ? (
                 <div className="panel-list">
@@ -50,7 +50,7 @@ const MenuItems = ({selectedCategory}) => {
                     ))}
                 </div>
             ) : (
-                <div className="no-found">
+                <div className="panel-list">
                     <h3>No products were found!</h3>
                 </div>
             )}

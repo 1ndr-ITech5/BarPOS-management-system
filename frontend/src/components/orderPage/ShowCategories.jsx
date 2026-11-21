@@ -16,7 +16,7 @@ const Categories = ({selectedCategory, setCategory}) => {
     }
 
     return (
-        <div className="order-panel categories-panel">
+        <div className="order-panel">
             <h1>Categories</h1>
             {hasCategories ? (
                 <div className="panel-list">
