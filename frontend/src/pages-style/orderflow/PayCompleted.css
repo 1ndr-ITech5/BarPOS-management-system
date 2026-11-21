@@ -18,7 +18,6 @@
     transition: margin-left 0.25s ease;
 }
 
-/* When receipt appears, set margin-left to 30px */
 .pay-completed:has(~ .receipt-panel),
 .main-content:has(.receipt-panel) .pay-completed {
     margin: auto auto auto 140px;
@@ -62,21 +61,24 @@
     cursor: pointer;
 }
  
-/* ---------- Side Panel ---------- */
 .receipt-panel {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 30%;
-    height: 100%;
-    background-color: #f3f3f3;
-    border-left: 14px solid #d1d5db;
-    box-shadow: -4px 0 12px rgba(0, 0, 0, 0.15);
-    overflow-y: auto;
-    box-sizing: border-box;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px); 
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    padding: 30px 10px;
+    padding: 20px;
     z-index: 100;
+}
+
+@media (max-width: 768px) {
+    .pay-completed {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        max-width: 240px;
+    }
 }

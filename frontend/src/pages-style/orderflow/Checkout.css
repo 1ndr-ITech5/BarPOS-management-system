@@ -1,32 +1,29 @@
-.checkout{
-    margin: 15px auto;
-    background-color: white;
-    border-radius: 10px;
-    padding: 30px;
+/* ========== Checkout ========== */
+
+.checkout {
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 600px;
-    width: 100%;
     gap: 10px;
+    width: 100%;
+    max-width: 600px;
+    margin: 15px auto;
+    padding: 30px;
+    box-sizing: border-box;
+    background: #fff;
+    border-radius: 10px;
 }
 
-.checkout h1 {
-    padding: 10px;
-}
- 
-/* Make every section fill the card width */
-.checkout > div {
-    width: 100%;
-}
- 
-/* Dashed dividers between sections */
+.checkout > div { width: 100%; }
+.checkout h1 { padding: 10px; }
+
 .order-list,
 .payment-summary {
-    border-top: 1px dashed #858585;
     padding-top: 15px;
+    border-top: 1px dashed #858585;
 }
- 
+
+/* ---------- Waiter / Table ---------- */
 .order-details {
     display: flex;
     justify-content: center;
@@ -34,107 +31,72 @@
     padding-bottom: 15px;
 }
 
-.order-details h3 span {
-    color: rgb(107, 107, 105)
-}
- 
 .order-details h3 {
-    border: solid black 1px;
-    padding: 10px;
-    border-radius: 8px;
     margin: auto;
+    padding: 10px;
+    border: 1px solid #000;
+    border-radius: 8px;
 }
- 
-/* ---------- Item list ---------- */
+
+.order-details span { color: #6b6b69; }
+
+/* ---------- Items List ---------- */
 .order-list h2 {
-    font-size: 1.4rem;
-    font-weight: 500;
     margin: 0 0 10px;
     padding-left: 10px;
+    font-size: 1.4rem;
+    font-weight: 500;
 }
- 
-.order-list h2 span {
-    color: #555555;
-}
- 
+
+.order-list h2 span { color: #555; }
+
 .item-list table {
     width: 100%;
     border-collapse: collapse;
-    padding-left: 20px;
 }
- 
-.item-list td {
-    padding: 15px 5px;
-}
- 
-.item-list td:first-child {
-    width: 60px;
-    font-size: 1.2rem;
-    color: #000000;
-}
- 
-.item-list td:last-child {
-    text-align: right;
-    font-weight: 700;
-    font-size: 1.2rem;
-    color: #000000;
-}
- 
+
+.item-list td { padding: 15px 5px; }
+.item-list td:is(:first-child, :last-child) { font-size: 1.2rem; color: #000; }
+.item-list td:first-child { width: 60px; }
+.item-list td:last-child { text-align: right; font-weight: 700; }
+
 /* ---------- Payment summary ---------- */
 .payment-summary {
     display: flex;
     flex-direction: column;
-    margin: auto;
     gap: 15px;
 }
 
-.payment-summary h3 {
-    margin: 0 0 10px;
-    text-align: center;
-}
- 
+.payment-summary h3 { margin: 0 0 10px; text-align: center; }
+
 .payment-total {
     display: flex;
-    padding-left: 60px;
-    gap: 300px;
+    justify-content: space-between;
+    padding: 0 20px;
 }
- 
-.payment-total h2 {
-    margin: 0;
-    padding: 10px;
-    font-size: 1.7rem;
-}
- 
-.payment-total h2:last-child {
-    color: #ff6600;
-}
- 
+
+.payment-total h2 { margin: 0; padding: 10px; font-size: 1.7rem; }
+.payment-total h2:last-child { color: #ff6600; }
+
 /* ---------- Amount received ---------- */
 .pay-amount {
-    padding: 20px;
     display: flex;
-    flex-direction: row;
     gap: 10px;
+    padding: 20px;
     margin-bottom: 15px;
 }
 
-.pay-amount label {
-    padding: 20px;
-    font-weight: 600;
-    font-size: 1.3rem;
-}
- 
+.pay-amount label { padding: 20px; font-size: 1.3rem; font-weight: 600; }
+
 .pay-amount input {
     padding: 12px 16px;
-    border: 2px solid #000000;
+    border: 2px solid #000;
     border-radius: 12px;
     font-size: 1rem;
 }
- 
-.pay-amount input:focus {
-    outline: none;
-}
- 
+
+.pay-amount input:focus { outline: none; }
+
 /* ---------- Payment method ---------- */
 .pay-options {
     display: flex;
@@ -143,7 +105,7 @@
     border: 1px solid #e5e5e5;
     border-radius: 16px;
 }
- 
+
 .pay-option {
     flex: 1;
     display: flex;
@@ -155,49 +117,52 @@
     color: #8a8a8a;
     cursor: pointer;
 }
- 
-.pay-option input {
-    display: none;
-}
- 
-.pay-icon {
-    font-size: 1.4rem;
-}
- 
-.pay-option.selected {
-    background-color: #CC5500;
-    color: white;
-}
- 
+
+.pay-option input { display: none; }
+.pay-icon { font-size: 1.4rem; }
+.pay-option.selected { background: #cc5500; color: #fff; }
+
 /* ---------- Buttons ---------- */
 .checkout-actions {
     display: flex;
-    padding-top: 20px;
     gap: 10px;
+    padding-top: 20px;
 }
- 
+
 .checkout-actions button {
     flex: 1;
     padding: 14px;
-    border-radius: 30px;
     border: none;
+    border-radius: 30px;
     font-size: 1rem;
     cursor: pointer;
 }
- 
-/* Back To Order: light orange */
-.checkout-actions button:first-child {
-    background-color: #ffc132;
-    color: #000000;
-}
- 
-/* Checkout: burnt orange */
-.checkout-actions button:last-child {
-    background-color: #CC5500;
-    color: white;
-}
- 
-.checkout-actions button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+
+.checkout-actions button:first-child { background: #ffc132; color: #000; }
+.checkout-actions button:last-child { background: #cc5500; color: #fff; }
+.checkout-actions button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ========== Mobile ========== */
+
+@media (max-width: 768px) {
+    .checkout { margin: 10px auto; padding: 20px 14px; }
+    .checkout h1 { padding: 0; font-size: 1.6rem; }
+
+    .order-details { flex-wrap: wrap; gap: 10px; }
+    .order-details h3 { flex: 1 1 140px; margin: 0; font-size: 0.95rem; text-align: center; }
+
+    .order-list h2 { padding-left: 0; font-size: 1.2rem; }
+    .item-list td { padding: 10px 4px; }
+    .item-list td:is(:first-child, :last-child) { font-size: 1rem; }
+    .item-list td:first-child { width: 44px; }
+    .item-list td:last-child { white-space: nowrap; }
+
+    .payment-total { padding: 0; }
+    .payment-total h2 { padding: 6px 0; font-size: 1.4rem; }
+
+    .pay-amount { flex-wrap: wrap; align-items: center; padding: 10px 0; }
+    .pay-amount label { flex: 1 0 100%; padding: 0; font-size: 1.1rem; }
+    .pay-amount input { flex: 1; min-width: 0; font-size: 16px; }
+
+    .checkout-actions { flex-direction: column-reverse; }
 }
