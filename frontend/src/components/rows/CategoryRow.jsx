@@ -63,7 +63,6 @@ const CategoryRow = ({category, index, productCount}) => {
                     <div className="edit-name">
                         <button onClick={() => setIsEditing(false)}><CiCircleRemove /></button>
                         <input type="text" value={categoryName} onChange={(e) => setCategoryName(e.target.value)}/>
-                        <button onClick={handleSubmit} disabled={isLoading}>Submit</button>
                     </div>
                 ) : category.categoryName}
             </td>
@@ -75,14 +74,18 @@ const CategoryRow = ({category, index, productCount}) => {
                 </label>
             </td>
             <td>
-                {category.isArchived === true ? 
-                <button onClick={handleRestoreCategory} disabled={restoringCategory}>Restore</button> : 
-                <div>
-                    <button onClick={() => setIsEditing(true)} disabled={isLoading || deletingCategory}>
-                        <FaPencilAlt /></button>
-                    <button onClick={handleDeleteCategory} disabled={isLoading || deletingCategory}>
-                        <RiDeleteBin6Line /></button>
-                </div>}
+                {category.isArchived ? (
+                    <button onClick={handleRestoreCategory} disabled={restoringCategory}>Restore</button>
+                ) : isEditing ? (
+                    <button onClick={handleSubmit} disabled={isLoading}>Submit</button>
+                ) : (
+                    <div>
+                        <button onClick={() => setIsEditing(true)} disabled={isLoading || deletingCategory}>
+                            <FaPencilAlt /></button>
+                        <button onClick={handleDeleteCategory} disabled={isLoading || deletingCategory}>
+                            <RiDeleteBin6Line /></button>
+                    </div>
+                )}
             </td>
         </tr>
     )

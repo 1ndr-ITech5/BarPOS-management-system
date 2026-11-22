@@ -6,6 +6,8 @@
     align-items: center;
     font-family: "Inter", sans-serif;
     gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .menu-managment > h1 {
@@ -40,4 +42,30 @@
 .active {
   background-color: #ffb300;
   color: #000000;
+}
+
+@media (max-width: 768px) {
+  .menu-managment {
+        margin: 0;
+        gap: 14px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .menu-managment > h3 { display: none; }
+
+    .menu-tabs {
+        width: 100%;
+        max-width: 100%;
+        gap: 8px;
+        margin-top: 4px;
+        padding: 4px;
+        box-sizing: border-box;
+    }
+
+    .menu-tabs button {
+        flex: 1;
+        padding: 10px 8px;
+        font-size: 1rem;
+    }
 }
