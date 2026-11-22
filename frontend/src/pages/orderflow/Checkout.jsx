@@ -42,7 +42,9 @@ const Checkout = () => {
 
         setPaymentData((prevData) => ({
             ...prevData,
-            [name]: name === "amountPaid" ? Number(value) : value
+            [name]: name === "amountPaid"
+            ? (value === "" ? "" : Number(value))
+            : value
         }))
     }
 

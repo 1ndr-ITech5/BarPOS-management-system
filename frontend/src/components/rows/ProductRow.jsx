@@ -24,7 +24,9 @@ const ProductRow = ({product, index, categories}) => {
 
         setEditedData((prevData) => ({
             ...prevData,
-            [name]: name === "price" ? Number(value) : value
+            [name]: name === "price"
+            ? (value === "" ? "" : Number(value))
+            : value
         }))
     }
 

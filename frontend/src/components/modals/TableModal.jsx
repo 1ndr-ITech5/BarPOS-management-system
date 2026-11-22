@@ -23,7 +23,9 @@ const TableModal = () => {
 
         setTableData((prevTableData) => ({
             ...prevTableData,
-            [name]: name === "capacity" ? Number(value) : value
+            [name]: name === "capacity"
+            ? (value === "" ? "" : Number(value))
+            : value
         }))
     }
 
