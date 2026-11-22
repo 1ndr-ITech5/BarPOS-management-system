@@ -1,6 +1,5 @@
-.main-content:has(.product-subpage) {
-  overflow: hidden;
-}
+/* ===== Page ===== */
+.main-content:has(.product-subpage) { overflow: hidden; }
 
 .product-subpage {
   display: flex;
@@ -15,7 +14,6 @@
 .product-subpage .tabs {
   display: flex;
   justify-content: center;
-  align-items: center;
   gap: 24px;
   width: 100%;
   max-width: 1000px;
@@ -33,17 +31,8 @@
   transition: border-color 0.2s, color 0.2s;
 }
 
-.product-subpage .tabs button.tab-active {
-  color: #cc5500;
-  font-weight: 600;
-  border-bottom-color: #cc5500;
-}
-
-.product-subpage .tabs button:hover:not(.tab-active),
-.product-subpage .tabs button.tab:hover {
-  color: #374151;
-  border-bottom-color: #9ca3af;
-}
+.product-subpage .tabs button:not(.tab-active):hover { color: #374151; border-bottom-color: #9ca3af; }
+.product-subpage .tabs button.tab-active { color: #cc5500; font-weight: 600; border-bottom-color: #cc5500; }
 
 /* ===== Category pills ===== */
 .product-subpage .categories-filter {
@@ -73,16 +62,8 @@
   transition: background-color 0.2s, color 0.2s;
 }
 
-.product-subpage .categories-filter button:hover:not(.selected) {
-  background: #e5e7eb;
-  color: #111827;
-}
-
-.product-subpage .categories-filter button.selected {
-  background: #cc5500;
-  color: #ffffff;
-  font-weight: 600;
-}
+.product-subpage .categories-filter button:not(.selected):hover { background: #e5e7eb; color: #111827; }
+.product-subpage .categories-filter button.selected { background: #cc5500; color: #fff; font-weight: 600; }
 
 /* ===== Container ===== */
 .product-table-container {
@@ -123,18 +104,15 @@
 .product-table-container .table-header button:hover { background: #b84d00; }
 
 /* ===== Table ===== */
-.product-table-container table {
-  width: 100%;
-  border-collapse: collapse;
-}
+.product-table-container table { width: 100%; border-collapse: collapse; }
 
-.product-table-container thead {
+.product-table-container :is(thead, tbody tr) {
   display: table;
   width: 100%;
   table-layout: fixed;
-  background: #fff;
-  border-bottom: 1px solid #e5e7eb;
 }
+
+.product-table-container thead { background: #fff; border-bottom: 1px solid #e5e7eb; }
 
 .product-table-container th {
   padding: 12px 16px;
@@ -158,14 +136,7 @@
   background: #f3f4f6;
 }
 
-.product-table-container tbody tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-  border-bottom: 1px solid #e5e7eb;
-  scroll-snap-align: start;
-}
-
+.product-table-container tbody tr { border-bottom: 1px solid #e5e7eb; scroll-snap-align: start; }
 .product-table-container tbody tr:last-child { border-bottom: none; }
 
 .product-table-container td {
@@ -176,21 +147,23 @@
   vertical-align: middle;
 }
 
-/* gjerësitë: No. | Name | Category | Price | Available | Actions */
+/* No. | Name | Category | Price | Available | Actions */
 .product-table-container :is(th, td):nth-child(1) { width: 7%; text-align: center; }
 .product-table-container :is(th, td):nth-child(2) { width: 27%; }
 .product-table-container :is(th, td):nth-child(3) { width: 20%; text-align: center; }
 .product-table-container :is(th, td):nth-child(n+4) { width: 15.33%; text-align: center; }
 
-/* ===== Edit brenda rreshtit ===== */
-.product-table-container td > div {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-
+/* ===== Inline edit ===== */
+.product-table-container td > div { display: flex; align-items: center; justify-content: center; gap: 6px; }
 .product-table-container td:nth-child(2) > div { justify-content: flex-start; }
+
+.product-table-container td:is(:nth-child(1), :nth-child(2)) button {
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
 
 .product-table-container td :is(input[type="text"], input[type="number"], select) {
   width: 100%;
@@ -202,7 +175,7 @@
   font: 0.85rem 'Inter', sans-serif;
 }
 
-/* ===== Action buttons (pencil / trash) ===== */
+/* ===== Action buttons ===== */
 .product-table-container td:nth-child(6) button {
   padding: 4px 6px;
   border: none;
@@ -225,10 +198,7 @@
   font-weight: 600;
 }
 
-.product-table-container td:nth-child(6) > button:hover {
-  background: #b84d00;
-  color: #fff;
-}
+.product-table-container td:nth-child(6) > button:hover { background: #b84d00; color: #fff; }
 
 /* ===== Toggle switch ===== */
 .toggle-switch {
@@ -278,14 +248,47 @@
   cursor: not-allowed;
 }
 
+/* ===== Modal overlay ===== */
 .modal {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(6px);
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 768px) {
+  .main-content:has(.product-subpage) { overflow-y: auto; }
+
+  .product-subpage { margin: 6px 0 20px; }
+  .product-subpage .tabs { gap: 16px; margin-bottom: 10px; }
+  .product-subpage .categories-filter { margin-bottom: 10px; }
+
+  .product-table-container { overflow-x: auto; overflow-y: hidden; }
+
+  .product-table-container .table-header {
+    position: sticky;
+    left: 0;
+    padding: 12px 14px;
+  }
+
+  .product-table-container table { min-width: 700px; }
+
+  .product-table-container td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .product-table-container :is(th, td) { padding-inline: 10px; }
+
+  .product-table-container td :is(input[type="text"], input[type="number"], select) {
+    max-width: 100%;
+    min-width: 0;
+  }
 }
