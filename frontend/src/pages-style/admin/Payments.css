@@ -123,3 +123,77 @@
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
+
+/* =========================================
+   MOBILE RESPONSIVE (1 PER LINE / COLUMN)
+   ========================================= */
+@media (max-width: 768px) {
+    .payments-page {
+        gap: 16px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .payments-page > h1 {
+        font-size: 2rem;
+    }
+
+    .filters {
+        margin: 15px 0;
+        flex-direction: column;
+        gap: 16px;
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .dropdown {
+        width: 100%;
+    }
+
+    .dropdown select {
+        width: 100%;
+    }
+
+    /* 1 revenue component per line (flex-direction: column) */
+    .revenue-container {
+        flex-direction: column;
+        gap: 16px;
+        width: 100%;
+    }
+
+    .revenue-container .revenue-card {
+        margin: 0;
+        width: 100%;
+        max-width: 400px;
+        box-sizing: border-box;
+    }
+
+    /* 1 payment card per line (1 per grid) */
+    .payments-container {
+        margin: 20px 0;
+        grid-template-columns: 1fr;
+        gap: 16px;
+        width: 100%;
+        max-width: 400px;
+        box-sizing: border-box;
+    }
+
+    .payments-container .payment-card {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Mobile pagination */
+    .pagination {
+        margin-top: 10px;
+        gap: 16px;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .pagination button {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+}
