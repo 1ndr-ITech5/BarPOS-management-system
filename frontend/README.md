@@ -54,3 +54,69 @@ The Menu Management page is organized into two related sections: Categories and 
 Administrators can perform CRUD operations on both categories and products. Each product belongs to a category and changes to a category can directly affect the availability and visibility of its associated products within the menu.
 
 For example, when a category is deactivated, its products become unavailable for order processing. Also, archiving or deleting a category affects its associated products according to the application's business rules, ensuring that the menu remains consistent.
+
+## Key Features
+
+1. Role-Based Access Control
+
+- Two user roles: Admin and Waiter, each with different permissions and access to application features.
+- Role-based restrictions are enforced across frontend pages and backend API operations.
+
+2. Table Management
+
+- Admins can create, edit, and delete workspace tables.
+- Each table displays its current status.
+- Both Admins and Waiters can initiate orders directly from table cards.
+
+3. Menu Management
+
+- Admin-only access to category and product management.
+- Full CRUD operations with a one-to-many relationship between categories and products.
+- Business rules handle product availability, archiving, and deletion based on category status and order history.
+
+4. Payment Management
+
+- Revenue analytics covering selected periods, last month, and all-time revenue.
+- Payment history with filters for date range and payment method.
+- Administrators can view detailed receipts for completed payments.
+
+5. Profile & Performance Analytics
+
+- Personal profile information and role-specific performance insights.
+- Admins can monitor daily order counts across Waiters.
+- Waiters can track their own daily and all-time order counts.
+- Admins can register new employees within their workspace.
+
+6. Two-Stage Authentication
+
+- Workspace authentication using workspace credentials, followed by individual employee authentication using a personal access code.
+- Employee access codes are unique within their respective workspaces.
+
+7. Workspace-Level Data Isolation
+
+- Each workspace operates within its own isolated data environment.
+- Backend API operations enforce workspace ownership and prevent unauthorized cross-workspace data access.
+
+8. Data Consistency & Concurrent Updates
+
+- MongoDB transactions and atomic updates help maintain data consistency during order operations.
+- Unique compound indexes enforce data integrity and prevent duplicate records.
+
+## Tech stack
+
+### Frontend
+- **React.js** – User interface development.
+- **Redux Toolkit** – Global state management.
+- **RTK Query** – API integration, data fetching, caching and cache invalidation.
+
+### Backend
+- **Node.js** – JavaScript runtime environment.
+- **Express.js** – Backend framework for building RESTful APIs.
+- **JWT (JSON Web Tokens)** – Authentication and token-based access control.
+- **Node-Cron** – Scheduled background tasks.
+- **Helmet.js** – HTTP security headers.
+- **CORS** – Cross-origin resource sharing.
+- **Mongoose** – MongoDB object data modeling (ODM).
+
+### Database
+- **MongoDB** – NoSQL database for storing application data.
