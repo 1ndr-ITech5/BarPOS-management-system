@@ -120,3 +120,66 @@ For example, when a category is deactivated, its products become unavailable for
 
 ### Database
 - **MongoDB** – NoSQL database for storing application data.
+
+
+## Architecture & Project Structure
+
+### Application Architecture
+
+BarPOS follows a client-server architecture, separating the frontend, backend, and database into distinct layers.
+
+```mermaid
+flowchart LR
+    subgraph Client ["Client Tier (Frontend)"]
+        direction TB
+        UI["React.js (SPA)"]
+        State["Redux Toolkit & RTK Query"]
+        UI <--> State
+    end
+
+    subgraph Server ["Application Tier (Backend)"]
+        direction TB
+        Router["Express Router & Middlewares"]
+        Services["Controllers & Business Services"]
+        Router --> Services
+    end
+
+    subgraph Database ["Data Tier (Database)"]
+        direction TB
+        ODM["Mongoose ODM"]
+        DB[("MongoDB Database")]
+        ODM <--> DB
+    end
+
+    State -- "REST API (HTTP/JSON + JWT)" --> Router
+    Services <--> ODM
+
+    style Client fill:#f0f7ff,stroke:#0284c7,stroke-width:1.5px,color:#0f172a
+    style Server fill:#fefce8,stroke:#ca8a04,stroke-width:1.5px,color:#0f172a
+    style Data fill:#f0fdf4,stroke:#16a34a,stroke-width:1.5px,color:#0f172a
+```
+
+The React frontend communicates with the Express backend through RESTful APIs. The backend handles authentication, authorization, business logic, and database operations, while MongoDB stores application data through Mongoose ODM.
+
+### Project Structure
+
+The codebase is organized into separate frontend and backend modules, following a modular structure with clear separation of responsibilities.
+
+#### Backend
+
+- config/ – Database and application configuration.
+- routes/ – REST API endpoint definitions.
+- controllers/ – HTTP request and response handling.
+- services/ – Business logic and database operations.
+- models/ – Mongoose schemas and data models.
+- middlewares/ – Authentication, authorization, and request handling.
+- jobs/ – Scheduled background tasks.
+
+#### Frontend
+
+- components/ – Reusable UI components.
+- pages/ – Application pages and views.
+- layout/ – Application layout and navigation.
+- store/apis/ – RTK Query API definitions.
+- store/slices/ – Redux state management.
+- utils/ – Shared utility functions.
