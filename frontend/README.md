@@ -183,3 +183,155 @@ The codebase is organized into separate frontend and backend modules, following 
 - store/apis/ – RTK Query API definitions.
 - store/slices/ – Redux state management.
 - utils/ – Shared utility functions.
+
+## Authentication & Authorization
+
+BarPOS implements a two-stage authentication system combined with role-based authorization and workspace-level data isolation.
+
+- Workspace Authentication: Users first authenticate using their workspace credentials to access the corresponding workspace.
+- Employee Authentication: After workspace authentication, employees log in using their personal access codes, which are unique within their workspace.
+- Role-Based Authorization: The system supports Admin and Waiter roles, each with different permissions enforced through frontend route protection and backend middleware.
+- Workspace Data Isolation: Backend operations verify workspace ownership to prevent unauthorized access to resources belonging to other workspaces.
+
+## Database Design
+
+### ER Diagram
+
+### Entity Relationships
+
+## Database Design
+
+```mermaid
+erDiagram
+    WORKSPACE ||--o{ USER : "employs"
+    WORKSPACE ||--o{ TABLE : "owns"
+    WORKSPACE ||--o{ CATEGORY : "defines"
+    WORKSPACE ||--o{ PRODUCT : "offers"
+    WORKSPACE ||--o{ ORDER : "scopes"
+    WORKSPACE ||--o{ PAYMENT : "scopes"
+
+    USER |o--o{ TABLE : "opens"
+    USER ||--o{ ORDER : "opens"
+    USER ||--o{ PAYMENT : "processes"
+
+    TABLE ||--o{ ORDER : "hosts"
+    ORDER ||--o{ ORDER_ITEM : "contains"
+    ORDER ||--o| PAYMENT : "settled by"
+
+    CATEGORY ||--o{ PRODUCT : "groups"
+    PRODUCT ||--o{ ORDER_ITEM : "ordered as"
+
+    WORKSPACE {
+        ObjectId workspaceId PK
+        string barName
+        string workspaceName
+        string password "hashed"
+        string type "real | demo"
+        date createdAt
+        date updatedAt
+    }
+
+    USER {
+        ObjectId userId PK
+        string first_name
+        string last_name
+        string code "hashed"
+        string role "admin | waiter"
+        ObjectId workspaceId FK
+        date createdAt
+        date updatedAt
+    }
+
+    TABLE {
+        ObjectId tableId PK
+        string tableName
+        string status "available | occupied"
+        number capacity
+        ObjectId ownedBy FK "workspace"
+        ObjectId openedBy FK "user, nullable"
+        date timeOpened
+        boolean isActive
+        date createdAt
+        date updatedAt
+    }
+
+    CATEGORY {
+        ObjectId categoryId PK
+        ObjectId workspaceId FK
+        string categoryName
+        boolean isActive
+        boolean isArchived
+        date createdAt
+        date updatedAt
+    }
+
+    PRODUCT {
+        ObjectId productId PK
+        string productName
+        ObjectId categoryId FK
+        number price
+        boolean isAvailable
+        boolean isArchived
+        ObjectId offeredBy FK "workspace"
+        date createdAt
+        date updatedAt
+    }
+
+    ORDER {
+        ObjectId orderId PK
+        ObjectId workspaceId FK
+        ObjectId waiterId FK
+        ObjectId tableId FK
+        string status "open | closed"
+        number total
+        date closedAt
+        date createdAt
+        date updatedAt
+    }
+
+    ORDER_ITEM {
+        ObjectId orderItemId PK
+        ObjectId orderId FK
+        ObjectId menuItemId FK "product"
+        number quantity
+        number unitPrice
+        number linePrice
+        date createdAt
+        date updatedAt
+    }
+
+    PAYMENT {
+        ObjectId paymentId PK
+        ObjectId orderId FK, UK
+        ObjectId waiterId FK
+        ObjectId workspaceId FK
+        number totalAmount
+        number amountPaid
+        number change
+        string method "cash | card"
+        string status
+        date paidAt
+        date createdAt
+        date updatedAt
+    }
+```
+
+### Relationships
+
+| Relationship | Cardinality | Description |
+|---|---|---|
+| Workspace → User | 1 : N | A workspace employs many users; each user belongs to one workspace. |
+| Workspace → Table | 1 : N | A workspace owns many tables. |
+| Workspace → Category | 1 : N | A workspace defines many categories. |
+| Workspace → Product | 1 : N | A workspace offers many products. |
+| Workspace → Order | 1 : N | Every order belongs to one workspace. |
+| Workspace → Payment | 1 : N | Every payment belongs to one workspace. |
+| User → Table | 1 : N (optional) | A user can have opened many tables. A table is opened by at most one user (`openedBy` is null when available). |
+| User → Order | 1 : N | Each order is opened by exactly one user; a user opens many orders. |
+| User → Payment | 1 : N | Each payment is processed by exactly one user. |
+| Table → Order | 1 : N | A table can host many orders over time, but at most one with status `open` at a time. |
+| Order → OrderItem | 1 : N | An order contains many order items. |
+| Order → Payment | 1 : 0..1 | A closed order is settled by exactly one payment; open orders have none. |
+| Category → Product | 1 : N | A category groups many products. |
+| Product → OrderItem | 1 : N | A product appears in many order items across orders. Within one order it appears once, with a `quantity`. |
+
