@@ -11,7 +11,7 @@ BarPOS includes features such as table management, menu and product management, 
 
 ## Application Screenshots
 
-![Table_Management](./screenshots/table-management.png)
+![Table_Management](./frontend/screenshots/table-management.png)
 
 1. Table Management
 
@@ -21,7 +21,7 @@ Administrators can perform CRUD operations on tables, including creating, editin
 
 
 
-![Order_Processing](./screenshots/order-page.png)
+![Order_Processing](./frontend/screenshots/order-page.png)
 
 2. Order Proccessing
 
@@ -35,7 +35,7 @@ Order Ticket: Displays the products added to the current order, calculates the o
 
 
 
-![Payment_Management](./screenshots/payments-page.png)
+![Payment_Management](./frontend/screenshots/payments-page.png)
 
 3. Payment Management
 
@@ -45,7 +45,7 @@ A revenue summary card displays the total revenue based on the selected time fil
 
 
 
-![Menu_Management](./screenshots/menu-management.png)
+![Menu_Management](./frontend/screenshots/menu-management.png)
 
 4. Menu Management
 
