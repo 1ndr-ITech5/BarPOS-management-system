@@ -193,6 +193,17 @@ BarPOS implements a two-stage authentication system combined with role-based aut
 - Role-Based Authorization: The system supports Admin and Waiter roles, each with different permissions enforced through frontend route protection and backend middleware.
 - Workspace Data Isolation: Backend operations verify workspace ownership to prevent unauthorized access to resources belonging to other workspaces.
 
+## Deployment
+
+BarPOS is deployed using the following services:
+
+- **Backend:** Deployed on [Render](https://render.com), which hosts the Node.js and Express API.
+- **Frontend:** Deployed on [Vercel](https://vercel.com), with the `VITE_API_URL` environment variable configured to point to the deployed backend API.
+- **Environment Configuration:** The backend's `FRONTEND_URL` environment variable is configured with the deployed Vercel frontend URL to allow cross-origin requests.
+- **Scheduled Health Check:** A cron job sends a request to the backend every 10 minutes to help prevent the server from becoming inactive.
+
+**Live Application:** [Visit BarPOS](https://barpos-management-system.vercel.app)
+
 ## Database Design
 
 ### ER Diagram
