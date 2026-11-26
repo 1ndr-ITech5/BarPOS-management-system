@@ -10,8 +10,8 @@ const createWorkspaces = async() => {
 
         const workspaces = [
             {
-                "barName": "Bar Restaurant Kusho",
-                "workspaceName": "kushoteam",
+                "barName": process.env.BAR_NAME,
+                "workspaceName": process.env.WORKSPACE_NAME,
                 "password": process.env.REAL_WORKSPACE_PASSWORD,
                 "type": "real"
             },

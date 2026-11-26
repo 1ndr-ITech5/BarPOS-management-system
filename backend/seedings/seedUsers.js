@@ -13,8 +13,8 @@ const createAdmin = async() => {
 
         const admins = [
             {
-                first_name: "Indrit",
-                last_name: "Llangozi",
+                first_name: process.env.FIRST_NAME,
+                last_name: process.env.LAST_NAME,
                 code: process.env.ADMIN_CODE,
                 workspaceId: mainWorkspace._id,
                 role: "admin"
