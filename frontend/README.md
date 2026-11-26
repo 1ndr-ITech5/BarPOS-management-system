@@ -197,10 +197,6 @@ BarPOS implements a two-stage authentication system combined with role-based aut
 
 ### ER Diagram
 
-### Entity Relationships
-
-## Database Design
-
 ```mermaid
 erDiagram
     WORKSPACE ||--o{ USER : "employs"
@@ -316,7 +312,7 @@ erDiagram
     }
 ```
 
-### Relationships
+### Entity Relationships
 
 | Relationship | Cardinality | Description |
 |---|---|---|
@@ -335,3 +331,59 @@ erDiagram
 | Category → Product | 1 : N | A category groups many products. |
 | Product → OrderItem | 1 : N | A product appears in many order items across orders. Within one order it appears once, with a `quantity`. |
 
+## Installation and setup
+
+You can run BarPOS on your local workspace by following these steps:
+
+### 1. Get the MongoDB connection string
+
+- Ensure that you have access on a free Mongo Atlas Cluster. Atlas is required because the app uses transactions, which need a replica set.
+- Sign in to Mongo Atlas [MongoDB Atlas](https://www.mongodb.com/products/platform/atlas-database)
+- Create a new project and deploy a free (M0) cluster.
+- Under **Database Access** create a database user and under **Network access** add your IP address or allow access from anywhere (0.0.0.0/0).
+- Go to Database > Connect > Drivers and copy your connection string (replacing in process <username> and <password>).
+
+### 2. Configure the environment
+
+### Getting Started
+
+- Clone the repository to your local machine.
+
+### Backend
+
+1. Open the `backend` folder and rename `.env.example` to `.env`.
+2. Fill in `.env` with your MongoDB connection string and the other required credentials.
+3. Install the dependencies:
+   ```bash
+   npm install
+   ```
+4. Once all the `.env` variables are set, seed the database. Run the workspace seed first, then the users seed:
+   ```bash
+   node seedings/seedWorkspaces.js
+   node seedings/seedUsers.js
+   ```
+5. Start the server:
+   ```bash
+   npm run dev
+   ```
+
+### Frontend
+
+1. Open the `frontend` folder and rename `.env.example` to `.env`.
+2. Install the dependencies and start the app:
+   ```bash
+   npm install
+   npm run dev
+   ```
+
+## Author
+
+**Indrit Llangozi**
+- GitHub: [@1ndr-ITech5](https://github.com/1ndr-ITech5)
+- LinkedIn: [Indrit Llangozi](www.linkedin.com/in/indrit-llangozi-bb60042b9)
+- Email: indritllangozi5@gmail.com
+
+## License
+
+Copyright (c) 2026 Indrit Llangozi. All rights reserved.
+This source code is published for **portfolio and review purposes only**. It may not be copied, modified or used commercially without written permission.
