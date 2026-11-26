@@ -27,6 +27,8 @@ app.use(helmet())
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
+app.get("/health", (req, res) => res.status(200).send("OK"));
+
 // manage the workspace auth paths
 app.use("/api/workspace", require("./routes/workspaceRoutes.js"))
 
